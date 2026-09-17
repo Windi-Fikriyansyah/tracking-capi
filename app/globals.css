@@ -1,26 +1,152 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-background: #0a122a;
+  --color-on-background: #dbe1ff;
+  --color-outline-variant: #3d494c;
+  --color-outline: #869397;
+  --color-inverse-on-surface: #282f49;
+  --color-surface-container-highest: #2c344d;
+  --color-surface-bright: #313852;
+  --color-on-secondary-fixed: #00174b;
+  --color-surface-container-high: #212942;
+  --color-inverse-primary: #00687a;
+  --color-tertiary: #4edea3;
+  --color-on-tertiary-fixed: #002113;
+  --color-primary-fixed-dim: #4cd7f6;
+  --color-on-error-container: #ffdad6;
+  --color-secondary-container: #0053db;
+  --color-error-container: #93000a;
+  --color-tertiary-fixed-dim: #4edea3;
+  --color-secondary-fixed-dim: #b4c5ff;
+  --color-primary-container: #06b6d4;
+  --color-primary: #4cd7f6;
+  --color-secondary: #b4c5ff;
+  --color-error: #ffb4ab;
+  --color-tertiary-fixed: #6ffbbe;
+  --color-surface-dim: #0a122a;
+  --color-on-tertiary: #003824;
+  --color-surface-tint: #4cd7f6;
+  --color-tertiary-container: #1bbd85;
+  --color-on-surface: #dbe1ff;
+  --color-surface-container-low: #131a33;
+  --color-on-surface-variant: #bcc9cd;
+  --color-on-primary: #003640;
+  --color-on-error: #690005;
+  --color-surface: #0a122a;
+  --color-surface-container: #171e37;
+  --color-on-tertiary-container: #00452e;
+  --color-inverse-surface: #dbe1ff;
+  --color-surface-container-lowest: #050d25;
+  --color-on-secondary-fixed-variant: #003ea8;
+  --color-on-tertiary-fixed-variant: #005236;
+  --color-on-primary-container: #00424f;
+  --color-secondary-fixed: #dbe1ff;
+  --color-primary-fixed: #acedff;
+  --color-on-secondary-container: #cdd7ff;
+  --color-on-secondary: #002a78;
+  --color-surface-variant: #2c344d;
+
+  --font-sans: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Custom typography and design scale */
+.font-headline-lg, .font-headline-md, .font-headline-sm,
+.font-body-lg, .font-body-md, .font-body-sm,
+.font-label-md, .font-label-sm {
+  font-family: var(--font-geist-sans), sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.text-headline-lg {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+
+.text-headline-md {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  letter-spacing: -0.015em;
+  font-weight: 500;
+}
+
+.text-headline-sm {
+  font-size: 1.125rem;
+  line-height: 1.5rem;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+
+.text-body-lg {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  letter-spacing: -0.005em;
+  font-weight: 400;
+}
+
+.text-body-md {
+  font-size: 0.875rem;
+  line-height: 1.375rem;
+  letter-spacing: 0em;
+  font-weight: 400;
+}
+
+.text-body-sm {
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+  letter-spacing: 0.005em;
+  font-weight: 400;
+}
+
+.text-label-md {
+  font-size: 0.8125rem;
+  line-height: 1rem;
+  letter-spacing: 0.01em;
+  font-weight: 500;
+}
+
+.text-label-sm {
+  font-size: 0.6875rem;
+  line-height: 0.875rem;
+  letter-spacing: 0.06em;
+  font-weight: 600;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #0a122a;
+  color: #dbe1ff;
+  font-family: var(--font-geist-sans), sans-serif;
 }
+
+.font-code-metric {
+  font-family: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.glow-cyan {
+  box-shadow: 0 0 16px rgba(6, 182, 212, 0.22);
+}
+
+.glow-dot {
+  box-shadow: 0 0 8px rgba(78, 222, 163, 0.7);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #050d25;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #212942;
+  border-radius: 2px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #4cd7f6;
+}
+
