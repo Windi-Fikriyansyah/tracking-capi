@@ -119,7 +119,7 @@ function ConnectWhatsAppContent() {
             isConnected: true,
             phone: acc.phone,
             wabaName: acc.wabaName,
-            wabaId: acc.wabaId,
+            wabaId: acc.id || acc.wabaId,
             userId,
           });
 

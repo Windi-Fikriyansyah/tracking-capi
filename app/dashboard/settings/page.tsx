@@ -16,6 +16,11 @@ import {
   Database,
   UserCheck,
   ShieldAlert,
+  Webhook,
+  Copy,
+  Check,
+  Globe,
+  ExternalLink,
 } from "lucide-react";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase/client";
 import {
@@ -53,6 +58,21 @@ export default function SettingsPage() {
     type: "success" | "error";
     message: string;
   } | null>(null);
+
+  // Webhook URL state
+  const [webhookUrl, setWebhookUrl] = useState("");
+  const [copiedWebhook, setCopiedWebhook] = useState(false);
+  const [testingWebhook, setTestingWebhook] = useState(false);
+  const [webhookFeedback, setWebhookFeedback] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setWebhookUrl(`${window.location.origin}/api/webhook/zernio/ctwa`);
+    }
+  }, []);
 
   // Load API key directly from Supabase Database for CURRENT USER
   const loadDatabaseSettings = useCallback(async () => {
@@ -154,6 +174,43 @@ export default function SettingsPage() {
       });
     } finally {
       setTestingZernio(false);
+    }
+  };
+
+  // Copy Webhook URL to clipboard
+  const handleCopyWebhook = () => {
+    if (!webhookUrl) return;
+    navigator.clipboard.writeText(webhookUrl);
+    setCopiedWebhook(true);
+    setTimeout(() => setCopiedWebhook(false), 2500);
+  };
+
+  // Test Webhook Endpoint
+  const handleTestWebhook = async () => {
+    setTestingWebhook(true);
+    setWebhookFeedback(null);
+    try {
+      const res = await fetch("/api/webhook/zernio/ctwa");
+      const data = await res.json();
+      if (res.ok && data.status === "active") {
+        setWebhookFeedback({
+          type: "success",
+          message: `Endpoint Siap! ${data.description || "Endpoint aktif menerima webhook Zernio."} (HTTP 200 OK)`,
+        });
+      } else {
+        setWebhookFeedback({
+          type: "error",
+          message: "Endpoint webhook merespons tetapi status tidak aktif.",
+        });
+      }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Gagal memverifikasi endpoint.";
+      setWebhookFeedback({
+        type: "error",
+        message: `Gagal memverifikasi endpoint: ${msg}`,
+      });
+    } finally {
+      setTestingWebhook(false);
     }
   };
 
@@ -376,7 +433,130 @@ export default function SettingsPage() {
         </form>
       </div>
 
-      {/* 2. Ubah Kata Sandi Akun */}
+      {/* 2. URL Webhook Zernio (Click-to-WhatsApp Ads Tracking) */}
+      <div className="p-6 rounded-xl bg-surface-container-low border border-outline-variant/30 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-outline-variant/20 gap-2">
+          <div className="flex items-center gap-2">
+            <Webhook className="w-5 h-5 text-primary" />
+            <h2 className="font-headline-sm text-headline-sm font-semibold text-on-surface">
+              URL Webhook Zernio (Click-to-WhatsApp)
+            </h2>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-code-metric bg-primary/10 border border-primary/30 text-primary flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+              POST / GET Aktif
+            </span>
+          </div>
+        </div>
+
+        <p className="text-body-sm text-on-surface-variant">
+          Gunakan URL Webhook ini untuk di-input pada dashboard Zernio. Ketika ada pesan masuk baru dari iklan Click-to-WhatsApp (CTWA), Zernio akan otomatis meneruskan data pesan dan Click ID (<code className="text-primary font-code-metric text-xs bg-surface-container-lowest px-1.5 py-0.5 rounded">ctwa_clid</code>) ke sistem ini secara otomatis.
+        </p>
+
+        {webhookFeedback && (
+          <div
+            className={`p-3 rounded-lg border text-body-sm flex items-center gap-2 ${
+              webhookFeedback.type === "success"
+                ? "bg-tertiary-container/20 border-tertiary/40 text-tertiary"
+                : "bg-error-container/20 border-error/40 text-error"
+            }`}
+          >
+            {webhookFeedback.type === "success" ? (
+              <CheckCircle2 className="w-4 h-4 shrink-0" />
+            ) : (
+              <AlertCircle className="w-4 h-4 shrink-0" />
+            )}
+            <span>{webhookFeedback.message}</span>
+          </div>
+        )}
+
+        <div className="space-y-1.5">
+          <label className="block text-label-md text-on-surface font-medium">
+            Endpoint Webhook URL
+          </label>
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+            <div className="relative flex-1">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-on-surface-variant">
+                <Globe className="w-4 h-4 text-primary" />
+              </div>
+              <input
+                type="text"
+                readOnly
+                value={webhookUrl || "/api/webhook/zernio/ctwa"}
+                className="block w-full pl-9 pr-3 py-2 text-xs font-code-metric bg-surface-container-lowest border border-outline-variant/40 rounded-lg text-primary select-all focus:outline-none focus:border-primary"
+              />
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={handleCopyWebhook}
+                className="px-4 py-2 rounded-lg bg-primary-container text-on-primary-container font-medium text-body-sm hover:bg-primary transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+              >
+                {copiedWebhook ? (
+                  <>
+                    <Check className="w-4 h-4 text-surface" />
+                    <span>Tersalin!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-4 h-4" />
+                    <span>Salin URL</span>
+                  </>
+                )}
+              </button>
+
+              <button
+                type="button"
+                onClick={handleTestWebhook}
+                disabled={testingWebhook}
+                className="px-3 py-2 rounded-lg bg-surface-container-high border border-outline-variant/50 text-on-surface hover:border-primary/50 hover:text-primary font-medium text-body-sm transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+              >
+                {testingWebhook ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Zap className="w-4 h-4 text-primary" />
+                )}
+                <span>{testingWebhook ? "Menguji..." : "Tes Endpoint"}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Panduan Input di Zernio */}
+        <div className="p-4 rounded-lg bg-surface-container-lowest border border-outline-variant/30 space-y-2.5 text-xs text-on-surface-variant">
+          <div className="font-semibold text-on-surface flex items-center gap-2">
+            <span>📋 Cara Memasang di Dashboard Zernio:</span>
+          </div>
+          <ol className="list-decimal list-inside space-y-1.5 text-on-surface-variant leading-relaxed">
+            <li>
+              Buka dashboard <strong className="text-on-surface">Zernio</strong> lalu masuk ke menu <strong className="text-on-surface">Webhooks</strong> atau <strong className="text-on-surface">Integrations</strong>.
+            </li>
+            <li>
+              Klik tombol <strong className="text-on-surface">Add Webhook / Tambah Webhook</strong>.
+            </li>
+            <li>
+              Tempelkan URL di atas ke kolom <strong className="text-primary font-code-metric">Webhook URL</strong>.
+            </li>
+            <li>
+              Pilih event yang dipantau: centang <strong className="text-on-surface">Inbound WhatsApp Messages</strong> / <strong className="text-on-surface">whatsapp.automatic_event</strong>.
+            </li>
+            <li>
+              Klik <strong className="text-on-surface">Save / Simpan Webhook</strong>.
+            </li>
+          </ol>
+          {webhookUrl && webhookUrl.includes("localhost") && (
+            <div className="mt-2 p-2.5 rounded bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[11px] flex items-start gap-2">
+              <span className="font-bold shrink-0">⚠️ Catatan Pengembangan Lokal:</span>
+              <span>
+                Karena saat ini berjalan di <code className="font-code-metric">localhost:3000</code>, server Zernio di internet memerlukan URL publik untuk mengirim webhook. Anda bisa menggunakan <strong>ngrok</strong> (<code className="font-code-metric">ngrok http 3000</code>) atau menggunakan URL domain saat aplikasi sudah di-deploy ke Vercel / server produksi.
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* 3. Ubah Kata Sandi Akun */}
       <div className="p-6 rounded-xl bg-surface-container-low border border-outline-variant/30 space-y-4">
         <div className="flex items-center justify-between pb-3 border-b border-outline-variant/20">
           <div className="flex items-center gap-2">

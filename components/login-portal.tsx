@@ -30,7 +30,7 @@ const DUMMY_PASSWORD = "PasswordCapi2026!";
 function LoginPortalContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectTarget = searchParams.get("redirect") || "/dashboard";
+  const redirectTarget = searchParams.get("redirect") || "/dashboard/tracking";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -368,11 +368,11 @@ function LoginPortalContent() {
 
           <div className="space-y-2.5">
             <button
-              onClick={() => router.push("/dashboard")}
+              onClick={() => router.push("/dashboard/tracking")}
               className="w-full py-3 px-4 rounded-lg bg-primary-container text-on-primary-container font-headline-sm text-headline-sm font-semibold tracking-wide flex items-center justify-center gap-2 hover:bg-primary transition-all duration-150 shadow-[0_0_20px_rgba(6,182,212,0.35)] cursor-pointer"
               type="button"
             >
-              <span>Buka Dashboard Telemetry</span>
+              <span>Buka Portal Tracking CAPI</span>
               <ArrowRight className="w-5 h-5" />
             </button>
 

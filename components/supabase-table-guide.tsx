@@ -3,11 +3,12 @@
 import React, { useState } from "react";
 import { Database, Copy, Check, ExternalLink, RefreshCw, Shield, UserCheck } from "lucide-react";
 
-export const SQL_CREATE_TABLE_SCRIPT = `-- 1. Hapus tabel lama jika ada agar skema ter-update ke user_id
-drop table if exists public.app_settings cascade;
+export const SQL_CREATE_TABLE_SCRIPT = `-- 1. Hapus tabel lama jika ingin reset bersih (opsional)
+-- drop table if exists public.ctwa_leads cascade;
+-- drop table if exists public.app_settings cascade;
 
 -- 2. Buat tabel app_settings dengan isolasi user_id sebagai PRIMARY KEY
-create table public.app_settings (
+create table if not exists public.app_settings (
   user_id text primary key,
   zernio_api_key text,
   wa_is_connected boolean default false,
@@ -15,34 +16,38 @@ create table public.app_settings (
   wa_waba_name text,
   wa_waba_id text,
   wa_connected_at timestamp with time zone,
+  ctwa_auto_send boolean default true,
+  ctwa_event_1 text default 'LeadSubmitted',
+  ctwa_event_2 text default 'ViewContent',
+  ctwa_event_3 text default 'InitiateCheckout',
+  ctwa_event_4 text default 'Purchase',
+  ctwa_currency text default 'IDR',
+  ctwa_purchase_value numeric default 150000,
+  ctwa_dataset_id text default '1469138511709885',
+  ctwa_test_code text,
   updated_at timestamp with time zone default timezone('utc'::text, now())
 );
 
--- 3. Aktifkan Row Level Security (RLS) untuk mencegah kebocoran data antar user
+-- 3. Aktifkan Row Level Security (RLS) pada app_settings
 alter table public.app_settings enable row level security;
 
--- 4. Policy SELECT: User hanya dapat melihat datanya sendiri
-create policy "Users can view own app_settings"
-on public.app_settings for select
-to authenticated, anon
+-- Policies untuk app_settings
+create policy if not exists "Users can view own app_settings"
+on public.app_settings for select to authenticated, anon
 using (
   (auth.uid() is not null and auth.uid()::text = user_id)
   or (auth.uid() is null and user_id is not null)
 );
 
--- 5. Policy INSERT: User hanya dapat menyimpan data dengan user_id miliknya
-create policy "Users can insert own app_settings"
-on public.app_settings for insert
-to authenticated, anon
+create policy if not exists "Users can insert own app_settings"
+on public.app_settings for insert to authenticated, anon
 with check (
   (auth.uid() is not null and auth.uid()::text = user_id)
   or (auth.uid() is null and user_id is not null)
 );
 
--- 6. Policy UPDATE: User hanya dapat mengubah datanya sendiri
-create policy "Users can update own app_settings"
-on public.app_settings for update
-to authenticated, anon
+create policy if not exists "Users can update own app_settings"
+on public.app_settings for update to authenticated, anon
 using (
   (auth.uid() is not null and auth.uid()::text = user_id)
   or (auth.uid() is null and user_id is not null)
@@ -52,11 +57,54 @@ with check (
   or (auth.uid() is null and user_id is not null)
 );
 
--- 7. Policy DELETE: User hanya dapat menghapus datanya sendiri
-create policy "Users can delete own app_settings"
-on public.app_settings for delete
-to authenticated, anon
+create policy if not exists "Users can delete own app_settings"
+on public.app_settings for delete to authenticated, anon
 using (
+  (auth.uid() is not null and auth.uid()::text = user_id)
+  or (auth.uid() is null and user_id is not null)
+);
+
+-- 4. Buat tabel ctwa_leads untuk tracking pesan masuk WhatsApp Ads & 4 Event Pipeline
+create table if not exists public.ctwa_leads (
+  id text primary key,
+  user_id text not null,
+  phone text not null,
+  phone_e164 text not null,
+  contact_name text default 'WhatsApp User',
+  ctwa_clid text,
+  ctwa_source_id text,
+  ctwa_headline text,
+  conversation_id text,
+  event_1_name text default 'LeadSubmitted', -- Event otomatis saat pesan pertama masuk
+  event_1_status text default 'pending',
+  event_1_trace_id text,
+  event_1_sent_at timestamp with time zone,
+  event_2_name text, -- Kosong (dipilih manual oleh user per nomor)
+  event_2_status text default 'pending',
+  event_2_trace_id text,
+  event_2_sent_at timestamp with time zone,
+  event_3_name text, -- Kosong (dipilih manual oleh user per nomor)
+  event_3_status text default 'pending',
+  event_3_trace_id text,
+  event_3_sent_at timestamp with time zone,
+  event_4_name text, -- Kosong (dipilih manual oleh user per nomor)
+  event_4_status text default 'pending',
+  event_4_trace_id text,
+  event_4_sent_at timestamp with time zone,
+  event_4_value numeric default 0,
+  created_at timestamp with time zone default timezone('utc'::text, now())
+);
+
+-- 5. Aktifkan Row Level Security (RLS) pada ctwa_leads
+alter table public.ctwa_leads enable row level security;
+
+create policy if not exists "Users can manage own ctwa_leads"
+on public.ctwa_leads for all to authenticated, anon
+using (
+  (auth.uid() is not null and auth.uid()::text = user_id)
+  or (auth.uid() is null and user_id is not null)
+)
+with check (
   (auth.uid() is not null and auth.uid()::text = user_id)
   or (auth.uid() is null and user_id is not null)
 );

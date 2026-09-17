@@ -6,7 +6,6 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   Network,
   PlusCircle,
-  LayoutDashboard,
   MessageSquare,
   Settings,
   BookOpen,
@@ -20,6 +19,7 @@ import {
   X,
   Loader2,
   ShieldAlert,
+  Target,
 } from "lucide-react";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase/client";
 
@@ -140,11 +140,15 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   const navItems = [
     {
-      label: "Dashboard",
-      href: "/dashboard",
-      icon: LayoutDashboard,
-      active: pathname === "/dashboard",
-      badge: null,
+      label: "Tracking WhatsApp",
+      href: "/dashboard/tracking",
+      icon: Target,
+      active: pathname.startsWith("/dashboard/tracking") || pathname === "/dashboard",
+      badge: (
+        <span className="ml-auto px-1.5 py-0.5 rounded text-[10px] font-code-metric bg-primary/10 text-primary border border-primary/30">
+          CTWA
+        </span>
+      ),
     },
     {
       label: "Connect WhatsApp",
