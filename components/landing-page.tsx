@@ -8,10 +8,12 @@ import {
   BarChart3,
   CheckCircle2,
   ChevronDown,
+  CreditCard,
   Eye,
   EyeOff,
   Ghost,
   Layers,
+  Lock,
   MessageSquare,
   MousePointerClick,
   Radio,
@@ -147,15 +149,13 @@ function FaqItem({ q, a }: { q: string; a: string }) {
           {q}
         </span>
         <ChevronDown
-          className={`w-5 h-5 text-[#4cd7f6] shrink-0 transition-transform duration-300 ${
-            open ? "rotate-180" : ""
-          }`}
+          className={`w-5 h-5 text-[#4cd7f6] shrink-0 transition-transform duration-300 ${open ? "rotate-180" : ""
+            }`}
         />
       </button>
       <div
-        className={`overflow-hidden transition-all duration-300 ${
-          open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-        }`}
+        className={`overflow-hidden transition-all duration-300 ${open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+          }`}
       >
         <p className="px-5 pb-5 text-[#869397] text-sm leading-relaxed">{a}</p>
       </div>
@@ -182,11 +182,10 @@ export default function LandingPage() {
     <div className="min-h-screen bg-[#0a122a] text-[#dbe1ff] overflow-x-hidden">
       {/* ───── STICKY NAV ───── */}
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrollY > 40
-            ? "bg-[#0a122a]/90 backdrop-blur-xl border-b border-[#1e2847]/60 shadow-lg shadow-black/10"
-            : "bg-transparent"
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrollY > 40
+          ? "bg-[#0a122a]/90 backdrop-blur-xl border-b border-[#1e2847]/60 shadow-lg shadow-black/10"
+          : "bg-transparent"
+          }`}
       >
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5 group">
@@ -208,25 +207,22 @@ export default function LandingPage() {
             <a href="#cara-kerja" className="hover:text-[#4cd7f6] transition-colors">
               Cara Kerja
             </a>
+            <a href="#harga" className="hover:text-[#4cd7f6] transition-colors">
+              Harga
+            </a>
             <a href="#faq" className="hover:text-[#4cd7f6] transition-colors">
               FAQ
             </a>
           </div>
 
           <div className="flex items-center gap-3">
-            <Link
-              href="/login"
-              className="hidden sm:inline-flex text-sm text-[#869397] hover:text-white transition-colors px-3 py-1.5"
-            >
-              Login
-            </Link>
-            <Link
-              href="/login"
+            <a
+              href="#harga"
               className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-gradient-to-r from-[#4cd7f6] to-[#06b6d4] text-[#050d25] text-sm font-semibold hover:shadow-[0_0_24px_rgba(76,215,246,0.4)] transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
-              <span>Mulai Gratis</span>
+              <span>Pilih Paket</span>
               <ArrowRight className="w-4 h-4" />
-            </Link>
+            </a>
           </div>
         </div>
       </nav>
@@ -273,14 +269,14 @@ export default function LandingPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14 animate-fade-in-up [animation-delay:300ms]">
-            <Link
-              href="/login"
+            <a
+              href="#harga"
               className="group inline-flex items-center gap-2.5 px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#4cd7f6] to-[#06b6d4] text-[#050d25] font-semibold text-base shadow-[0_0_30px_rgba(76,215,246,0.25)] hover:shadow-[0_0_40px_rgba(76,215,246,0.4)] transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               <Zap className="w-5 h-5" />
-              <span>Coba Sekarang — Gratis</span>
+              <span>Lihat Paket Berlangganan</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
+            </a>
             <a
               href="#cara-kerja"
               className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl border border-[#1e2847] text-[#869397] hover:text-white hover:border-[#2d3a5c] transition-all text-base"
@@ -774,6 +770,155 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ───── PRICING SECTION ───── */}
+      <section id="harga" className="relative py-20 md:py-28 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <span className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-widest uppercase text-[#4cd7f6] mb-4">
+              <CreditCard className="w-4 h-4" />
+              Struktur Harga & Paket
+            </span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-5">
+              Investasi Terjangkau,{" "}
+              <span className="bg-gradient-to-r from-[#4cd7f6] via-[#4edea3] to-[#4cd7f6] bg-clip-text text-transparent">
+                Hasil Maksimal
+              </span>
+            </h2>
+            <p className="text-[#869397] max-w-2xl mx-auto text-base leading-relaxed">
+              Tanpa biaya tersembunyi, tanpa komisi per konversi. Pilih paket yang sesuai kebutuhan
+              skala iklan CTWA Anda dan mulai lacak setiap konversi secara akurat.
+            </p>
+          </div>
+
+          {/* ALL FEATURES HIGHLIGHT (SHARED ACROSS BOTH PLANS) */}
+
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto items-stretch">
+            {/* 6 BULAN PLAN */}
+            <div className="relative rounded-2xl border border-[#1e2847] bg-[#0d1632]/70 backdrop-blur-md p-8 md:p-9 flex flex-col justify-between hover:border-[#4cd7f6]/40 transition-all group">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#869397] px-3 py-1 rounded-full bg-[#1e2847]/60 border border-[#1e2847]">
+                    Pilihan Fleksibel
+                  </span>
+                  <span className="text-xs font-semibold text-[#4cd7f6] px-2.5 py-0.5 rounded-full bg-[#4cd7f6]/10 border border-[#4cd7f6]/20">
+                    Durasi 6 Bulan
+                  </span>
+                </div>
+
+                <h3 className="text-3xl font-bold text-white mb-2">Paket 6 Bulan</h3>
+                <p className="text-sm text-[#869397] mb-6 leading-relaxed">
+                  Akses penuh ke seluruh fitur SignalPulse selama 6 bulan untuk optimasi iklan CTWA Anda.
+                </p>
+
+                <div className="mb-6 pb-6 border-b border-[#1e2847]">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-sm text-[#869397]">Rp</span>
+                    <span className="text-4xl md:text-5xl font-black text-white font-mono tracking-tight">
+                      149.000
+                    </span>
+                    <span className="text-xs text-[#869397]">/ 6 bulan</span>
+                  </div>
+                  <p className="text-xs text-[#4edea3] mt-2 flex items-center gap-1.5 font-medium">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    Setara Rp 24.833 / bulan
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-[#090f23]/60 border border-[#1e2847] mb-8 space-y-2 text-xs text-[#bcc9cd]">
+                  <p className="font-semibold text-white flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-[#4cd7f6]" />
+                    Termasuk Semua Fitur Tanpa Batas:
+                  </p>
+                  <p className="text-[#869397] leading-relaxed">
+                    Mendapatkan akses lengkap 100% ke seluruh sistem tracking CAPI, telemetry, dan update selama masa aktif 6 bulan.
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <Link
+                  href="/checkout?plan=6-bulan"
+                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl border border-[#4cd7f6]/50 bg-[#4cd7f6]/10 text-[#4cd7f6] font-semibold text-base hover:bg-[#4cd7f6] hover:text-[#050d25] transition-all duration-200 group-hover:shadow-[0_0_25px_rgba(76,215,246,0.3)]"
+                >
+                  <span>Beli Paket 6 Bulan</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+                <p className="text-[11px] text-center text-[#5a6480] mt-3 flex items-center justify-center gap-1.5">
+                  <Lock className="w-3 h-3" />
+                  Pembayaran instan otomatis
+                </p>
+              </div>
+            </div>
+
+            {/* 1 TAHUN PLAN (RECOMMENDED) */}
+            <div className="relative rounded-2xl border-2 border-[#4cd7f6] bg-gradient-to-b from-[#0f1c42] to-[#0a142f] p-8 md:p-9 flex flex-col justify-between shadow-[0_0_40px_rgba(76,215,246,0.18)] hover:shadow-[0_0_60px_rgba(76,215,246,0.3)] transition-all">
+              {/* Highlight Badge */}
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-[#4cd7f6] via-[#4edea3] to-[#4cd7f6] text-[#050d25] text-xs font-bold uppercase tracking-wider shadow-lg">
+                🔥 Rekomendasi • Paling Hemat
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-4 mt-1">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#4cd7f6] px-3 py-1 rounded-full bg-[#4cd7f6]/10 border border-[#4cd7f6]/30">
+                    Durasi 1 Tahun
+                  </span>
+                  <span className="text-xs font-semibold text-[#4edea3] bg-[#4edea3]/10 px-2.5 py-0.5 rounded-full border border-[#4edea3]/20">
+                    Hemat Rp 49.000
+                  </span>
+                </div>
+
+                <h3 className="text-3xl font-bold text-white mb-2">Paket 1 Tahun</h3>
+                <p className="text-sm text-[#bcc9cd] mb-6 leading-relaxed">
+                  Akses penuh ke seluruh fitur SignalPulse selama 12 bulan penuh dengan harga paling hemat.
+                </p>
+
+                <div className="mb-6 pb-6 border-b border-[#1e2847]">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-sm text-[#869397]">Rp</span>
+                    <span className="text-4xl md:text-5xl font-black text-white font-mono tracking-tight">
+                      249.000
+                    </span>
+                    <span className="text-xs text-[#869397]">/ 1 tahun</span>
+                  </div>
+                  <p className="text-xs text-[#4edea3] mt-2 flex items-center gap-1.5 font-medium">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    Setara hanya Rp 20.750 / bulan (Diskon Terbesar!)
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-[#090f23]/60 border border-[#4edea3]/30 mb-8 space-y-2 text-xs text-[#bcc9cd]">
+                  <p className="font-semibold text-white flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-[#4edea3]" />
+                    Termasuk Semua Fitur Tanpa Batas:
+                  </p>
+                  <p className="text-[#869397] leading-relaxed">
+                    Mendapatkan akses lengkap 100% ke seluruh sistem tracking CAPI, telemetry, dan update selama masa aktif 12 bulan penuh.
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <Link
+                  href="/checkout?plan=1-tahun"
+                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-gradient-to-r from-[#4cd7f6] via-[#06b6d4] to-[#4edea3] text-[#050d25] font-bold text-base hover:shadow-[0_0_35px_rgba(76,215,246,0.5)] hover:scale-[1.02] active:scale-[0.98] transition-all"
+                >
+                  <Zap className="w-4 h-4" />
+                  <span>Beli Paket 1 Tahun</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+                <p className="text-[11px] text-center text-[#4edea3] mt-3 flex items-center justify-center gap-1.5 font-medium">
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  Aktivasi instan otomatis & jaminan terhubung
+                </p>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </section>
+
       {/* ───── FAQ SECTION ───── */}
       <section id="faq" className="relative py-20 md:py-28 px-6">
         <div className="max-w-3xl mx-auto">
@@ -849,18 +994,18 @@ export default function LandingPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              href="/login"
+            <a
+              href="#harga"
               className="group inline-flex items-center gap-2.5 px-10 py-4 rounded-xl bg-gradient-to-r from-[#4cd7f6] to-[#06b6d4] text-[#050d25] font-semibold text-base shadow-[0_0_36px_rgba(76,215,246,0.3)] hover:shadow-[0_0_50px_rgba(76,215,246,0.45)] transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               <Zap className="w-5 h-5" />
-              <span>Mulai Gratis Sekarang</span>
+              <span>Pilih Paket Sekarang</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
+            </a>
           </div>
 
           <p className="text-xs text-[#5a6480] mt-6">
-            Tidak perlu kartu kredit • Setup 10 menit • Cancel kapan saja
+            Aktivasi Instan Otomatis • Pembayaran Resmi via Pakasir • Setup 10 Menit
           </p>
         </div>
       </section>
