@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Login - SignalPulse CAPI Telemetry Portal",
-  description: "Portal tracking dan diagnostik CAPI Meta Ads Anda",
+  title: "SignalPulse — CTWA Conversion Tracking via Meta Conversions API",
+  description: "Track setiap konversi Click-to-WhatsApp (CTWA) langsung ke Meta Ads Manager via Conversions API. Server-side tracking, 99.4% akurasi, setup 10 menit.",
 };
 
 export default function RootLayout({
@@ -29,7 +29,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body
-        className="min-h-screen bg-background text-on-background font-sans selection:bg-primary-container selection:text-surface-container-lowest antialiased relative overflow-x-hidden flex flex-col justify-center"
+        className="min-h-screen bg-background text-on-background font-sans selection:bg-primary-container selection:text-surface-container-lowest antialiased relative overflow-x-hidden flex flex-col"
         suppressHydrationWarning
       >
         {children}
