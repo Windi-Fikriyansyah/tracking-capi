@@ -329,7 +329,7 @@ function LoginPortalContent() {
             </div>
             <div className="flex items-center justify-center gap-2">
               <span className="font-headline-sm text-headline-sm font-semibold tracking-tight text-primary">
-                SignalPulse CAPI
+                TrackCAPI
               </span>
               <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-label-sm font-label-sm bg-surface-container text-on-surface-variant border border-outline-variant/40">
                 <span className="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse" />
@@ -416,7 +416,7 @@ function LoginPortalContent() {
               </div>
               <div className="flex items-center justify-center gap-2">
                 <span className="font-headline-sm text-headline-sm font-semibold tracking-tight text-primary">
-                  SignalPulse CAPI
+                  TrackCAPI
                 </span>
                 <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-label-sm font-label-sm bg-surface-container text-on-surface-variant border border-outline-variant/40">
                   <span className="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse" />
@@ -433,11 +433,10 @@ function LoginPortalContent() {
                   setAuthMode("signin");
                   setFeedback(null);
                 }}
-                className={`py-2 rounded-md text-xs font-semibold transition-all cursor-pointer ${
-                  authMode === "signin"
-                    ? "bg-primary text-surface shadow-sm"
-                    : "text-on-surface-variant hover:text-on-surface"
-                }`}
+                className={`py-2 rounded-md text-xs font-semibold transition-all cursor-pointer ${authMode === "signin"
+                  ? "bg-primary text-surface shadow-sm"
+                  : "text-on-surface-variant hover:text-on-surface"
+                  }`}
               >
                 Masuk (Sign In)
               </button>
@@ -447,11 +446,10 @@ function LoginPortalContent() {
                   setAuthMode("signup");
                   setFeedback(null);
                 }}
-                className={`py-2 rounded-md text-xs font-semibold transition-all cursor-pointer ${
-                  authMode === "signup"
-                    ? "bg-primary text-surface shadow-sm"
-                    : "text-on-surface-variant hover:text-on-surface"
-                }`}
+                className={`py-2 rounded-md text-xs font-semibold transition-all cursor-pointer ${authMode === "signup"
+                  ? "bg-primary text-surface shadow-sm"
+                  : "text-on-surface-variant hover:text-on-surface"
+                  }`}
               >
                 Daftar Akun Baru (Sign Up)
               </button>
@@ -482,13 +480,12 @@ function LoginPortalContent() {
             {/* Feedback Notifications */}
             {feedback && (
               <div
-                className={`p-3.5 rounded-lg border text-body-sm flex items-start gap-2.5 transition-all ${
-                  feedback.type === "error"
-                    ? "bg-error-container/20 border-error/40 text-error"
-                    : feedback.type === "success"
+                className={`p-3.5 rounded-lg border text-body-sm flex items-start gap-2.5 transition-all ${feedback.type === "error"
+                  ? "bg-error-container/20 border-error/40 text-error"
+                  : feedback.type === "success"
                     ? "bg-tertiary-container/20 border-tertiary/40 text-tertiary"
                     : "bg-surface-container-high border-primary/40 text-on-surface"
-                }`}
+                  }`}
               >
                 {feedback.type === "error" ? (
                   <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
@@ -665,32 +662,32 @@ function LoginPortalContent() {
                   className="px-4 py-1.5 rounded-lg bg-primary-container text-on-primary-container font-medium text-body-sm hover:bg-primary flex items-center gap-1.5 cursor-pointer"
                 >
                   {resetLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-                    <span>Kirim Tautan</span>
-                  </button>
-                </div>
-              </form>
-            </div>
+                  <span>Kirim Tautan</span>
+                </button>
+              </div>
+            </form>
           </div>
-        )}
-      </>
-    );
-  }
+        </div>
+      )}
+    </>
+  );
+}
 
-  export default function LoginPortal() {
-    return (
-      <Suspense
-        fallback={
-          <div className="min-h-screen bg-background flex items-center justify-center p-8">
-            <div className="flex flex-col items-center gap-3 text-on-surface-variant">
-              <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              <span className="text-body-sm font-medium tracking-wide">
-                Menginisialisasi portal...
-              </span>
-            </div>
+export default function LoginPortal() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-background flex items-center justify-center p-8">
+          <div className="flex flex-col items-center gap-3 text-on-surface-variant">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            <span className="text-body-sm font-medium tracking-wide">
+              Menginisialisasi portal...
+            </span>
           </div>
-        }
-      >
-        <LoginPortalContent />
-      </Suspense>
-    );
-  }
+        </div>
+      }
+    >
+      <LoginPortalContent />
+    </Suspense>
+  );
+}

@@ -280,7 +280,7 @@ function CheckoutContent() {
               <Activity className="w-4.5 h-4.5 text-[#050d25]" strokeWidth={2.5} />
             </div>
             <span className="font-semibold text-lg tracking-tight text-white">
-              Signal<span className="text-[#4cd7f6]">Pulse</span>
+              Track<span className="text-[#4cd7f6]">Capi</span>
             </span>
           </Link>
 
@@ -311,7 +311,7 @@ function CheckoutContent() {
             <span className="inline-block px-3.5 py-1 rounded-full bg-[#4edea3]/10 border border-[#4edea3]/30 text-xs text-[#4edea3] font-semibold uppercase tracking-wider mb-3">
               Pembayaran Berhasil Diverifikasi
             </span>
-            <h1 className="text-3xl font-bold text-white mb-3">Selamat Datang di SignalPulse!</h1>
+            <h1 className="text-3xl font-bold text-white mb-3">Selamat Datang di TrackCapi!</h1>
             <p className="text-[#869397] text-sm leading-relaxed mb-6">
               Langganan <strong className="text-white">{currentPlan.name}</strong> Anda telah aktif.
               Detail akses dan receipt telah dikirimkan ke email{" "}
@@ -422,7 +422,7 @@ function CheckoutContent() {
                         transactionData.payment_url ||
                         `https://app.pakasir.com/pay-v2/${transactionData.order_id}`
                       )}`}
-                      alt="QRIS Pakasir SignalPulse"
+                      alt="QRIS Pakasir TrackCapi"
                       className="w-full h-full object-contain rounded-lg"
                     />
                   </div>
@@ -466,7 +466,7 @@ function CheckoutContent() {
                     <p>1. Buka aplikasi m-Banking atau kunjungi ATM bank Anda.</p>
                     <p>2. Pilih menu <strong>Transfer / Pembayaran</strong> → <strong>Virtual Account</strong>.</p>
                     <p>3. Masukkan nomor Virtual Account di atas.</p>
-                    <p>4. Pastikan nama penerima tertera <strong>SignalPulse / Pakasir</strong> dan nominal sesuai (Rp {(transactionData.total_payment || transactionData.amount).toLocaleString("id-ID")}).</p>
+                    <p>4. Pastikan nama penerima tertera <strong>TrackCapi / Pakasir</strong> dan nominal sesuai (Rp {(transactionData.total_payment || transactionData.amount).toLocaleString("id-ID")}).</p>
                     <p>5. Konfirmasi transaksi dan simpan bukti transfer.</p>
                   </div>
                 </div>
@@ -514,7 +514,7 @@ function CheckoutContent() {
                 Proses Checkout Instan
               </span>
               <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-3">
-                Selesaikan Pesanan SignalPulse
+                Selesaikan Pesanan TrackCapi
               </h1>
               <p className="text-[#869397] text-sm leading-relaxed">
                 Pilih paket langganan dan metode pembayaran yang Anda inginkan.

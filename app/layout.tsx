@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SignalPulse — CTWA Conversion Tracking via Meta Conversions API",
+  title: "TrackCapi — CTWA Conversion Tracking via Meta Conversions API",
   description: "Track setiap konversi Click-to-WhatsApp (CTWA) langsung ke Meta Ads Manager via Conversions API. Server-side tracking, 99.4% akurasi, setup 10 menit.",
 };
 

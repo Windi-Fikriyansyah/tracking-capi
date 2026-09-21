@@ -208,9 +208,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
       {/* SIDEBAR NAVIGATION */}
       <aside
-        className={`h-screen w-64 fixed left-0 top-0 border-r border-outline-variant/30 bg-surface-container-lowest z-50 flex flex-col justify-between p-4 transition-transform duration-200 md:translate-x-0 ${
-          mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`h-screen w-64 fixed left-0 top-0 border-r border-outline-variant/30 bg-surface-container-lowest z-50 flex flex-col justify-between p-4 transition-transform duration-200 md:translate-x-0 ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         <div className="space-y-6">
           {/* Organization / Header Workspace */}
@@ -256,11 +255,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                   key={item.label}
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors duration-150 ${
-                    item.active
-                      ? "bg-surface-container-high text-primary font-medium border-l-2 border-primary"
-                      : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high"
-                  }`}
+                  className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors duration-150 ${item.active
+                    ? "bg-surface-container-high text-primary font-medium border-l-2 border-primary"
+                    : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high"
+                    }`}
                 >
                   <Icon className="w-5 h-5" />
                   <span className="font-label-md text-label-md">{item.label}</span>
@@ -377,7 +375,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         <footer className="px-6 py-3 bg-surface-container-lowest border-t border-outline-variant/30 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs font-code-metric text-outline">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-tertiary" />
-            <span>SignalPulse CAPI Node #us-east-worker-04</span>
+            <span>TrackCapi Node #us-east-worker-04</span>
             <span>•</span>
             <span>Telemetry Frequency: 1.0 Hz</span>
           </div>

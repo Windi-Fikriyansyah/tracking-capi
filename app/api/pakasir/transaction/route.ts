@@ -43,7 +43,7 @@ export async function POST(request: Request) {
     const randomSuffix = Math.floor(100 + Math.random() * 900);
     const orderId = `SP-${timestamp}-${randomSuffix}`;
 
-    const slug = process.env.NEXT_PUBLIC_PAKASIR_SLUG || "signalpulse";
+    const slug = process.env.NEXT_PUBLIC_PAKASIR_SLUG || "Trackcapi";
     const apiKey = process.env.PAKASIR_API_KEY || "";
 
     // Fetch fee from v2 API or fallback
@@ -126,7 +126,7 @@ export async function POST(request: Request) {
     let qrString = null;
 
     if (method === "qris") {
-      qrString = `00020101021226670014ID.LINKAJA.WWW011893600002011${orderId}0215ID10200215000010303UMI51440014ID.PAKASIR.WWW0215${orderId}520458125303360540${totalPayment}.005802ID5911SignalPulse6007Jakarta61051011062070703A016304`;
+      qrString = `00020101021226670014ID.LINKAJA.WWW011893600002011${orderId}0215ID10200215000010303UMI51440014ID.PAKASIR.WWW0215${orderId}520458125303360540${totalPayment}.005802ID5911Trackcapi6007Jakarta61051011062070703A016304`;
     } else if (method.endsWith("_va")) {
       const bankCodes: Record<string, string> = {
         bni_va: "988",
