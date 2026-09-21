@@ -216,6 +216,58 @@ function CheckoutContent() {
       ? PAKASIR_METHODS
       : PAKASIR_METHODS.filter((m) => m.category === methodFilter);
 
+  const [isCheckingStatus, setIsCheckingStatus] = useState(false);
+  const [statusCheckMsg, setStatusCheckMsg] = useState<string | null>(null);
+
+  // Poll status from /api/pakasir/status every 4 seconds while payment is active
+  useEffect(() => {
+    if (!transactionData?.order_id || isPaidSuccess) return;
+
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch(
+          `/api/pakasir/status?order_id=${encodeURIComponent(transactionData.order_id)}`
+        );
+        if (res.ok) {
+          const data = await res.json();
+          if (data.paid || data.status === "completed") {
+            setIsPaidSuccess(true);
+            clearInterval(interval);
+          }
+        }
+      } catch (pollErr) {
+        console.warn("Polling status error:", pollErr);
+      }
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [transactionData?.order_id, isPaidSuccess]);
+
+  const handleCheckPaymentStatus = async () => {
+    if (!transactionData?.order_id) return;
+    setIsCheckingStatus(true);
+    setStatusCheckMsg(null);
+
+    try {
+      const res = await fetch(
+        `/api/pakasir/status?order_id=${encodeURIComponent(transactionData.order_id)}`
+      );
+      const data = await res.json();
+
+      if (data.paid || data.status === "completed") {
+        setIsPaidSuccess(true);
+      } else {
+        setStatusCheckMsg(
+          "Pembayaran belum terdeteksi. Silakan selesaikan pembayaran sesuai petunjuk. Sistem akan otomatis beralih setelah webhook pembayaran berhasil diterima dari Pakasir."
+        );
+      }
+    } catch {
+      setStatusCheckMsg("Gagal memeriksa status pembayaran. Silakan coba lagi.");
+    } finally {
+      setIsCheckingStatus(false);
+    }
+  };
+
   const handleCopy = (text: string, field: string) => {
     navigator.clipboard.writeText(text);
     setCopiedField(field);
@@ -330,7 +382,7 @@ function CheckoutContent() {
               <div className="flex justify-between">
                 <span className="text-[#869397]">Total Pembayaran:</span>
                 <span className="text-white font-bold">
-                  Rp {currentPlan.price.toLocaleString("id-ID")}
+                  Rp {(transactionData?.total_payment || transactionData?.amount || totalPayment).toLocaleString("id-ID")}
                 </span>
               </div>
               <div className="flex justify-between">
@@ -396,14 +448,16 @@ function CheckoutContent() {
                 </div>
               </div>
 
-              {/* Status Alert */}
-              <div className="flex items-center gap-3 p-3.5 rounded-xl bg-[#4cd7f6]/10 border border-[#4cd7f6]/30 text-xs text-[#dbe1ff] mb-6">
-                <Clock className="w-4 h-4 text-[#4cd7f6] shrink-0" />
-                <p>
-                  Selesaikan pembayaran Anda dalam{" "}
-                  <strong className="text-[#4cd7f6]">15:00 menit</strong> untuk aktivasi otomatis
-                  melalui sistem Pakasir.
-                </p>
+              {/* Status Alert & Live Webhook Listener Badge */}
+              <div className="space-y-2.5 mb-6">
+
+
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-[#4cd7f6]/10 border border-[#4cd7f6]/30 text-xs text-[#dbe1ff]">
+                  <Clock className="w-4 h-4 text-[#4cd7f6] shrink-0" />
+                  <p>
+                    Selesaikan pembayaran dalam <strong className="text-[#4cd7f6]">15:00 menit</strong>. Halaman ini akan otomatis beralih setelah Pakasir mengonfirmasi pembayaran Anda.
+                  </p>
+                </div>
               </div>
 
               {/* QRIS PAYMENT VIEW */}
@@ -484,19 +538,35 @@ function CheckoutContent() {
                   <ExternalLink className="w-4 h-4" />
                 </a>
 
-                {/* Simulation button for demo testing */}
+                {/* Real check status button verifying webhook / status API */}
                 <button
                   type="button"
-                  onClick={() => setIsPaidSuccess(true)}
-                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-[#4edea3]/40 bg-[#4edea3]/10 text-[#4edea3] hover:bg-[#4edea3] hover:text-[#050d25] text-xs font-semibold transition-all"
+                  onClick={handleCheckPaymentStatus}
+                  disabled={isCheckingStatus}
+                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-[#4edea3]/40 bg-[#4edea3]/10 text-[#4edea3] hover:bg-[#4edea3]/20 text-xs font-semibold transition-all cursor-pointer disabled:opacity-60"
                 >
-                  <CheckCircle2 className="w-4 h-4" />
-                  <span>Konfirmasi Pembayaran Selesai (Cek Status)</span>
+                  {isCheckingStatus ? (
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <RefreshCw className="w-4 h-4" />
+                  )}
+                  <span>
+                    {isCheckingStatus ? "Memeriksa Status ke Pakasir..." : "Cek Status Pembayaran"}
+                  </span>
                 </button>
+
+                {statusCheckMsg && (
+                  <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs leading-relaxed text-center">
+                    {statusCheckMsg}
+                  </div>
+                )}
 
                 <button
                   type="button"
-                  onClick={() => setTransactionData(null)}
+                  onClick={() => {
+                    setTransactionData(null);
+                    setStatusCheckMsg(null);
+                  }}
                   className="w-full text-center text-xs text-[#869397] hover:text-white transition-colors py-2"
                 >
                   Ganti Metode Pembayaran Lain

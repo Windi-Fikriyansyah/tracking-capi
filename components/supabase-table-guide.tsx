@@ -32,21 +32,24 @@ create table if not exists public.app_settings (
 alter table public.app_settings enable row level security;
 
 -- Policies untuk app_settings
-create policy if not exists "Users can view own app_settings"
+drop policy if exists "Users can view own app_settings" on public.app_settings;
+create policy "Users can view own app_settings"
 on public.app_settings for select to authenticated, anon
 using (
   (auth.uid() is not null and auth.uid()::text = user_id)
   or (auth.uid() is null and user_id is not null)
 );
 
-create policy if not exists "Users can insert own app_settings"
+drop policy if exists "Users can insert own app_settings" on public.app_settings;
+create policy "Users can insert own app_settings"
 on public.app_settings for insert to authenticated, anon
 with check (
   (auth.uid() is not null and auth.uid()::text = user_id)
   or (auth.uid() is null and user_id is not null)
 );
 
-create policy if not exists "Users can update own app_settings"
+drop policy if exists "Users can update own app_settings" on public.app_settings;
+create policy "Users can update own app_settings"
 on public.app_settings for update to authenticated, anon
 using (
   (auth.uid() is not null and auth.uid()::text = user_id)
@@ -57,7 +60,8 @@ with check (
   or (auth.uid() is null and user_id is not null)
 );
 
-create policy if not exists "Users can delete own app_settings"
+drop policy if exists "Users can delete own app_settings" on public.app_settings;
+create policy "Users can delete own app_settings"
 on public.app_settings for delete to authenticated, anon
 using (
   (auth.uid() is not null and auth.uid()::text = user_id)
@@ -98,7 +102,8 @@ create table if not exists public.ctwa_leads (
 -- 5. Aktifkan Row Level Security (RLS) pada ctwa_leads
 alter table public.ctwa_leads enable row level security;
 
-create policy if not exists "Users can manage own ctwa_leads"
+drop policy if exists "Users can manage own ctwa_leads" on public.ctwa_leads;
+create policy "Users can manage own ctwa_leads"
 on public.ctwa_leads for all to authenticated, anon
 using (
   (auth.uid() is not null and auth.uid()::text = user_id)
@@ -108,6 +113,37 @@ with check (
   (auth.uid() is not null and auth.uid()::text = user_id)
   or (auth.uid() is null and user_id is not null)
 );
+
+-- 6. Buat tabel orders untuk menyimpan riwayat transaksi checkout & webhook Pakasir
+create table if not exists public.orders (
+  order_id text primary key,
+  txn_id text,
+  plan_id text not null,
+  plan_name text not null,
+  amount numeric not null,
+  fee numeric default 0,
+  total_payment numeric not null,
+  payment_method text,
+  customer_name text not null,
+  customer_email text not null,
+  customer_phone text not null,
+  status text default 'pending',
+  login_password text,
+  email_sent boolean default false,
+  email_sent_at timestamp with time zone,
+  created_at timestamp with time zone default timezone('utc'::text, now()),
+  paid_at timestamp with time zone,
+  updated_at timestamp with time zone default timezone('utc'::text, now())
+);
+
+-- Aktifkan RLS pada tabel orders
+alter table public.orders enable row level security;
+
+drop policy if exists "Allow public and authenticated to insert and query orders" on public.orders;
+create policy "Allow public and authenticated to insert and query orders"
+on public.orders for all to authenticated, anon
+using (true)
+with check (true);
 `;
 
 interface SupabaseTableGuideProps {

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { saveOrder } from "@/lib/services/order-service";
 
 export interface CreateTransactionRequest {
   planId: "6-bulan" | "1-tahun";
@@ -80,7 +81,7 @@ export async function POST(request: Request) {
           },
           body: JSON.stringify({
             method: method,
-            amount: amount,
+            amount: totalPayment,
           }),
         });
 
@@ -91,6 +92,23 @@ export async function POST(request: Request) {
             data.payment_link ||
             (txnId ? `https://app.pakasir.com/pay-v2/${txnId}` : "");
 
+          const finalFee = data.fee ?? fee;
+          const finalTotal = data.total_payment ?? totalPayment;
+
+          await saveOrder({
+            orderId,
+            txnId,
+            planId,
+            planName,
+            amount,
+            fee: finalFee,
+            totalPayment: finalTotal,
+            method,
+            customer,
+            status: "pending",
+            createdAt: new Date().toISOString(),
+          });
+
           return NextResponse.json({
             success: true,
             api_version: "v2",
@@ -98,8 +116,8 @@ export async function POST(request: Request) {
             txn_id: txnId,
             order_id: orderId,
             amount,
-            fee: data.fee ?? fee,
-            total_payment: data.total_payment ?? totalPayment,
+            fee: finalFee,
+            total_payment: finalTotal,
             plan_name: planName,
             plan_id: planId,
             method,
@@ -140,6 +158,20 @@ export async function POST(request: Request) {
       const prefix = bankCodes[method] || "8888";
       vaNumber = `${prefix}${customer.phone.replace(/[^0-9]/g, "").slice(-8)}${Math.floor(10 + Math.random() * 90)}`;
     }
+
+    await saveOrder({
+      orderId,
+      txnId: mockTxnId,
+      planId,
+      planName,
+      amount,
+      fee,
+      totalPayment,
+      method,
+      customer,
+      status: "pending",
+      createdAt: new Date().toISOString(),
+    });
 
     return NextResponse.json({
       success: true,

@@ -190,14 +190,42 @@ function LoginPortalContent() {
       return;
     }
 
-    // 2. Real Supabase auth for other accounts
+    // 2. Check if customer has an active paid subscription credential from checkout
+    try {
+      const orderAuthRes = await fetch("/api/auth/order-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      if (orderAuthRes.ok) {
+        const orderAuthData = await orderAuthRes.json();
+        if (orderAuthData.success && orderAuthData.user) {
+          localStorage.setItem(
+            "signalpulse_demo_session",
+            JSON.stringify(orderAuthData.user)
+          );
+          setCurrentUser(orderAuthData.user);
+          setFeedback({
+            type: "success",
+            message: `Selamat datang, ${orderAuthData.user.name}! Membuka dashboard...`,
+          });
+          setIsLoading(false);
+          router.push(redirectTarget);
+          return;
+        }
+      }
+    } catch {
+      // Continue to Supabase auth
+    }
+
+    // 3. Supabase auth
     if (!isSupabaseConfigured) {
       setTimeout(() => {
         setIsLoading(false);
         setFeedback({
-          type: "info",
+          type: "error",
           message:
-            "Supabase belum terkonfigurasi pada .env.local. Anda dapat menggunakan tombol 'Gunakan Akun Demo' di bawah.",
+            "Email atau kata sandi tidak cocok. Pastikan Anda memasukkan kredensial yang dikirimkan ke email Anda, atau gunakan Akun Demo.",
         });
       }, 400);
       return;
