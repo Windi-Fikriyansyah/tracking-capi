@@ -1,10 +1,26 @@
 import { NextResponse } from "next/server";
+import { getUserSubscription } from "@/lib/services/order-service";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json().catch(() => ({}));
     const apiKey = body.apiKey;
     const redirectUrl = body.redirectUrl;
+    const userEmail = body.userEmail || body.email;
+
+    if (userEmail) {
+      const sub = await getUserSubscription(userEmail);
+      if (sub.isExpired) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: `Masa aktif langganan Anda (${sub.planName}) telah berakhir pada ${sub.formattedExpiresAt}. Silakan perpanjang paket untuk menghubungkan akun WhatsApp.`,
+            isExpired: true,
+          },
+          { status: 403 }
+        );
+      }
+    }
 
     if (!apiKey || typeof apiKey !== "string" || apiKey.trim().length === 0) {
       return NextResponse.json(

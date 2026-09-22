@@ -250,6 +250,7 @@ function ConnectWhatsAppContent() {
         body: JSON.stringify({
           apiKey,
           redirectUrl,
+          userEmail: currentUser?.email,
         }),
       });
 

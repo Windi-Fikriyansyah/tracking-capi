@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase/client";
+import { getUserSubscription } from "@/lib/services/order-service";
 
 export async function GET() {
   return NextResponse.json({
@@ -120,9 +121,16 @@ export async function POST(request: Request) {
     let event1Status: "sent" | "pending" | "failed" = "pending";
     let event1TraceId: string | null = null;
 
-    // 5. Auto-dispatch Event 1 to Meta via Zernio ONLY if ctwa_clid exists
-    // (Meta rejects events without ctwa_clid with error 422: no captured ctwa_clid)
-    if (ctwa_clid) {
+    // 5. Cek status aktif paket langganan sebelum mengirim event CAPI
+    const sub = await getUserSubscription(userId);
+
+    if (sub.isExpired) {
+      console.warn(
+        `[CAPI Blocked]: Langganan akun (${userId}) telah berakhir (${sub.formattedExpiresAt}). Event CTWA tidak diteruskan ke Meta Conversions API.`
+      );
+      event1Status = "failed";
+    } else if (ctwa_clid) {
+      // Auto-dispatch Event 1 to Meta via Zernio ONLY if ctwa_clid exists and subscription is active
       if (autoSend && apiKey && accountId) {
         try {
           console.log(`Mengirim otomatis Event 1 (${event1Name}) untuk kontak iklan CTWA: ${phoneE164} (clid: ${ctwa_clid})`);

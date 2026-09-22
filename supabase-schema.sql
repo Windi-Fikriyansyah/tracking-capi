@@ -110,8 +110,12 @@ create table if not exists public.orders (
   email_sent_at timestamp with time zone,
   created_at timestamp with time zone default timezone('utc'::text, now()),
   paid_at timestamp with time zone,
+  expires_at timestamp with time zone,
   updated_at timestamp with time zone default timezone('utc'::text, now())
 );
+
+-- Pastikan kolom expires_at ada jika tabel sudah dibuat sebelumnya
+alter table public.orders add column if not exists expires_at timestamp with time zone;
 
 alter table public.orders enable row level security;
 

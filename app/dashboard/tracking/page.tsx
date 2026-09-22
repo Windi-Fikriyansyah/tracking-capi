@@ -229,6 +229,7 @@ export default function TrackingPage() {
           value: eventName === "Purchase" ? customValue || lead.event_4_value || settings.purchase_value : undefined,
           currency: settings.currency,
           testCode: settings.test_code || undefined,
+          userEmail: currentUser?.email,
         }),
       });
 

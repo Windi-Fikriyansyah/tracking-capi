@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase/client";
+import { createClient } from "@supabase/supabase-js";
 
 export interface CustomerData {
   name: string;
@@ -22,8 +23,41 @@ export interface OrderRecord {
   status: "pending" | "completed" | "failed";
   createdAt: string;
   paidAt?: string;
+  expiresAt?: string;
   emailSent?: boolean;
   emailSentAt?: string;
+}
+
+export interface SubscriptionStatus {
+  hasSubscription: boolean;
+  isExpired: boolean;
+  planId: "6-bulan" | "1-tahun" | string;
+  planName: string;
+  paidAt?: string;
+  expiresAt?: string;
+  daysLeft: number;
+  formattedExpiresAt: string;
+}
+
+/**
+ * Hitung tanggal kedaluwarsa paket berdasarkan paket yang dibeli:
+ * - 6-bulan: +6 bulan dari tanggal pembayaran (atau tanggal pembuatan)
+ * - 1-tahun: +12 bulan (1 tahun) dari tanggal pembayaran
+ */
+export function calculateExpirationDate(
+  planId: "6-bulan" | "1-tahun" | string,
+  startDateIso?: string
+): string {
+  const baseDate = startDateIso ? new Date(startDateIso) : new Date();
+  const date = isNaN(baseDate.getTime()) ? new Date() : new Date(baseDate.getTime());
+
+  if (planId === "1-tahun") {
+    date.setFullYear(date.getFullYear() + 1);
+  } else {
+    // default 6-bulan
+    date.setMonth(date.getMonth() + 6);
+  }
+  return date.toISOString();
 }
 
 // In-memory cache for fast lookup
@@ -72,6 +106,11 @@ function saveOrdersToFile(orders: Record<string, OrderRecord>) {
  * Simpan data order baru saat checkout / transaksi dibuat.
  */
 export async function saveOrder(order: OrderRecord): Promise<void> {
+  // Hitung expiresAt jika status completed dan belum dihitung
+  if (order.status === "completed" && !order.expiresAt) {
+    order.expiresAt = calculateExpirationDate(order.planId, order.paidAt || order.createdAt);
+  }
+
   // 1. Update in-memory
   ordersCache.set(order.orderId, order);
 
@@ -101,6 +140,7 @@ export async function saveOrder(order: OrderRecord): Promise<void> {
         email_sent_at: order.emailSentAt,
         created_at: order.createdAt,
         paid_at: order.paidAt,
+        expires_at: order.expiresAt,
       });
     } catch {
       // Non-blocking if table doesn't exist
@@ -151,6 +191,11 @@ export async function getOrder(orderId: string): Promise<OrderRecord | null> {
           status: data.status,
           createdAt: data.created_at,
           paidAt: data.paid_at,
+          expiresAt:
+            data.expires_at ||
+            (data.status === "completed"
+              ? calculateExpirationDate(data.plan_id, data.paid_at || data.created_at)
+              : undefined),
           loginPassword: data.login_password,
           emailSent: data.email_sent,
           emailSentAt: data.email_sent_at,
@@ -176,9 +221,19 @@ export async function updateOrder(
   const existing = await getOrder(orderId);
   if (!existing) return null;
 
+  // Jika status diubah jadi completed dan expiresAt belum ada
+  let calculatedExpiresAt = updates.expiresAt || existing.expiresAt;
+  if ((updates.status === "completed" || existing.status === "completed") && !calculatedExpiresAt) {
+    calculatedExpiresAt = calculateExpirationDate(
+      updates.planId || existing.planId,
+      updates.paidAt || existing.paidAt || new Date().toISOString()
+    );
+  }
+
   const updated: OrderRecord = {
     ...existing,
     ...updates,
+    expiresAt: calculatedExpiresAt,
   };
 
   // Update in-memory
@@ -197,6 +252,7 @@ export async function updateOrder(
         .update({
           status: updated.status,
           paid_at: updated.paidAt,
+          expires_at: updated.expiresAt,
           txn_id: updated.txnId,
           login_password: updated.loginPassword,
           email_sent: updated.emailSent,
@@ -262,6 +318,11 @@ export async function findOrderByEmail(email: string): Promise<OrderRecord | nul
           status: data.status,
           createdAt: data.created_at,
           paidAt: data.paid_at,
+          expiresAt:
+            data.expires_at ||
+            (data.status === "completed"
+              ? calculateExpirationDate(data.plan_id, data.paid_at || data.created_at)
+              : undefined),
           loginPassword: data.login_password,
           emailSent: data.email_sent,
           emailSentAt: data.email_sent_at,
@@ -275,4 +336,199 @@ export async function findOrderByEmail(email: string): Promise<OrderRecord | nul
   }
 
   return null;
+}
+
+/**
+ * Mendapatkan status langganan lengkap (aktif / expired, sisa hari) untuk suatu email pengguna.
+ * MENDUKUNG MULTI-ORDER & PERPANJANGAN (STACKING):
+ * Jika user memiliki lebih dari 1 order berstatus 'completed' (misal perpanjang paket atau beli lagi karena lupa),
+ * masa aktif diakumulasikan secara otomatis sehingga hari aktif tidak pernah hangus atau tumpang tindih.
+ */
+export async function getUserSubscription(emailOrUserId: string): Promise<SubscriptionStatus> {
+  const cleanKey = (emailOrUserId || "").trim().toLowerCase();
+
+  // Jika input berupa UUID / user_id (bukan format email), selesaikan ke email akun pengguna
+  let cleanEmail = cleanKey;
+  if (cleanKey && !cleanKey.includes("@") && isSupabaseConfigured) {
+    try {
+      const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      if (serviceRoleKey && supabaseUrl) {
+        const adminClient = createClient(supabaseUrl, serviceRoleKey, {
+          auth: { autoRefreshToken: false, persistSession: false },
+        });
+        const { data: userData } = await adminClient.auth.admin.getUserById(cleanKey);
+        if (userData?.user?.email) {
+          cleanEmail = userData.user.email.trim().toLowerCase();
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }
+
+  // Kumpulkan semua order berstatus completed untuk user ini
+  const completedOrdersMap = new Map<string, OrderRecord>();
+
+  // 1. Cek memory & local file
+  const allOrders = loadOrdersFromFile();
+  const localCandidates: OrderRecord[] = [
+    ...Array.from(ordersCache.values()),
+    ...Object.values(allOrders),
+  ].filter(
+    (o) =>
+      o.status === "completed" &&
+      (o.customer.email.toLowerCase() === cleanEmail ||
+        o.customer.email.toLowerCase() === cleanKey ||
+        o.orderId.toLowerCase() === cleanKey)
+  );
+
+  for (const ord of localCandidates) {
+    completedOrdersMap.set(ord.orderId, ord);
+  }
+
+  // 2. Cek di Supabase untuk mengambil SEMUA order completed milik user
+  if (isSupabaseConfigured) {
+    try {
+      const { data } = await supabase
+        .from("orders")
+        .select("*")
+        .or(`customer_email.ilike.${cleanEmail},customer_email.ilike.${cleanKey}`)
+        .eq("status", "completed")
+        .order("created_at", { ascending: true });
+
+      if (Array.isArray(data)) {
+        for (const row of data) {
+          const rec: OrderRecord = {
+            orderId: row.order_id,
+            txnId: row.txn_id,
+            planId: row.plan_id,
+            planName: row.plan_name,
+            amount: row.amount,
+            fee: row.fee,
+            totalPayment: row.total_payment,
+            method: row.payment_method,
+            customer: {
+              name: row.customer_name,
+              email: row.customer_email,
+              phone: row.customer_phone,
+            },
+            status: row.status,
+            createdAt: row.created_at,
+            paidAt: row.paid_at,
+            expiresAt: row.expires_at,
+            loginPassword: row.login_password,
+          };
+          completedOrdersMap.set(row.order_id, rec);
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }
+
+  const completedOrders = Array.from(completedOrdersMap.values());
+
+  // Jika tidak ada order completed sama sekali (misal akun default / belum order)
+  if (completedOrders.length === 0) {
+    // Cek apakah akun demo / development default
+    const isDemo =
+      cleanKey.includes("demo") ||
+      cleanKey.includes("admin") ||
+      cleanKey.includes("signalpulse.io");
+
+    if (isDemo) {
+      // Berikan akses demo aktif 6 bulan untuk testing
+      const fakePaid = new Date().toISOString();
+      const fakeExpires = calculateExpirationDate("6-bulan", fakePaid);
+      return {
+        hasSubscription: true,
+        isExpired: false,
+        planId: "6-bulan",
+        planName: "Paket 6 Bulan (Demo)",
+        paidAt: fakePaid,
+        expiresAt: fakeExpires,
+        daysLeft: 180,
+        formattedExpiresAt: formatIndonesianDate(fakeExpires),
+      };
+    }
+
+    return {
+      hasSubscription: false,
+      isExpired: true,
+      planId: "6-bulan",
+      planName: "Belum Berlangganan",
+      daysLeft: 0,
+      formattedExpiresAt: "-",
+    };
+  }
+
+  // 3. Urutkan semua order completed secara kronologis (dari yang paling awal dibayar)
+  completedOrders.sort((a, b) => {
+    const timeA = new Date(a.paidAt || a.createdAt).getTime();
+    const timeB = new Date(b.paidAt || b.createdAt).getTime();
+    return timeA - timeB;
+  });
+
+  // 4. Hitung masa aktif kumulatif (Stacking Algorithm)
+  let runningExpiresAt: Date | null = null;
+  let latestPlanName = completedOrders[completedOrders.length - 1].planName;
+  let latestPlanId = completedOrders[completedOrders.length - 1].planId;
+  const firstPaidAt = completedOrders[0].paidAt || completedOrders[0].createdAt;
+
+  for (const ord of completedOrders) {
+    const orderPaidDate = new Date(ord.paidAt || ord.createdAt);
+    const validPaidDate = isNaN(orderPaidDate.getTime()) ? new Date() : orderPaidDate;
+
+    // Jika belum ada runningExpiresAt, atau jika order baru ini dibayar SETELAH paket sebelumnya kedaluwarsa
+    const baseDateToExtend: Date =
+      !runningExpiresAt || validPaidDate.getTime() > runningExpiresAt.getTime()
+        ? validPaidDate
+        : runningExpiresAt;
+
+    const nextExpiry = new Date(baseDateToExtend.getTime());
+    if (ord.planId === "1-tahun") {
+      nextExpiry.setFullYear(nextExpiry.getFullYear() + 1);
+    } else {
+      nextExpiry.setMonth(nextExpiry.getMonth() + 6);
+    }
+    runningExpiresAt = nextExpiry;
+  }
+
+  const finalExpiresIso = runningExpiresAt ? runningExpiresAt.toISOString() : new Date().toISOString();
+  const now = Date.now();
+  const diffMs = new Date(finalExpiresIso).getTime() - now;
+  const daysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+  const isExpired = daysLeft <= 0;
+
+  // Berikan label khusus jika user memiliki lebih dari 1 transaksi aktif
+  let displayName = latestPlanName;
+  if (completedOrders.length > 1) {
+    displayName = `${latestPlanName} (${completedOrders.length}x Perpanjangan)`;
+  }
+
+  return {
+    hasSubscription: true,
+    isExpired,
+    planId: latestPlanId,
+    planName: displayName,
+    paidAt: firstPaidAt,
+    expiresAt: finalExpiresIso,
+    daysLeft: isExpired ? 0 : daysLeft,
+    formattedExpiresAt: formatIndonesianDate(finalExpiresIso),
+  };
+}
+
+function formatIndonesianDate(isoString: string): string {
+  try {
+    const d = new Date(isoString);
+    if (isNaN(d.getTime())) return "-";
+    return d.toLocaleDateString("id-ID", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+  } catch {
+    return isoString;
+  }
 }

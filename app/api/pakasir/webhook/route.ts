@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
-import { getOrder, updateOrder } from "@/lib/services/order-service";
+import {
+  getOrder,
+  updateOrder,
+  calculateExpirationDate,
+  getUserSubscription,
+} from "@/lib/services/order-service";
 import { sendLoginAccessEmail } from "@/lib/services/email-service";
 import { createClient } from "@supabase/supabase-js";
 
@@ -34,7 +39,14 @@ function generateRandomPassword(): string {
 /**
  * Mendaftarkan akun user ke Supabase Auth jika belum terdaftar.
  */
-async function provisionSupabaseUser(email: string, password: string, name: string) {
+async function provisionSupabaseUser(
+  email: string,
+  password: string,
+  name: string,
+  planId?: string,
+  planName?: string,
+  expiresAt?: string
+) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -58,10 +70,37 @@ async function provisionSupabaseUser(email: string, password: string, name: stri
           name,
           role: "customer",
           created_via: "pakasir_webhook",
+          plan_id: planId || "6-bulan",
+          plan_name: planName || "Paket 6 Bulan",
+          expires_at: expiresAt,
         },
       });
 
       if (error) {
+        // Jika user sudah terdaftar sebelumnya (misal perpanjangan paket / beli ulang)
+        if (error.message?.toLowerCase().includes("already") || (error as any).status === 422) {
+          try {
+            const { data: usersList } = await adminClient.auth.admin.listUsers();
+            const existingUser = usersList?.users?.find(
+              (u) => u.email?.toLowerCase() === email.toLowerCase()
+            );
+            if (existingUser) {
+              await adminClient.auth.admin.updateUserById(existingUser.id, {
+                user_metadata: {
+                  ...existingUser.user_metadata,
+                  plan_id: planId || existingUser.user_metadata?.plan_id || "6-bulan",
+                  plan_name: planName || existingUser.user_metadata?.plan_name || "Paket 6 Bulan",
+                  expires_at: expiresAt,
+                  last_renewed_at: new Date().toISOString(),
+                },
+              });
+              console.log("[Supabase Provision]: Akun lama berhasil diperbarui dengan masa aktif baru.");
+              return { success: true, user: existingUser, isExisting: true };
+            }
+          } catch (updateErr: any) {
+            console.warn("[Supabase Provision Update Warning]:", updateErr.message);
+          }
+        }
         console.warn("[Supabase Admin Provision Warning]:", error.message);
         return { success: false, error: error.message };
       }
@@ -182,32 +221,60 @@ export async function POST(request: Request) {
       );
     }
 
-    // 4. Siapkan password akses login
+    // 4. Siapkan password akses login dan hitung masa aktif paket
     const loginPassword = order.loginPassword || generateRandomPassword();
+    const paidAt = completed_at || new Date().toISOString();
+
+    // Periksa apakah customer sudah memiliki langganan aktif sebelumnya (stacking / akumulasi)
+    const existingSub = await getUserSubscription(order.customer.email);
+    let baseStartDate = paidAt;
+    if (existingSub.hasSubscription && !existingSub.isExpired && existingSub.expiresAt) {
+      baseStartDate = existingSub.expiresAt;
+      console.log(
+        `[Pakasir Webhook Stacking]: Customer ${order.customer.email} memperpanjang langganan aktif. Diakumulasikan dari ${existingSub.expiresAt}`
+      );
+    }
+    const expiresAt = calculateExpirationDate(order.planId, baseStartDate);
 
     // 5. Daftarkan / Provision user di Supabase Auth (jika aktif)
     const provisionResult = await provisionSupabaseUser(
       order.customer.email,
       loginPassword,
-      order.customer.name
+      order.customer.name,
+      order.planId,
+      order.planName,
+      expiresAt
     );
-    console.log("[Supabase Provision Status]:", provisionResult);
+    const isExistingUser = Boolean((provisionResult as any)?.isExisting);
+    let formattedExpiresAt: string | undefined;
+    try {
+      formattedExpiresAt = new Date(expiresAt).toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+    } catch {
+      // ignore
+    }
 
-    // 6. Kirim Email Kredensial Akses via Resend
+    // 6. Kirim Email Kredensial Akses / Konfirmasi Perpanjangan via Resend
     const emailResult = await sendLoginAccessEmail({
       to: order.customer.email,
       customerName: order.customer.name,
       planName: order.planName,
       orderId: order.orderId,
       loginPassword,
+      isExistingUser,
+      formattedExpiresAt,
     });
 
     console.log("[Resend Email Result]:", emailResult);
 
-    // 7. Perbarui status order menjadi 'completed'
+    // 7. Perbarui status order menjadi 'completed' dengan expiresAt
     await updateOrder(order_id, {
       status: "completed",
-      paidAt: completed_at || new Date().toISOString(),
+      paidAt,
+      expiresAt,
       txnId: txn_id || order.txnId,
       loginPassword,
       emailSent: emailResult.success,

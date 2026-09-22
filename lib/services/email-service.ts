@@ -7,6 +7,8 @@ export interface SendLoginAccessEmailParams {
   orderId: string;
   loginPassword: string;
   loginUrl?: string;
+  isExistingUser?: boolean;
+  formattedExpiresAt?: string;
 }
 
 export interface EmailSendResult {
@@ -18,12 +20,22 @@ export interface EmailSendResult {
 
 /**
  * Mengirim email berisi detail kredensial akses login setelah pembayaran berhasil.
+ * Jika pengguna lama melakukan perpanjangan / pembelian ulang, email akan otomatis
+ * mengonfirmasi perpanjangan masa aktif dan menginstruksikan untuk menggunakan password lama.
  * Menggunakan Resend API.
  */
 export async function sendLoginAccessEmail(
   params: SendLoginAccessEmailParams
 ): Promise<EmailSendResult> {
-  const { to, customerName, planName, orderId, loginPassword } = params;
+  const {
+    to,
+    customerName,
+    planName,
+    orderId,
+    loginPassword,
+    isExistingUser = false,
+    formattedExpiresAt,
+  } = params;
 
   const apiKey = process.env.RESEND_API_KEY;
   const fromEmail = process.env.RESEND_FROM_EMAIL || "TrackCapi <onboarding@resend.dev>";
@@ -40,8 +52,10 @@ export async function sendLoginAccessEmail(
   if (!apiKey) {
     console.warn(
       `[Resend Email Mock] RESEND_API_KEY belum diisi di .env.local.\n` +
-      `Simulasi pengiriman email akses login ke: ${to}\n` +
-      `Detail: Nama: ${customerName}, Paket: ${planName}, Order: ${orderId}, Password: ${loginPassword}`
+      `Simulasi pengiriman email ke: ${to} (Perpanjangan: ${isExistingUser})\n` +
+      `Detail: Nama: ${customerName}, Paket: ${planName}, Order: ${orderId}, Password: ${
+        isExistingUser ? "(Password Akun Lama)" : loginPassword
+      }`
     );
     return {
       success: true,
@@ -53,7 +67,9 @@ export async function sendLoginAccessEmail(
   try {
     const resend = new Resend(apiKey);
 
-    const subject = `🎉 Pembayaran Berhasil! Akses Login TrackCapi Anda (${planName})`;
+    const subject = isExistingUser
+      ? `🎉 Perpanjangan Berhasil! Masa Aktif Akun TrackCapi Anda Diperpanjang (${planName})`
+      : `🎉 Pembayaran Berhasil! Akses Login TrackCapi Anda (${planName})`;
 
     const htmlContent = `
 <!DOCTYPE html>
@@ -228,8 +244,8 @@ export async function sendLoginAccessEmail(
         <div class="logo-badge">
           Track<span class="logo-cyan">Capi</span>
         </div>
-        <h1 class="title">Pembayaran Berhasil!</h1>
-        <p class="subtitle">Langganan Anda telah aktif secara otomatis.</p>
+        <h1 class="title">${isExistingUser ? "Perpanjangan Berhasil!" : "Pembayaran Berhasil!"}</h1>
+        <p class="subtitle">${isExistingUser ? "Masa aktif akun TrackCapi Anda telah berhasil diperpanjang." : "Langganan Anda telah aktif secara otomatis."}</p>
       </div>
 
       <div class="content">
@@ -237,43 +253,71 @@ export async function sendLoginAccessEmail(
 
         <p class="greeting">Halo <strong>${customerName}</strong>,</p>
         <p style="font-size: 14px; color: #869397; line-height: 1.6;">
-          Terima kasih telah mempercayakan pelacakan konversi CTWA bisnis Anda kepada <strong>TrackCapi</strong>.
-          Pembayaran Anda untuk <strong>${planName}</strong> telah berhasil kami terima.
+          ${isExistingUser
+            ? `Terima kasih telah memperpanjang langganan <strong>${planName}</strong>. Pembayaran Anda telah kami terima dan masa aktif akun Anda telah otomatis diakumulasikan.`
+            : `Terima kasih telah mempercayakan pelacakan konversi CTWA bisnis Anda kepada <strong>TrackCapi</strong>. Pembayaran Anda untuk <strong>${planName}</strong> telah berhasil kami terima.`}
         </p>
 
-        <!-- KREDENSIAL LOGIN -->
+        <!-- KREDENSIAL LOGIN / DETAIL AKUN -->
         <div class="card-credentials">
-          <div class="cred-title">🔑 Kredensial Akses Akun Anda</div>
+          <div class="cred-title">${isExistingUser ? "📋 Detail Akun & Masa Aktif Anda" : "🔑 Kredensial Akses Akun Anda"}</div>
 
           <div class="cred-row">
-            <div class="cred-label">Email Login:</div>
+            <div class="cred-label">Email Akun:</div>
             <div class="cred-val">${to}</div>
           </div>
 
+          ${isExistingUser
+            ? `
+          <div class="cred-row">
+            <div class="cred-label">Kata Sandi (Password):</div>
+            <div class="cred-val" style="font-size: 14px; font-family: inherit; color: #4edea3;">✓ Gunakan Password Akun Lama Anda</div>
+          </div>
+          ${formattedExpiresAt ? `
+          <div class="cred-row" style="margin-bottom: 0;">
+            <div class="cred-label">Masa Aktif Akun Diperpanjang Hingga:</div>
+            <div class="cred-val" style="color: #4cd7f6;">${formattedExpiresAt}</div>
+          </div>
+          ` : ""}
+            `
+            : `
           <div class="cred-row" style="margin-bottom: 0;">
             <div class="cred-label">Kata Sandi (Password):</div>
             <div class="cred-val">${loginPassword}</div>
           </div>
+            `
+          }
         </div>
 
         <a href="${directLoginUrl}" class="btn-cta" target="_blank">
-          Masuk ke Dashboard TrackCapi &rarr;
+          ${isExistingUser ? "Buka Dashboard TrackCapi &rarr;" : "Masuk ke Dashboard TrackCapi &rarr;"}
         </a>
 
         <!-- PANDUAN MULAI -->
         <div class="steps-box">
-          <div class="steps-title">🚀 Langkah Selanjutnya:</div>
+          <div class="steps-title">${isExistingUser ? "💡 Informasi Akun:" : "🚀 Langkah Selanjutnya:"}</div>
           <ol class="steps-list">
-            <li>Klik tombol <strong>Masuk ke Dashboard</strong> di atas atau kunjungi <a href="${appUrl}/login" style="color: #4cd7f6; text-decoration: none;">${appUrl}/login</a>.</li>
-            <li>Gunakan email dan kata sandi di atas untuk masuk.</li>
-            <li>Hubungkan akun WhatsApp Business Anda di menu <em>Settings / Integrasi</em>.</li>
-            <li>Event konversi iklan CTWA Anda akan langsung tercatat otomatis di Meta Ads Manager!</li>
+            ${isExistingUser
+              ? `
+              <li>Masa aktif akun Anda telah otomatis ditambahkan dan aktif langsung tanpa perlu setup ulang.</li>
+              <li>Jika Anda lupa kata sandi lama, Anda dapat menggunakan opsi <em>Lupa Password</em> di halaman login.</li>
+              <li>Seluruh konfigurasi WhatsApp dan Meta Pixel Anda sebelumnya tetap aman dan langsung terhubung.</li>
+              `
+              : `
+              <li>Klik tombol <strong>Masuk ke Dashboard</strong> di atas atau kunjungi <a href="${appUrl}/login" style="color: #4cd7f6; text-decoration: none;">${appUrl}/login</a>.</li>
+              <li>Gunakan email dan kata sandi di atas untuk masuk.</li>
+              <li>Hubungkan akun WhatsApp Business Anda di menu <em>Settings / Integrasi</em>.</li>
+              <li>Event konversi iklan CTWA Anda akan langsung tercatat otomatis di Meta Ads Manager!</li>
+              `
+            }
           </ol>
         </div>
 
+        ${!isExistingUser ? `
         <p style="font-size: 12px; color: #5a6480; margin-top: 20px; line-height: 1.5;">
           <em>Keamanan:</em> Demi keamanan akun Anda, silakan ubah kata sandi ini melalui menu pengaturan profil setelah Anda berhasil login pertama kali.
         </p>
+        ` : ""}
       </div>
 
       <div class="footer">
@@ -286,7 +330,25 @@ export async function sendLoginAccessEmail(
 </html>
 `;
 
-    const textContent = `
+    const textContent = isExistingUser
+      ? `
+Halo ${customerName},
+
+Perpanjangan paket Anda untuk ${planName} (Order: #${orderId}) telah berhasil diverifikasi!
+
+Detail Akun:
+----------------------------------------
+Email Akun : ${to}
+Password   : Gunakan password akun lama Anda
+${formattedExpiresAt ? `Masa Aktif : Diperpanjang s/d ${formattedExpiresAt}\n` : ""}----------------------------------------
+
+Masa aktif akun Anda telah diperpanjang. Seluruh fitur CAPI langsung aktif.
+Login dashboard: ${directLoginUrl}
+
+Terima kasih,
+Tim TrackCapi
+`
+      : `
 Halo ${customerName},
 
 Pembayaran Anda untuk ${planName} (Order: #${orderId}) telah berhasil diverifikasi!

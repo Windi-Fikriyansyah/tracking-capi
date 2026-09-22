@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getUserSubscription } from "@/lib/services/order-service";
 
 const SUPPORTED_CTWA_EVENTS = [
   "LeadSubmitted",
@@ -79,7 +80,25 @@ export async function POST(request: Request) {
       value,
       currency,
       testCode,
+      userEmail,
+      userId,
     } = body;
+
+    // Cek batas masa aktif langganan jika identitas user disertakan
+    const targetUser = userEmail || userId;
+    if (targetUser) {
+      const sub = await getUserSubscription(targetUser);
+      if (sub.isExpired) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: `Masa aktif langganan Anda (${sub.planName}) telah berakhir pada ${sub.formattedExpiresAt}. Silakan perpanjang paket Anda untuk melanjutkan pengiriman event CAPI.`,
+            isExpired: true,
+          },
+          { status: 403 }
+        );
+      }
+    }
 
     if (!apiKey || typeof apiKey !== "string") {
       return NextResponse.json(
