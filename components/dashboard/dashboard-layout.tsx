@@ -24,6 +24,7 @@ import {
   RefreshCw,
   Zap,
   CheckCircle2,
+  Download,
 } from "lucide-react";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase/client";
 
@@ -214,6 +215,17 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       icon: Settings,
       active: pathname.startsWith("/dashboard/settings"),
       badge: null,
+    },
+    {
+      label: "Install Aplikasi",
+      href: "/dashboard/install-pwa",
+      icon: Download,
+      active: pathname.startsWith("/dashboard/install-pwa"),
+      badge: (
+        <span className="ml-auto px-1.5 py-0.5 rounded text-[10px] font-code-metric bg-tertiary/10 text-tertiary border border-tertiary/30">
+          PWA
+        </span>
+      ),
     },
   ];
 
