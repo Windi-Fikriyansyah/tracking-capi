@@ -291,34 +291,31 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="space-y-6 max-w-3xl">
+    <div className="space-y-4 sm:space-y-6 max-w-3xl">
       {/* Header */}
-      <div className="p-6 rounded-xl bg-surface-container-low border border-primary/20 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-surface-container-high border border-primary/30 flex items-center justify-center text-primary glow-cyan shrink-0">
-            <Settings className="w-6 h-6" />
+      <div className="p-4 sm:p-6 rounded-xl bg-surface-container-low border border-primary/20 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex items-start sm:items-center gap-3.5 sm:gap-4">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-surface-container-high border border-primary/30 flex items-center justify-center text-primary glow-cyan shrink-0 mt-0.5 sm:mt-0">
+            <Settings className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
           <div>
-            <h1 className="font-headline-sm text-headline-sm font-semibold text-on-surface">
+            <h1 className="text-base sm:text-headline-sm font-semibold text-on-surface">
               Pengaturan Akun &amp; API
             </h1>
-
           </div>
         </div>
 
         {/* User Isolation & DB Badge */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 shrink-0">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 shrink-0 w-full sm:w-auto">
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-high border border-outline-variant/40">
-            <UserCheck className="w-4 h-4 text-tertiary" />
+            <UserCheck className="w-4 h-4 text-tertiary shrink-0" />
             <div className="flex flex-col text-left">
               <span className="text-[10px] text-on-surface-variant leading-none">Akun Aktif:</span>
-              <span className="text-xs font-semibold text-on-surface max-w-[170px] truncate">
+              <span className="text-xs font-semibold text-on-surface max-w-[200px] truncate">
                 {currentUser?.email || "User"}
               </span>
             </div>
           </div>
-
-
         </div>
       </div>
 
@@ -331,27 +328,26 @@ export default function SettingsPage() {
       )}
 
       {/* 1. Kredensial API Zernio (User-Isolated) */}
-      <div className="p-6 rounded-xl bg-surface-container-low border border-outline-variant/30 space-y-4">
+      <div className="p-4 sm:p-6 rounded-xl bg-surface-container-low border border-outline-variant/30 space-y-4">
         <div className="flex items-center justify-between pb-3 border-b border-outline-variant/20">
           <div className="flex items-center gap-2">
-            <Key className="w-5 h-5 text-primary" />
-            <h2 className="font-headline-sm text-headline-sm font-semibold text-on-surface">
+            <Key className="w-5 h-5 text-primary shrink-0" />
+            <h2 className="text-sm sm:text-headline-sm font-semibold text-on-surface">
               API Key Zernio
             </h2>
           </div>
-
         </div>
 
         {zernioSaved && (
-          <div className="p-3 rounded-lg bg-tertiary-container/20 border border-tertiary/40 text-tertiary text-body-sm flex items-center gap-2">
+          <div className="p-3 rounded-lg bg-tertiary-container/20 border border-tertiary/40 text-tertiary text-xs sm:text-body-sm flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 shrink-0" />
-            <span>API Key Zernio tersimpan khusus untuk akun Anda di database Supabase!</span>
+            <span className="leading-snug">API Key Zernio tersimpan khusus untuk akun Anda di database Supabase!</span>
           </div>
         )}
 
         {zernioFeedback && (
           <div
-            className={`p-3 rounded-lg border text-body-sm flex items-center gap-2 ${zernioFeedback.type === "success"
+            className={`p-3 rounded-lg border text-xs sm:text-body-sm flex items-center gap-2 ${zernioFeedback.type === "success"
               ? "bg-tertiary-container/20 border-tertiary/40 text-tertiary"
               : "bg-error-container/20 border-error/40 text-error"
               }`}
@@ -361,7 +357,7 @@ export default function SettingsPage() {
             ) : (
               <AlertCircle className="w-4 h-4 shrink-0" />
             )}
-            <span>{zernioFeedback.message}</span>
+            <span className="leading-snug">{zernioFeedback.message}</span>
           </div>
         )}
 
@@ -391,40 +387,40 @@ export default function SettingsPage() {
                 )}
               </button>
             </div>
-            <p className="text-[11px] text-on-surface-variant">
+            <p className="text-[11px] text-on-surface-variant leading-relaxed">
               Kunci API ini hanya dapat diakses dan dilihat oleh akun Anda (<span className="text-primary font-code-metric">{currentUser?.email}</span>). Pengguna lain tidak memiliki izin akses ke baris ini.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
             <div className="flex items-center gap-1.5 text-[11px] text-tertiary font-code-metric">
-              <ShieldCheck className="w-3.5 h-3.5" />
+              <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
               <span>Row Level Security (RLS) Diaktifkan</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
               <button
                 type="button"
                 onClick={handleTestZernio}
                 disabled={testingZernio || !zernioApiKey.trim()}
-                className="px-4 py-2 rounded-lg bg-surface-container-high border border-outline-variant/50 text-on-surface hover:border-primary/50 hover:text-primary font-medium text-body-sm transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                className="flex-1 sm:flex-initial justify-center px-4 py-2 rounded-lg bg-surface-container-high border border-outline-variant/50 text-on-surface hover:border-primary/50 hover:text-primary font-medium text-xs sm:text-body-sm transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
               >
                 {testingZernio ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <Loader2 className="w-4 h-4 animate-spin shrink-0" />
                 ) : (
-                  <Zap className="w-4 h-4 text-primary" />
+                  <Zap className="w-4 h-4 text-primary shrink-0" />
                 )}
-                <span>{testingZernio ? "Menguji Koneksi..." : "Tes Koneksi"}</span>
+                <span>{testingZernio ? "Menguji..." : "Tes Koneksi"}</span>
               </button>
 
               <button
                 type="submit"
                 disabled={savingZernio}
-                className="px-4 py-2 rounded-lg bg-primary-container text-on-primary-container font-medium text-body-sm hover:bg-primary transition-all flex items-center gap-1.5 cursor-pointer shadow-sm disabled:opacity-50"
+                className="flex-1 sm:flex-initial justify-center px-4 py-2 rounded-lg bg-primary-container text-on-primary-container font-medium text-xs sm:text-body-sm hover:bg-primary transition-all flex items-center gap-1.5 cursor-pointer shadow-sm disabled:opacity-50"
               >
                 {savingZernio ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <Loader2 className="w-4 h-4 animate-spin shrink-0" />
                 ) : (
-                  <Save className="w-4 h-4" />
+                  <Save className="w-4 h-4 shrink-0" />
                 )}
                 <span>{savingZernio ? "Menyimpan..." : "Simpan ke Database"}</span>
               </button>
@@ -434,15 +430,15 @@ export default function SettingsPage() {
       </div>
 
       {/* 2. URL Webhook Zernio (Click-to-WhatsApp Ads Tracking) */}
-      <div className="p-6 rounded-xl bg-surface-container-low border border-outline-variant/30 space-y-4">
+      <div className="p-4 sm:p-6 rounded-xl bg-surface-container-low border border-outline-variant/30 space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-outline-variant/20 gap-2">
           <div className="flex items-center gap-2">
-            <Webhook className="w-5 h-5 text-primary" />
-            <h2 className="font-headline-sm text-headline-sm font-semibold text-on-surface">
+            <Webhook className="w-5 h-5 text-primary shrink-0" />
+            <h2 className="text-sm sm:text-headline-sm font-semibold text-on-surface">
               URL Webhook Zernio (Click-to-WhatsApp)
             </h2>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 self-start sm:self-auto">
             <span className="px-2.5 py-0.5 rounded-full text-[11px] font-code-metric bg-primary/10 border border-primary/30 text-primary flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
               POST / GET Aktif
@@ -450,13 +446,13 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        <p className="text-body-sm text-on-surface-variant">
+        <p className="text-xs sm:text-body-sm text-on-surface-variant leading-relaxed">
           Gunakan URL Webhook ini untuk di-input pada dashboard Zernio. Ketika ada pesan masuk baru dari iklan Click-to-WhatsApp (CTWA), Zernio akan otomatis meneruskan data pesan dan Click ID (<code className="text-primary font-code-metric text-xs bg-surface-container-lowest px-1.5 py-0.5 rounded">ctwa_clid</code>) ke sistem ini secara otomatis.
         </p>
 
         {webhookFeedback && (
           <div
-            className={`p-3 rounded-lg border text-body-sm flex items-center gap-2 ${
+            className={`p-3 rounded-lg border text-xs sm:text-body-sm flex items-center gap-2 ${
               webhookFeedback.type === "success"
                 ? "bg-tertiary-container/20 border-tertiary/40 text-tertiary"
                 : "bg-error-container/20 border-error/40 text-error"
@@ -467,7 +463,7 @@ export default function SettingsPage() {
             ) : (
               <AlertCircle className="w-4 h-4 shrink-0" />
             )}
-            <span>{webhookFeedback.message}</span>
+            <span className="leading-snug">{webhookFeedback.message}</span>
           </div>
         )}
 
@@ -491,16 +487,16 @@ export default function SettingsPage() {
               <button
                 type="button"
                 onClick={handleCopyWebhook}
-                className="px-4 py-2 rounded-lg bg-primary-container text-on-primary-container font-medium text-body-sm hover:bg-primary transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+                className="flex-1 sm:flex-initial justify-center px-4 py-2 rounded-lg bg-primary-container text-on-primary-container font-medium text-xs sm:text-body-sm hover:bg-primary transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
               >
                 {copiedWebhook ? (
                   <>
-                    <Check className="w-4 h-4 text-surface" />
+                    <Check className="w-4 h-4 text-surface shrink-0" />
                     <span>Tersalin!</span>
                   </>
                 ) : (
                   <>
-                    <Copy className="w-4 h-4" />
+                    <Copy className="w-4 h-4 shrink-0" />
                     <span>Salin URL</span>
                   </>
                 )}
@@ -510,12 +506,12 @@ export default function SettingsPage() {
                 type="button"
                 onClick={handleTestWebhook}
                 disabled={testingWebhook}
-                className="px-3 py-2 rounded-lg bg-surface-container-high border border-outline-variant/50 text-on-surface hover:border-primary/50 hover:text-primary font-medium text-body-sm transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                className="flex-1 sm:flex-initial justify-center px-3 py-2 rounded-lg bg-surface-container-high border border-outline-variant/50 text-on-surface hover:border-primary/50 hover:text-primary font-medium text-xs sm:text-body-sm transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
               >
                 {testingWebhook ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <Loader2 className="w-4 h-4 animate-spin shrink-0" />
                 ) : (
-                  <Zap className="w-4 h-4 text-primary" />
+                  <Zap className="w-4 h-4 text-primary shrink-0" />
                 )}
                 <span>{testingWebhook ? "Menguji..." : "Tes Endpoint"}</span>
               </button>
@@ -524,11 +520,11 @@ export default function SettingsPage() {
         </div>
 
         {/* Panduan Input di Zernio */}
-        <div className="p-4 rounded-lg bg-surface-container-lowest border border-outline-variant/30 space-y-2.5 text-xs text-on-surface-variant">
+        <div className="p-3.5 sm:p-4 rounded-lg bg-surface-container-lowest border border-outline-variant/30 space-y-2.5 text-xs text-on-surface-variant leading-relaxed">
           <div className="font-semibold text-on-surface flex items-center gap-2">
             <span>📋 Cara Memasang di Dashboard Zernio:</span>
           </div>
-          <ol className="list-decimal list-inside space-y-1.5 text-on-surface-variant leading-relaxed">
+          <ol className="list-decimal list-inside space-y-1.5 text-on-surface-variant">
             <li>
               Buka dashboard <strong className="text-on-surface">Zernio</strong> lalu masuk ke menu <strong className="text-on-surface">Webhooks</strong> atau <strong className="text-on-surface">Integrations</strong>.
             </li>
@@ -557,22 +553,22 @@ export default function SettingsPage() {
       </div>
 
       {/* 3. Ubah Kata Sandi Akun */}
-      <div className="p-6 rounded-xl bg-surface-container-low border border-outline-variant/30 space-y-4">
-        <div className="flex items-center justify-between pb-3 border-b border-outline-variant/20">
+      <div className="p-4 sm:p-6 rounded-xl bg-surface-container-low border border-outline-variant/30 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-outline-variant/20 gap-1 sm:gap-2">
           <div className="flex items-center gap-2">
-            <Lock className="w-5 h-5 text-primary" />
-            <h2 className="font-headline-sm text-headline-sm font-semibold text-on-surface">
+            <Lock className="w-5 h-5 text-primary shrink-0" />
+            <h2 className="text-sm sm:text-headline-sm font-semibold text-on-surface">
               Ubah Kata Sandi
             </h2>
           </div>
-          <span className="text-[11px] font-code-metric text-on-surface-variant">
+          <span className="text-[11px] font-code-metric text-on-surface-variant truncate">
             {currentUser?.email}
           </span>
         </div>
 
         {passwordFeedback && (
           <div
-            className={`p-3 rounded-lg border text-body-sm flex items-center gap-2 ${passwordFeedback.type === "success"
+            className={`p-3 rounded-lg border text-xs sm:text-body-sm flex items-center gap-2 ${passwordFeedback.type === "success"
               ? "bg-tertiary-container/20 border-tertiary/40 text-tertiary"
               : "bg-error-container/20 border-error/40 text-error"
               }`}
@@ -582,12 +578,12 @@ export default function SettingsPage() {
             ) : (
               <AlertCircle className="w-4 h-4 shrink-0" />
             )}
-            <span>{passwordFeedback.message}</span>
+            <span className="leading-snug">{passwordFeedback.message}</span>
           </div>
         )}
 
         <form onSubmit={handleChangePassword} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             {/* Password Baru */}
             <div className="space-y-1.5">
               <label className="block text-label-md text-on-surface font-medium">
@@ -651,12 +647,12 @@ export default function SettingsPage() {
             <button
               type="submit"
               disabled={passwordLoading}
-              className="px-5 py-2 rounded-lg bg-primary-container text-on-primary-container font-headline-sm text-headline-sm font-semibold hover:bg-primary transition-all flex items-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(6,182,212,0.25)] disabled:opacity-75"
+              className="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-primary-container text-on-primary-container font-semibold text-xs sm:text-sm hover:bg-primary transition-all flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(6,182,212,0.25)] disabled:opacity-75"
             >
               {passwordLoading ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
+                <Loader2 className="w-4 h-4 animate-spin shrink-0" />
               ) : (
-                <Lock className="w-4 h-4" />
+                <Lock className="w-4 h-4 shrink-0" />
               )}
               <span>Perbarui Kata Sandi</span>
             </button>

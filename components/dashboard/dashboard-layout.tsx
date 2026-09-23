@@ -10,10 +10,6 @@ import {
   Settings,
   BookOpen,
   Circle,
-  Search,
-  Bell,
-  SlidersHorizontal,
-  HelpCircle,
   LogOut,
   Menu,
   X,
@@ -263,9 +259,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
       {/* SIDEBAR NAVIGATION */}
       <aside
-        className={`h-screen w-64 fixed left-0 top-0 border-r border-outline-variant/30 bg-surface-container-lowest z-50 flex flex-col justify-between p-4 transition-transform duration-200 md:translate-x-0 ${
-          mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`h-screen w-64 fixed left-0 top-0 border-r border-outline-variant/30 bg-surface-container-lowest z-50 flex flex-col justify-between p-4 transition-transform duration-200 md:translate-x-0 ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         <div className="space-y-6 overflow-y-auto">
           {/* Organization / Header Workspace */}
@@ -276,7 +271,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               </div>
               <div className="flex flex-col">
                 <span className="font-headline-sm text-headline-sm font-semibold text-primary">
-                  CAPI Telemetry
+                  TrackCapi
                 </span>
                 <span className="font-body-sm text-body-sm text-on-surface-variant font-code-metric">
                   Meta Graph v19.0
@@ -294,13 +289,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
 
           {/* Quick Action CTA */}
-          <Link
-            href="/dashboard/tracking"
-            className="w-full flex items-center justify-center gap-2 bg-secondary-container hover:bg-secondary-container/90 text-on-background py-2 px-3 rounded-lg font-label-md text-label-md transition-all duration-150 active:scale-[0.99] border border-outline-variant/30 cursor-pointer"
-          >
-            <PlusCircle className="w-4 h-4" />
-            <span>New Pipeline</span>
-          </Link>
+
 
           {/* Primary Nav Tabs */}
           <nav className="space-y-1">
@@ -311,11 +300,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                   key={item.label}
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors duration-150 ${
-                    item.active
-                      ? "bg-surface-container-high text-primary font-medium border-l-2 border-primary"
-                      : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high"
-                  }`}
+                  className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors duration-150 ${item.active
+                    ? "bg-surface-container-high text-primary font-medium border-l-2 border-primary"
+                    : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high"
+                    }`}
                 >
                   <Icon className="w-5 h-5" />
                   <span className="font-label-md text-label-md">{item.label}</span>
@@ -330,13 +318,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         <div className="space-y-3 pt-2">
           {/* Active Subscription Badge Box */}
           <div
-            className={`p-3 rounded-xl border transition-all ${
-              isExpired
-                ? "bg-error-container/10 border-error/40 text-error"
-                : subscription?.daysLeft && subscription.daysLeft <= 14
+            className={`p-3 rounded-xl border transition-all ${isExpired
+              ? "bg-error-container/10 border-error/40 text-error"
+              : subscription?.daysLeft && subscription.daysLeft <= 14
                 ? "bg-amber-500/10 border-amber-500/40 text-amber-300"
                 : "bg-surface-container-high border-primary/25 text-on-surface"
-            }`}
+              }`}
           >
             <div className="flex items-center justify-between pb-1.5 border-b border-outline-variant/20">
               <span className="text-[11px] font-semibold tracking-wide uppercase flex items-center gap-1.5 font-code-metric">
@@ -375,11 +362,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             {/* Renewal Link Button */}
             <Link
               href={isExpired ? "/checkout?plan=6-bulan" : `/checkout?plan=${subscription?.planId || "6-bulan"}`}
-              className={`mt-2.5 w-full py-1.5 px-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all text-center ${
-                isExpired
-                  ? "bg-error text-white hover:bg-error/90 shadow-[0_0_12px_rgba(239,68,68,0.4)]"
-                  : "bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30"
-              }`}
+              className={`mt-2.5 w-full py-1.5 px-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all text-center ${isExpired
+                ? "bg-error text-white hover:bg-error/90 shadow-[0_0_12px_rgba(239,68,68,0.4)]"
+                : "bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30"
+                }`}
             >
               <Sparkles className="w-3.5 h-3.5" />
               <span>{isExpired ? "Perpanjang Sekarang" : "Perpanjang Paket"}</span>
@@ -388,13 +374,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
           {/* Utility Links & Sign Out */}
           <div className="border-t border-outline-variant/30 pt-2 space-y-1">
-            <Link
-              href="#docs"
-              className="flex items-center gap-3 px-3 py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors duration-150 text-xs"
-            >
-              <BookOpen className="w-4 h-4" />
-              <span className="font-label-md text-label-md">Docs</span>
-            </Link>
+
 
             <div className="flex items-center justify-between px-3 py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors duration-150 cursor-pointer text-xs">
               <div className="flex items-center gap-2.5">
@@ -432,26 +412,15 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               <Menu className="w-5 h-5" />
             </button>
 
-            {/* Global Search Bar */}
-            <div className="relative hidden sm:block">
-              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 text-outline w-4 h-4" />
-              <input
-                className="bg-surface-container-low border border-outline-variant/40 rounded pl-8 pr-3 py-1 font-code-metric text-xs text-on-surface placeholder:text-outline/70 focus:outline-none focus:border-primary w-52 sm:w-72 md:w-80"
-                placeholder="Search event_id, fbp, email hash..."
-                type="text"
-              />
-            </div>
-
             {/* Subscription Status Chip in Header */}
             {subscription && (
               <div
-                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-code-metric border ${
-                  isExpired
-                    ? "bg-error/15 border-error/40 text-error"
-                    : subscription.daysLeft <= 14
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-code-metric border ${isExpired
+                  ? "bg-error/15 border-error/40 text-error"
+                  : subscription.daysLeft <= 14
                     ? "bg-amber-500/15 border-amber-500/40 text-amber-300"
                     : "bg-tertiary/10 border-tertiary/30 text-tertiary"
-                }`}
+                  }`}
               >
                 {isExpired ? (
                   <>
@@ -470,33 +439,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             )}
           </div>
 
-          {/* Right side: Action Icons & Profile */}
+          {/* Right side: Profile */}
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* Trailing Icon Actions */}
-            <div className="flex items-center gap-1">
-              <button
-                className="p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded transition-colors cursor-pointer"
-                title="Notifications"
-                type="button"
-              >
-                <Bell className="w-[18px] h-[18px]" />
-              </button>
-              <button
-                className="p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded transition-colors cursor-pointer"
-                title="Pipeline Tuning"
-                type="button"
-              >
-                <SlidersHorizontal className="w-[18px] h-[18px]" />
-              </button>
-              <button
-                className="p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded transition-colors cursor-pointer"
-                title="Support & Guides"
-                type="button"
-              >
-                <HelpCircle className="w-[18px] h-[18px]" />
-              </button>
-            </div>
-
             {/* User Profile Avatar with Title */}
             <div
               onClick={handleSignOut}
@@ -509,7 +453,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </header>
 
         {/* PAGE CONTENT CONTAINER WITH SUBSCRIPTION LOCK OVERLAY */}
-        <main className="p-4 md:p-6 space-y-6 flex-1 relative">
+        <main className="p-3.5 sm:p-4 md:p-6 space-y-4 sm:space-y-6 flex-1 relative">
           {/* FEATURE LOCK OVERLAY: Displayed if subscription is expired */}
           {isExpired && (
             <div className="fixed inset-0 z-40 md:ml-64 bg-background/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
@@ -647,17 +591,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </main>
 
         {/* FOOTER TELEMETRY STATUS */}
-        <footer className="px-6 py-3 bg-surface-container-lowest border-t border-outline-variant/30 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs font-code-metric text-outline">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-tertiary" />
-            <span>TrackCapi Node #us-east-worker-04</span>
-            <span>•</span>
-            <span>Telemetry Frequency: 1.0 Hz</span>
-          </div>
-          <div>
-            <span>Meta Ads Conversions API Engine • Protected under SOC-2 Type II Compliance</span>
-          </div>
-        </footer>
+
       </div>
     </div>
   );

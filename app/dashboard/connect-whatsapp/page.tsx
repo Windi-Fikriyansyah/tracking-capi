@@ -331,37 +331,36 @@ function ConnectWhatsAppContent() {
   }
 
   return (
-    <div className="space-y-6 max-w-4xl">
+    <div className="space-y-4 sm:space-y-6 max-w-4xl">
       {/* Header Banner */}
-      <div className="p-6 rounded-xl bg-surface-container-low border border-primary/20 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-tertiary/10 border border-tertiary/30 flex items-center justify-center text-tertiary glow-dot shrink-0">
-            <MessageSquare className="w-6 h-6" />
+      <div className="p-4 sm:p-6 rounded-xl bg-surface-container-low border border-primary/20 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex items-start sm:items-center gap-3.5 sm:gap-4">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-tertiary/10 border border-tertiary/30 flex items-center justify-center text-tertiary glow-dot shrink-0 mt-0.5 sm:mt-0">
+            <MessageSquare className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <h1 className="font-headline-sm text-headline-sm font-semibold text-on-surface">
+            <div className="flex flex-wrap items-center gap-2">
+              <h1 className="text-base sm:text-headline-sm font-semibold text-on-surface">
                 Connect WhatsApp Business via Zernio OAuth
               </h1>
               {isConnected ? (
-                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-label-sm font-label-sm bg-tertiary/10 text-tertiary border border-tertiary/30 font-code-metric">
+                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] sm:text-label-sm bg-tertiary/10 text-tertiary border border-tertiary/30 font-code-metric">
                   <span className="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse" />
                   TERHUBUNG
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-label-sm font-label-sm bg-surface-container text-outline border border-outline-variant/40 font-code-metric">
+                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] sm:text-label-sm bg-surface-container text-outline border border-outline-variant/40 font-code-metric">
                   BELUM TERHUBUNG
                 </span>
               )}
             </div>
-
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 shrink-0">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-high border border-outline-variant/40">
-            <UserCheck className="w-4 h-4 text-tertiary" />
-            <span className="text-xs font-medium text-on-surface max-w-[150px] truncate">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 shrink-0 w-full sm:w-auto">
+          <div className="flex items-center justify-center sm:justify-start gap-2 px-3 py-1.5 rounded-lg bg-surface-container-high border border-outline-variant/40">
+            <UserCheck className="w-4 h-4 text-tertiary shrink-0" />
+            <span className="text-xs font-medium text-on-surface truncate">
               {currentUser?.email || "User"}
             </span>
           </div>
@@ -371,7 +370,7 @@ function ConnectWhatsAppContent() {
               type="button"
               onClick={handleTestEvent}
               disabled={testingEvent}
-              className="px-4 py-2 rounded-lg bg-primary-container text-on-primary-container font-medium text-body-sm hover:bg-primary transition-all flex items-center gap-2 cursor-pointer disabled:opacity-75 shadow-sm"
+              className="w-full sm:w-auto px-4 py-2 rounded-lg bg-primary-container text-on-primary-container font-medium text-xs sm:text-body-sm hover:bg-primary transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-75 shadow-sm"
             >
               {testingEvent ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -394,16 +393,16 @@ function ConnectWhatsAppContent() {
 
       {/* Missing API Key Warning */}
       {!apiKey && (
-        <div className="p-4 rounded-xl bg-surface-container-low border border-error/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-body-sm">
-          <div className="flex items-center gap-3 text-error">
-            <AlertCircle className="w-5 h-5 shrink-0" />
-            <span>
+        <div className="p-3.5 sm:p-4 rounded-xl bg-surface-container-low border border-error/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs sm:text-body-sm">
+          <div className="flex items-start sm:items-center gap-2.5 sm:gap-3 text-error">
+            <AlertCircle className="w-5 h-5 shrink-0 mt-0.5 sm:mt-0" />
+            <span className="leading-relaxed">
               API Key Zernio belum tersimpan di database untuk akun <strong>{currentUser?.email}</strong>. Anda perlu memasukkan API Key terlebih dahulu.
             </span>
           </div>
           <Link
             href="/dashboard/settings"
-            className="px-3.5 py-1.5 rounded-lg bg-primary-container text-on-primary-container text-xs font-semibold hover:bg-primary flex items-center gap-1.5 shrink-0"
+            className="w-full sm:w-auto px-3.5 py-2 sm:py-1.5 rounded-lg bg-primary-container text-on-primary-container text-xs font-semibold hover:bg-primary flex items-center justify-center gap-1.5 shrink-0"
           >
             <Settings className="w-3.5 h-3.5" />
             <span>Buka Pengaturan</span>
@@ -414,7 +413,7 @@ function ConnectWhatsAppContent() {
       {/* Feedback Alerts */}
       {feedback && (
         <div
-          className={`p-3.5 rounded-lg border text-body-sm flex items-center gap-2.5 ${feedback.type === "success"
+          className={`p-3.5 rounded-lg border text-xs sm:text-body-sm flex items-center gap-2.5 ${feedback.type === "success"
             ? "bg-tertiary-container/20 border-tertiary/40 text-tertiary"
             : feedback.type === "error"
               ? "bg-error-container/20 border-error/40 text-error"
@@ -428,35 +427,35 @@ function ConnectWhatsAppContent() {
           ) : (
             <Radio className="w-4 h-4 shrink-0 text-primary" />
           )}
-          <span>{feedback.message}</span>
+          <span className="leading-snug">{feedback.message}</span>
         </div>
       )}
 
       {testEventMessage && (
-        <div className="p-3.5 rounded-lg bg-tertiary-container/20 border border-tertiary/40 text-tertiary text-body-sm flex items-center gap-2">
+        <div className="p-3.5 rounded-lg bg-tertiary-container/20 border border-tertiary/40 text-tertiary text-xs sm:text-body-sm flex items-center gap-2">
           <Sparkles className="w-4 h-4 shrink-0" />
-          <span>{testEventMessage}</span>
+          <span className="leading-snug">{testEventMessage}</span>
         </div>
       )}
 
       {/* Main Connection Container */}
       {!isConnected ? (
-        <div className="p-6 rounded-xl bg-surface-container-low border border-outline-variant/30 space-y-6">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-outline-variant/20">
+        <div className="p-4 sm:p-6 rounded-xl bg-surface-container-low border border-outline-variant/30 space-y-4 sm:space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-outline-variant/20">
             <div>
-              <h2 className="font-headline-sm text-headline-sm font-semibold text-on-surface flex items-center gap-2">
-                <MessageSquare className="w-5 h-5 text-tertiary" />
+              <h2 className="text-sm sm:text-headline-sm font-semibold text-on-surface flex items-center gap-2">
+                <MessageSquare className="w-5 h-5 text-tertiary shrink-0" />
                 Otorisasi WhatsApp Business
               </h2>
-              <p className="text-body-sm text-on-surface-variant mt-1">
+              <p className="text-xs sm:text-body-sm text-on-surface-variant mt-1">
                 Gunakan tombol di bawah untuk membuka alur resmi OAuth Zernio.
               </p>
             </div>
 
             {/* API Key Status Pill from Database */}
             {apiKey && (
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-lowest border border-outline-variant/30 font-code-metric text-xs">
-                <Database className="w-3.5 h-3.5 text-primary" />
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-lowest border border-outline-variant/30 font-code-metric text-xs self-start sm:self-auto">
+                <Database className="w-3.5 h-3.5 text-primary shrink-0" />
                 <span className="text-outline">Key Akun:</span>
                 <span className="text-primary font-medium">
                   {apiKey.slice(0, 7)}••••••••
@@ -467,16 +466,16 @@ function ConnectWhatsAppContent() {
           </div>
 
           {/* Action CTA Button */}
-          <div className="flex flex-col items-center justify-center p-8 rounded-xl bg-surface-container-lowest border border-outline-variant/30 text-center space-y-4">
-            <div className="w-16 h-16 rounded-2xl bg-tertiary/10 border border-tertiary/40 flex items-center justify-center text-tertiary glow-dot">
-              <MessageSquare className="w-8 h-8" />
+          <div className="flex flex-col items-center justify-center p-5 sm:p-8 rounded-xl bg-surface-container-lowest border border-outline-variant/30 text-center space-y-4">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-tertiary/10 border border-tertiary/40 flex items-center justify-center text-tertiary glow-dot">
+              <MessageSquare className="w-7 h-7 sm:w-8 sm:h-8" />
             </div>
 
             <div className="max-w-md space-y-1">
-              <h3 className="font-headline-sm text-headline-sm font-semibold text-on-surface">
+              <h3 className="text-base sm:text-headline-sm font-semibold text-on-surface">
                 Tautkan Nomor WhatsApp Business
               </h3>
-              <p className="text-body-sm text-on-surface-variant">
+              <p className="text-xs sm:text-body-sm text-on-surface-variant leading-relaxed">
                 Klik tombol di bawah untuk mengarahkan ke halaman otorisasi OAuth resmi Zernio. Hasil koneksi &amp; profil WhatsApp Anda akan diambil secara langsung dari Zernio.
               </p>
             </div>
@@ -485,49 +484,47 @@ function ConnectWhatsAppContent() {
               type="button"
               onClick={handleConnectWhatsApp}
               disabled={connecting || !apiKey}
-              className="px-6 py-3 rounded-lg bg-[#25D366] hover:bg-[#20ba5a] text-[#050d25] font-headline-sm text-headline-sm font-semibold flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(37,211,102,0.35)] hover:shadow-[0_0_25px_rgba(37,211,102,0.5)] active:scale-[0.99] cursor-pointer disabled:opacity-50 disabled:pointer-events-none"
+              className="w-full sm:w-auto px-5 sm:px-6 py-3 rounded-lg bg-[#25D366] hover:bg-[#20ba5a] text-[#050d25] text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(37,211,102,0.35)] hover:shadow-[0_0_25px_rgba(37,211,102,0.5)] active:scale-[0.99] cursor-pointer disabled:opacity-50 disabled:pointer-events-none text-center"
             >
               {connecting ? (
                 <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <Loader2 className="w-5 h-5 animate-spin shrink-0" />
                   <span>Memproses OAuth Zernio...</span>
                 </>
               ) : (
                 <>
-                  <MessageSquare className="w-5 h-5 fill-current" />
+                  <MessageSquare className="w-5 h-5 fill-current shrink-0" />
                   <span>Hubungkan WhatsApp dengan Zernio OAuth</span>
-                  <ExternalLink className="w-4 h-4" />
+                  <ExternalLink className="w-4 h-4 shrink-0" />
                 </>
               )}
             </button>
 
-            <div className="flex items-center gap-2 text-xs text-outline font-code-metric pt-2">
-              <ShieldCheck className="w-4 h-4 text-tertiary" />
+            <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs text-outline font-code-metric pt-2 text-center">
+              <ShieldCheck className="w-4 h-4 text-tertiary shrink-0" />
               <span>Otorisasi Resmi Zernio Cloud Gateway • Meta Verified Partner</span>
             </div>
           </div>
         </div>
       ) : (
         /* Connected State View with REAL ZERNIO DATA */
-        <div className="p-6 rounded-xl bg-surface-container-low border border-tertiary/30 space-y-6">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-outline-variant/20">
+        <div className="p-4 sm:p-6 rounded-xl bg-surface-container-low border border-tertiary/30 space-y-4 sm:space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-outline-variant/20">
             <div>
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5 text-tertiary" />
-                <h2 className="font-headline-sm text-headline-sm font-semibold text-on-surface">
+                <CheckCircle2 className="w-5 h-5 text-tertiary shrink-0" />
+                <h2 className="text-sm sm:text-headline-sm font-semibold text-on-surface">
                   Akun WhatsApp Business Terhubung
                 </h2>
-
               </div>
-
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
               <button
                 type="button"
                 onClick={() => apiKey && syncAccountFromZernio(apiKey, connectedAccount?.zernioAccountId, currentUser?.id)}
                 disabled={syncingZernio || !apiKey}
-                className="px-3 py-1.5 rounded-lg bg-surface-container-high border border-outline-variant/40 text-on-surface hover:text-primary text-xs font-code-metric flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                className="flex-1 sm:flex-initial justify-center px-3 py-1.5 rounded-lg bg-surface-container-high border border-outline-variant/40 text-on-surface hover:text-primary text-xs font-code-metric flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
                 title="Sinkronkan data terbaru"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${syncingZernio ? "animate-spin text-primary" : ""}`} />
@@ -538,7 +535,7 @@ function ConnectWhatsAppContent() {
                 type="button"
                 onClick={handleConnectWhatsApp}
                 disabled={connecting}
-                className="px-3 py-1.5 rounded-lg bg-surface-container-high border border-outline-variant/40 text-on-surface hover:text-primary text-xs font-code-metric flex items-center gap-1.5 cursor-pointer"
+                className="flex-1 sm:flex-initial justify-center px-3 py-1.5 rounded-lg bg-surface-container-high border border-outline-variant/40 text-on-surface hover:text-primary text-xs font-code-metric flex items-center gap-1.5 cursor-pointer"
               >
                 <ExternalLink className="w-3.5 h-3.5" />
                 <span>Otorisasi Ulang</span>
@@ -547,7 +544,7 @@ function ConnectWhatsAppContent() {
               <button
                 type="button"
                 onClick={handleDisconnect}
-                className="px-3 py-1.5 rounded-lg bg-surface-container-high border border-error/30 text-error hover:bg-error-container/20 text-xs font-code-metric flex items-center gap-1.5 cursor-pointer"
+                className="w-full sm:w-auto justify-center px-3 py-1.5 rounded-lg bg-surface-container-high border border-error/30 text-error hover:bg-error-container/20 text-xs font-code-metric flex items-center gap-1.5 cursor-pointer"
               >
                 <LogOut className="w-3.5 h-3.5" />
                 <span>Putuskan</span>
@@ -556,42 +553,42 @@ function ConnectWhatsAppContent() {
           </div>
 
           {/* Real Account Detail Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
             {/* Card 1: WhatsApp Profile Details */}
-            <div className="p-4 rounded-lg bg-surface-container-lowest border border-outline-variant/30 space-y-3 font-code-metric text-xs">
-              <div className="flex items-center justify-between pb-2 border-b border-outline-variant/20">
+            <div className="p-3.5 sm:p-4 rounded-lg bg-surface-container-lowest border border-outline-variant/30 space-y-3 font-code-metric text-xs">
+              <div className="flex items-center justify-between pb-2 border-b border-outline-variant/20 gap-2">
                 <span className="text-on-surface font-semibold flex items-center gap-1.5">
-                  <Phone className="w-4 h-4 text-tertiary" /> Nomor Telepon:
+                  <Phone className="w-4 h-4 text-tertiary shrink-0" /> Nomor Telepon:
                 </span>
                 <span className="font-bold text-tertiary text-sm">
                   {connectedAccount?.phone || "+62 896-2298-1080"}
                 </span>
               </div>
 
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-2">
                 <span className="text-on-surface-variant flex items-center gap-1.5">
-                  <MessageSquare className="w-4 h-4 text-primary" /> Nama Akun WABA:
+                  <MessageSquare className="w-4 h-4 text-primary shrink-0" /> Nama Akun WABA:
                 </span>
-                <span className="font-semibold text-on-surface">
+                <span className="font-semibold text-on-surface truncate">
                   {connectedAccount?.name || "wamaps"}
                 </span>
               </div>
 
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-2">
                 <span className="text-on-surface-variant flex items-center gap-1.5">
-                  <Hash className="w-4 h-4 text-outline" /> WABA Account ID (Meta):
+                  <Hash className="w-4 h-4 text-outline shrink-0" /> WABA Account ID:
                 </span>
-                <span className="text-primary font-medium">
+                <span className="text-primary font-medium font-mono break-all">
                   {connectedAccount?.wabaId || "1810517499719467"}
                 </span>
               </div>
 
               {connectedAccount?.phoneNumberId && (
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-2">
                   <span className="text-on-surface-variant flex items-center gap-1.5">
-                    <Hash className="w-4 h-4 text-outline" /> Phone Number ID:
+                    <Hash className="w-4 h-4 text-outline shrink-0" /> Phone Number ID:
                   </span>
-                  <span className="text-outline">
+                  <span className="text-outline font-mono break-all">
                     {connectedAccount.phoneNumberId}
                   </span>
                 </div>
@@ -599,45 +596,43 @@ function ConnectWhatsAppContent() {
             </div>
 
             {/* Card 2: Zernio & Meta Platform Details */}
-            <div className="p-4 rounded-lg bg-surface-container-lowest border border-outline-variant/30 space-y-3 font-code-metric text-xs">
-              <div className="flex items-center justify-between pb-2 border-b border-outline-variant/20">
+            <div className="p-3.5 sm:p-4 rounded-lg bg-surface-container-lowest border border-outline-variant/30 space-y-3 font-code-metric text-xs">
+              <div className="flex items-center justify-between pb-2 border-b border-outline-variant/20 gap-2">
                 <span className="text-on-surface font-semibold flex items-center gap-1.5">
-                  <Activity className="w-4 h-4 text-primary" /> Zernio Account ID:
+                  <Activity className="w-4 h-4 text-primary shrink-0" /> Zernio Account ID:
                 </span>
-                <span className="font-mono text-on-surface bg-surface-container-high px-2 py-0.5 rounded">
+                <span className="font-mono text-on-surface bg-surface-container-high px-2 py-0.5 rounded text-[11px] break-all">
                   {connectedAccount?.zernioAccountId || "6aab661f8d284ffb210c4d75"}
                 </span>
               </div>
 
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-2">
                 <span className="text-on-surface-variant flex items-center gap-1.5">
-                  <Radio className="w-4 h-4 text-tertiary" /> Kualitas Akun (Rating):
+                  <Radio className="w-4 h-4 text-tertiary shrink-0" /> Kualitas Akun:
                 </span>
-                <span className="text-tertiary font-semibold flex items-center gap-1.5 bg-tertiary/10 px-2 py-0.5 rounded border border-tertiary/20">
+                <span className="text-tertiary font-semibold flex items-center gap-1.5 bg-tertiary/10 px-2 py-0.5 rounded border border-tertiary/20 text-[11px]">
                   <span className="w-2 h-2 rounded-full bg-tertiary animate-pulse" />
                   {connectedAccount?.qualityRating || "GREEN (Tinggi)"}
                 </span>
               </div>
 
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-2">
                 <span className="text-on-surface-variant flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-primary" /> Metode Otorisasi:
+                  <ShieldCheck className="w-4 h-4 text-primary shrink-0" /> Metode Otorisasi:
                 </span>
-                <span className="text-primary font-medium">Zernio Redirect OAuth</span>
+                <span className="text-primary font-medium">Zernio OAuth</span>
               </div>
 
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-2">
                 <span className="text-on-surface-variant flex items-center gap-1.5">
-                  <Sparkles className="w-4 h-4 text-outline" /> Terhubung Sejak:
+                  <Sparkles className="w-4 h-4 text-outline shrink-0" /> Terhubung Sejak:
                 </span>
-                <span className="text-outline">
+                <span className="text-outline truncate">
                   {connectedAccount?.connectedAt || "Hari ini"}
                 </span>
               </div>
             </div>
           </div>
-
-
         </div>
       )}
     </div>
