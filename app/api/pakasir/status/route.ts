@@ -1,6 +1,13 @@
 import { NextResponse } from "next/server";
-import { getOrder, updateOrder } from "@/lib/services/order-service";
+import {
+  getOrder,
+  updateOrder,
+  calculateExpirationDate,
+  getUserSubscription,
+  findOrderByEmail,
+} from "@/lib/services/order-service";
 import { sendLoginAccessEmail } from "@/lib/services/email-service";
+import { createClient } from "@supabase/supabase-js";
 
 function generateRandomPassword(): string {
   const chars = "abcdefghjkmnpqrstuvwxyz23456789";
@@ -65,7 +72,80 @@ export async function GET(request: Request) {
           const statusData = await pakasirRes.json();
           if (statusData.status === "completed") {
             // Webhook mungkin belum sampai tapi Pakasir sudah completed
-            const loginPassword = order.loginPassword || generateRandomPassword();
+            const paidAt = statusData.completed_at || new Date().toISOString();
+
+            // Hitung akumulasi masa aktif
+            const existingSub = await getUserSubscription(order.customer.email);
+            let baseStartDate = paidAt;
+            if (existingSub.hasSubscription && !existingSub.isExpired && existingSub.expiresAt) {
+              baseStartDate = existingSub.expiresAt;
+            }
+            const expiresAt = calculateExpirationDate(order.planId, baseStartDate);
+
+            // Jika pembeli lama, tetap gunakan password lama
+            const previousOrder = await findOrderByEmail(order.customer.email);
+            const existingPassword =
+              previousOrder && previousOrder.status === "completed" && previousOrder.loginPassword
+                ? previousOrder.loginPassword
+                : undefined;
+
+            const loginPassword = existingPassword || order.loginPassword || generateRandomPassword();
+
+            // Provision Supabase Auth
+            let isExistingUser = false;
+            const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+            const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+            if (supabaseUrl && serviceRoleKey) {
+              try {
+                const adminClient = createClient(supabaseUrl, serviceRoleKey, {
+                  auth: { autoRefreshToken: false, persistSession: false },
+                });
+                const { data: usersList } = await adminClient.auth.admin.listUsers();
+                const existingUser = usersList?.users?.find(
+                  (u) => u.email?.toLowerCase() === order.customer.email.toLowerCase()
+                );
+                if (existingUser) {
+                  isExistingUser = true;
+                  await adminClient.auth.admin.updateUserById(existingUser.id, {
+                    email_confirm: true,
+                    user_metadata: {
+                      ...existingUser.user_metadata,
+                      name: order.customer.name || existingUser.user_metadata?.name,
+                      plan_id: order.planId,
+                      plan_name: order.planName,
+                      expires_at: expiresAt,
+                      last_renewed_at: new Date().toISOString(),
+                    },
+                  });
+                } else {
+                  await adminClient.auth.admin.createUser({
+                    email: order.customer.email,
+                    password: loginPassword,
+                    email_confirm: true,
+                    user_metadata: {
+                      name: order.customer.name,
+                      role: "customer",
+                      plan_id: order.planId,
+                      plan_name: order.planName,
+                      expires_at: expiresAt,
+                    },
+                  });
+                }
+              } catch (e: any) {
+                console.warn("[Status Polling] Supabase provision exception:", e.message);
+              }
+            }
+
+            let formattedExpiresAt: string | undefined;
+            try {
+              formattedExpiresAt = new Date(expiresAt).toLocaleDateString("id-ID", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              });
+            } catch {
+              // ignore
+            }
 
             const emailResult = await sendLoginAccessEmail({
               to: order.customer.email,
@@ -73,11 +153,14 @@ export async function GET(request: Request) {
               planName: order.planName,
               orderId: order.orderId,
               loginPassword,
+              isExistingUser,
+              formattedExpiresAt,
             });
 
             await updateOrder(order.orderId, {
               status: "completed",
-              paidAt: statusData.completed_at || new Date().toISOString(),
+              paidAt,
+              expiresAt,
               loginPassword,
               emailSent: emailResult.success,
               emailSentAt: new Date().toISOString(),
@@ -87,7 +170,7 @@ export async function GET(request: Request) {
               status: "completed",
               paid: true,
               order_id: order.orderId,
-              paid_at: statusData.completed_at,
+              paid_at: paidAt,
               plan_name: order.planName,
               email_sent: emailResult.success,
             });
