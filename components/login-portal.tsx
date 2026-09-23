@@ -36,7 +36,6 @@ function LoginPortalContent() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
-  const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
   const [isLoading, setIsLoading] = useState(false);
   const [feedback, setFeedback] = useState<{
     type: "error" | "success" | "info";
@@ -113,63 +112,12 @@ function LoginPortalContent() {
     checkSession();
   }, [router]);
 
-  const fillDummyCredentials = () => {
-    setEmail(DUMMY_EMAIL);
-    setPassword(DUMMY_PASSWORD);
-    setFeedback({
-      type: "info",
-      message: "Kredensial demo terisi! Klik tombol 'Masuk ke Dashboard CAPI'.",
-    });
-  };
-
   const handleAuthSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFeedback(null);
     setIsLoading(true);
 
-    // 1. Handle Sign Up mode
-    if (authMode === "signup") {
-      if (!isSupabaseConfigured) {
-        setIsLoading(false);
-        setFeedback({
-          type: "info",
-          message: "Supabase belum terkonfigurasi pada file .env.local.",
-        });
-        return;
-      }
-
-      try {
-        const { data, error } = await supabase.auth.signUp({
-          email,
-          password,
-        });
-
-        if (error) {
-          setFeedback({ type: "error", message: error.message });
-        } else if (data.session?.user) {
-          setCurrentUser(data.session.user);
-          setFeedback({
-            type: "success",
-            message: "Akun baru berhasil dibuat! Membuka dashboard...",
-          });
-          router.push(redirectTarget);
-        } else {
-          setFeedback({
-            type: "success",
-            message: "Pendaftaran berhasil! Silakan masuk dengan akun baru Anda.",
-          });
-          setAuthMode("signin");
-        }
-      } catch (err: unknown) {
-        const errorMsg = err instanceof Error ? err.message : "Gagal mendaftar.";
-        setFeedback({ type: "error", message: errorMsg });
-      } finally {
-        setIsLoading(false);
-      }
-      return;
-    }
-
-    // 2. Check if user is logging in with the dummy account
+    // 1. Check if user is logging in with the dummy account
     if (
       email.trim().toLowerCase() === DUMMY_EMAIL.toLowerCase() &&
       password === DUMMY_PASSWORD
@@ -225,7 +173,7 @@ function LoginPortalContent() {
         setFeedback({
           type: "error",
           message:
-            "Email atau kata sandi tidak cocok. Pastikan Anda memasukkan kredensial yang dikirimkan ke email Anda, atau gunakan Akun Demo.",
+            "Email atau kata sandi tidak cocok. Pastikan Anda memasukkan kredensial yang dikirimkan ke email Anda.",
         });
       }, 400);
       return;
@@ -239,11 +187,10 @@ function LoginPortalContent() {
 
       if (error) {
         if (error.message.includes("Email not confirmed")) {
-          // If Supabase email confirmation is enabled, allow demo access or show clear advice
           setFeedback({
             type: "error",
             message:
-              "Email belum dikonfirmasi di Supabase. Anda dapat menonaktifkan 'Confirm email' di Supabase Auth Settings, atau gunakan Akun Demo.",
+              "Email belum dikonfirmasi di Supabase. Silakan periksa inbox email Anda untuk konfirmasi.",
           });
         } else if (error.message === "Invalid login credentials") {
           setFeedback({
@@ -453,57 +400,15 @@ function LoginPortalContent() {
               </div>
             </div>
 
-            {/* Auth Mode Tabs (Masuk vs Daftar Baru) */}
-            <div className="grid grid-cols-2 gap-1 p-1 rounded-lg bg-surface-container-high border border-outline-variant/30">
-              <button
-                type="button"
-                onClick={() => {
-                  setAuthMode("signin");
-                  setFeedback(null);
-                }}
-                className={`py-2 rounded-md text-xs font-semibold transition-all cursor-pointer ${authMode === "signin"
-                  ? "bg-primary text-surface shadow-sm"
-                  : "text-on-surface-variant hover:text-on-surface"
-                  }`}
-              >
-                Masuk (Sign In)
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setAuthMode("signup");
-                  setFeedback(null);
-                }}
-                className={`py-2 rounded-md text-xs font-semibold transition-all cursor-pointer ${authMode === "signup"
-                  ? "bg-primary text-surface shadow-sm"
-                  : "text-on-surface-variant hover:text-on-surface"
-                  }`}
-              >
-                Daftar Akun Baru (Sign Up)
-              </button>
+            {/* Portal Login Header */}
+            <div className="text-center space-y-1 pb-1">
+              <h1 className="text-headline-sm font-semibold text-on-surface">
+                Masuk ke Portal CAPI
+              </h1>
+              <p className="text-xs text-on-surface-variant font-code-metric">
+                Akses login otomatis diberikan via email setelah pembelian paket
+              </p>
             </div>
-
-            {/* Dummy Account Quick-Fill Card */}
-            {authMode === "signin" && (
-              <div className="p-3.5 rounded-lg bg-surface-container-low border border-outline-variant/40 flex items-center justify-between gap-3">
-                <div className="space-y-0.5 text-left">
-                  <div className="flex items-center gap-1.5 text-label-sm font-semibold text-primary">
-                    <Sparkles className="w-3.5 h-3.5 text-primary" />
-                    <span>Akun Demo Tester</span>
-                  </div>
-                  <p className="text-[12px] font-mono text-on-surface-variant">
-                    {DUMMY_EMAIL}
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={fillDummyCredentials}
-                  className="px-2.5 py-1 text-label-sm font-medium rounded-md bg-surface-container hover:bg-surface-container-high border border-primary/40 text-primary transition-colors cursor-pointer shrink-0"
-                >
-                  Gunakan Akun
-                </button>
-              </div>
-            )}
 
             {/* Feedback Notifications */}
             {feedback && (
@@ -630,16 +535,25 @@ function LoginPortalContent() {
                   </>
                 ) : (
                   <>
-                    <span>
-                      {authMode === "signin"
-                        ? "Masuk ke Dashboard CAPI"
-                        : "Daftar Akun Baru"}
-                    </span>
+                    <span>Masuk ke Dashboard CAPI</span>
                     <ArrowRight className="w-5 h-5" />
                   </>
                 )}
               </button>
             </form>
+
+            {/* Link to Checkout for users without an account */}
+            <div className="text-center pt-3 border-t border-outline-variant/30">
+              <p className="text-xs text-on-surface-variant font-code-metric">
+                Belum memiliki akun?{" "}
+                <a
+                  href="/checkout?plan=6-bulan"
+                  className="text-primary hover:underline font-semibold"
+                >
+                  Beli Paket Langganan &rarr;
+                </a>
+              </p>
+            </div>
           </div>
         </div>
       </main>
