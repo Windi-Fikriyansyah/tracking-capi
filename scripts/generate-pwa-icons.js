@@ -110,6 +110,13 @@ async function generate() {
     .toFile(path.join(iconsDir, 'icon-maskable-512x512.png'));
   console.log('✓ icon-maskable-512x512.png created');
 
+  // 192x192 Maskable PNG
+  await sharp(maskableSvg)
+    .resize(192, 192)
+    .png()
+    .toFile(path.join(iconsDir, 'icon-maskable-192x192.png'));
+  console.log('✓ icon-maskable-192x192.png created');
+
   // 180x180 Apple Touch Icon
   await sharp(standardSvg)
     .resize(180, 180)

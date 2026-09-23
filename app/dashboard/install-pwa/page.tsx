@@ -344,6 +344,17 @@ export default function InstallPwaPage() {
                 </p>
               </div>
             </div>
+
+            {/* Note on Android WebAPK compilation */}
+            <div className="p-3 rounded-lg bg-surface-container-lowest border border-outline-variant/30 text-xs text-on-surface-variant flex items-start gap-2.5">
+              <Zap className="w-4 h-4 text-tertiary shrink-0 mt-0.5" />
+              <div className="space-y-0.5 leading-relaxed text-[11px]">
+                <strong className="text-on-surface">Mengapa instalasi di Android memerlukan waktu beberapa detik?</strong>
+                <p>
+                  Di sistem Android, Google Chrome bekerja sama dengan <em>Google Play Services</em> untuk membuat dan menandatangani paket aplikasi native mini (<strong>WebAPK</strong>) secara otomatis di latar belakang. Proses ini normalnya membutuhkan waktu sekitar <strong>15–30 detik</strong> (bisa dicek di bilah notifikasi HP: <em>&quot;Menginstal TrackCapi...&quot;</em>). Setelah terpasang, aplikasi dapat dibuka secara instan tanpa loading browser.
+                </p>
+              </div>
+            </div>
           </div>
         )}
 
