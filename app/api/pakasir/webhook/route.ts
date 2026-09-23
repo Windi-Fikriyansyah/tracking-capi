@@ -4,6 +4,7 @@ import {
   updateOrder,
   calculateExpirationDate,
   getUserSubscription,
+  findOrderByEmail,
 } from "@/lib/services/order-service";
 import { sendLoginAccessEmail } from "@/lib/services/email-service";
 import { createClient } from "@supabase/supabase-js";
@@ -85,16 +86,19 @@ async function provisionSupabaseUser(
               (u) => u.email?.toLowerCase() === email.toLowerCase()
             );
             if (existingUser) {
+              // Pengguna lama memperpanjang paket: JANGAN ubah password lama, tetap gunakan password yang ada
               await adminClient.auth.admin.updateUserById(existingUser.id, {
+                email_confirm: true,
                 user_metadata: {
                   ...existingUser.user_metadata,
+                  name: name || existingUser.user_metadata?.name,
                   plan_id: planId || existingUser.user_metadata?.plan_id || "6-bulan",
                   plan_name: planName || existingUser.user_metadata?.plan_name || "Paket 6 Bulan",
                   expires_at: expiresAt,
                   last_renewed_at: new Date().toISOString(),
                 },
               });
-              console.log("[Supabase Provision]: Akun lama berhasil diperbarui dengan masa aktif baru.");
+              console.log("[Supabase Provision]: Akun lama berhasil diperpanjang. Password akun lama tetap dipertahankan.");
               return { success: true, user: existingUser, isExisting: true };
             }
           } catch (updateErr: any) {
@@ -222,7 +226,14 @@ export async function POST(request: Request) {
     }
 
     // 4. Siapkan password akses login dan hitung masa aktif paket
-    const loginPassword = order.loginPassword || generateRandomPassword();
+    // Jika customer sudah pernah membeli sebelumnya, TETAP gunakan password akun yang lama
+    const previousOrder = await findOrderByEmail(order.customer.email);
+    const existingPassword =
+      previousOrder && previousOrder.status === "completed" && previousOrder.loginPassword
+        ? previousOrder.loginPassword
+        : undefined;
+
+    const loginPassword = existingPassword || order.loginPassword || generateRandomPassword();
     const paidAt = completed_at || new Date().toISOString();
 
     // Periksa apakah customer sudah memiliki langganan aktif sebelumnya (stacking / akumulasi)

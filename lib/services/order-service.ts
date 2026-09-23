@@ -269,15 +269,17 @@ export async function updateOrder(
 }
 
 /**
- * Cari order berdasarkan email customer
+ * Cari order berdasarkan email customer.
+ * Memprioritaskan order berstatus 'completed' yang terbaru.
  */
 export async function findOrderByEmail(email: string): Promise<OrderRecord | null> {
   const cleanEmail = email.trim().toLowerCase();
+  const matchedOrders: OrderRecord[] = [];
 
   // 1. Search in memory
   for (const order of ordersCache.values()) {
     if (order.customer.email.trim().toLowerCase() === cleanEmail) {
-      return order;
+      matchedOrders.push(order);
     }
   }
 
@@ -285,7 +287,9 @@ export async function findOrderByEmail(email: string): Promise<OrderRecord | nul
   const allOrders = loadOrdersFromFile();
   for (const order of Object.values(allOrders)) {
     if (order.customer.email.trim().toLowerCase() === cleanEmail) {
-      return order;
+      if (!matchedOrders.some((m) => m.orderId === order.orderId)) {
+        matchedOrders.push(order);
+      }
     }
   }
 
@@ -296,46 +300,59 @@ export async function findOrderByEmail(email: string): Promise<OrderRecord | nul
         .from("orders")
         .select("*")
         .ilike("customer_email", cleanEmail)
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .maybeSingle();
+        .order("created_at", { ascending: false });
 
-      if (data) {
-        const order: OrderRecord = {
-          orderId: data.order_id,
-          txnId: data.txn_id,
-          planId: data.plan_id,
-          planName: data.plan_name,
-          amount: data.amount,
-          fee: data.fee,
-          totalPayment: data.total_payment,
-          method: data.payment_method,
-          customer: {
-            name: data.customer_name,
-            email: data.customer_email,
-            phone: data.customer_phone,
-          },
-          status: data.status,
-          createdAt: data.created_at,
-          paidAt: data.paid_at,
-          expiresAt:
-            data.expires_at ||
-            (data.status === "completed"
-              ? calculateExpirationDate(data.plan_id, data.paid_at || data.created_at)
-              : undefined),
-          loginPassword: data.login_password,
-          emailSent: data.email_sent,
-          emailSentAt: data.email_sent_at,
-        };
-        ordersCache.set(order.orderId, order);
-        return order;
+      if (data && data.length > 0) {
+        for (const row of data) {
+          if (!matchedOrders.some((m) => m.orderId === row.order_id)) {
+            matchedOrders.push({
+              orderId: row.order_id,
+              txnId: row.txn_id,
+              planId: row.plan_id,
+              planName: row.plan_name,
+              amount: row.amount,
+              fee: row.fee,
+              totalPayment: row.total_payment,
+              method: row.payment_method,
+              customer: {
+                name: row.customer_name,
+                email: row.customer_email,
+                phone: row.customer_phone,
+              },
+              status: row.status,
+              createdAt: row.created_at,
+              paidAt: row.paid_at,
+              expiresAt:
+                row.expires_at ||
+                (row.status === "completed"
+                  ? calculateExpirationDate(row.plan_id, row.paid_at || row.created_at)
+                  : undefined),
+              loginPassword: row.login_password,
+              emailSent: row.email_sent,
+              emailSentAt: row.email_sent_at,
+            });
+          }
+        }
       }
     } catch {
       // Ignore
     }
   }
 
-  return null;
+  if (matchedOrders.length === 0) return null;
+
+  // Prioritaskan order yang 'completed' dan urutkan dari yang paling baru
+  matchedOrders.sort((a, b) => {
+    if (a.status === "completed" && b.status !== "completed") return -1;
+    if (b.status === "completed" && a.status !== "completed") return 1;
+    const timeA = new Date(a.paidAt || a.createdAt).getTime();
+    const timeB = new Date(b.paidAt || b.createdAt).getTime();
+    return timeB - timeA;
+  });
+
+  const bestMatch = matchedOrders[0];
+  ordersCache.set(bestMatch.orderId, bestMatch);
+  return bestMatch;
 }
 
 /**
