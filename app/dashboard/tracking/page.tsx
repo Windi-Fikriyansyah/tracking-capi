@@ -199,10 +199,10 @@ export default function TrackingPage() {
       (eventIndex === 1
         ? lead.event_1_name || settings.event_1_name
         : eventIndex === 2
-        ? lead.event_2_name
-        : eventIndex === 3
-        ? lead.event_3_name
-        : lead.event_4_name) || "";
+          ? lead.event_2_name
+          : eventIndex === 3
+            ? lead.event_3_name
+            : lead.event_4_name) || "";
 
     if (!eventName) {
       setFeedback({
@@ -338,9 +338,9 @@ export default function TrackingPage() {
           prev.map((item) =>
             item.id === lead.id
               ? {
-                  ...item,
-                  [`event_${eventIndex}_status`]: "failed",
-                }
+                ...item,
+                [`event_${eventIndex}_status`]: "failed",
+              }
               : item
           )
         );
@@ -370,10 +370,10 @@ export default function TrackingPage() {
       eventIndex === 1
         ? lead.event_1_name || settings.event_1_name
         : eventIndex === 2
-        ? lead.event_2_name
-        : eventIndex === 3
-        ? lead.event_3_name
-        : lead.event_4_name;
+          ? lead.event_2_name
+          : eventIndex === 3
+            ? lead.event_3_name
+            : lead.event_4_name;
 
     if (!eventName) {
       setFeedback({
@@ -562,14 +562,14 @@ export default function TrackingPage() {
 
         {/* Action Buttons */}
         <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 shrink-0 w-full lg:w-auto">
-          <button
+          {/* <button
             type="button"
             onClick={() => setShowSimulateModal(true)}
             className="flex-1 sm:flex-initial px-3.5 py-2 rounded-lg bg-primary-container hover:bg-primary text-on-primary-container text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer transition-all shadow-[0_0_15px_rgba(6,182,212,0.25)]"
           >
             <Plus className="w-4 h-4 shrink-0" />
             <span>Simulasi Pesan Iklan</span>
-          </button>
+          </button> */}
 
           <button
             type="button"
@@ -595,13 +595,12 @@ export default function TrackingPage() {
       {/* Feedback Alerts */}
       {feedback && (
         <div
-          className={`p-3.5 rounded-lg border text-body-sm flex items-center gap-2.5 ${
-            feedback.type === "success"
-              ? "bg-tertiary-container/20 border-tertiary/40 text-tertiary"
-              : feedback.type === "error"
+          className={`p-3.5 rounded-lg border text-body-sm flex items-center gap-2.5 ${feedback.type === "success"
+            ? "bg-tertiary-container/20 border-tertiary/40 text-tertiary"
+            : feedback.type === "error"
               ? "bg-error-container/20 border-error/40 text-error"
               : "bg-surface-container-high border-primary/40 text-on-surface"
-          }`}
+            }`}
         >
           {feedback.type === "success" ? (
             <CheckCircle2 className="w-4 h-4 shrink-0" />
@@ -872,9 +871,8 @@ export default function TrackingPage() {
                         <select
                           value={lead.event_2_name || ""}
                           onChange={(e) => handleChangeEventName(lead.id, 2, e.target.value)}
-                          className={`w-full text-xs font-code-metric bg-surface-container border rounded-lg px-2 py-1.5 focus:outline-none focus:border-primary cursor-pointer transition-colors ${
-                            lead.event_2_name ? "text-on-surface border-outline-variant/40 hover:border-primary/60" : "text-outline border-dashed border-outline-variant/60"
-                          }`}
+                          className={`w-full text-xs font-code-metric bg-surface-container border rounded-lg px-2 py-1.5 focus:outline-none focus:border-primary cursor-pointer transition-colors ${lead.event_2_name ? "text-on-surface border-outline-variant/40 hover:border-primary/60" : "text-outline border-dashed border-outline-variant/60"
+                            }`}
                         >
                           <option value="" className="bg-surface-container-high text-outline">
                             -- Pilih Event 2 --
@@ -927,9 +925,8 @@ export default function TrackingPage() {
                         <select
                           value={lead.event_3_name || ""}
                           onChange={(e) => handleChangeEventName(lead.id, 3, e.target.value)}
-                          className={`w-full text-xs font-code-metric bg-surface-container border rounded-lg px-2 py-1.5 focus:outline-none focus:border-primary cursor-pointer transition-colors ${
-                            lead.event_3_name ? "text-on-surface border-outline-variant/40 hover:border-primary/60" : "text-outline border-dashed border-outline-variant/60"
-                          }`}
+                          className={`w-full text-xs font-code-metric bg-surface-container border rounded-lg px-2 py-1.5 focus:outline-none focus:border-primary cursor-pointer transition-colors ${lead.event_3_name ? "text-on-surface border-outline-variant/40 hover:border-primary/60" : "text-outline border-dashed border-outline-variant/60"
+                            }`}
                         >
                           <option value="" className="bg-surface-container-high text-outline">
                             -- Pilih Event 3 --
@@ -983,13 +980,12 @@ export default function TrackingPage() {
                         <select
                           value={lead.event_4_name || ""}
                           onChange={(e) => handleChangeEventName(lead.id, 4, e.target.value)}
-                          className={`w-full text-xs font-code-metric bg-surface-container border rounded-lg px-2 py-1.5 focus:outline-none focus:border-tertiary cursor-pointer transition-colors ${
-                            lead.event_4_name === "Purchase"
-                              ? "text-tertiary font-semibold border-tertiary/40 hover:border-tertiary"
-                              : lead.event_4_name
+                          className={`w-full text-xs font-code-metric bg-surface-container border rounded-lg px-2 py-1.5 focus:outline-none focus:border-tertiary cursor-pointer transition-colors ${lead.event_4_name === "Purchase"
+                            ? "text-tertiary font-semibold border-tertiary/40 hover:border-tertiary"
+                            : lead.event_4_name
                               ? "text-on-surface border-outline-variant/40 hover:border-primary/60"
                               : "text-outline border-dashed border-outline-variant/60"
-                          }`}
+                            }`}
                         >
                           <option value="" className="bg-surface-container-high text-outline font-normal">
                             -- Pilih Event 4 --
@@ -1171,9 +1167,8 @@ export default function TrackingPage() {
                             <select
                               value={lead.event_2_name || ""}
                               onChange={(e) => handleChangeEventName(lead.id, 2, e.target.value)}
-                              className={`w-full text-xs font-code-metric bg-surface-container-lowest border rounded-lg px-2 py-1 focus:outline-none focus:border-primary cursor-pointer transition-colors ${
-                                lead.event_2_name ? "text-on-surface border-outline-variant/40 hover:border-primary/60" : "text-outline border-dashed border-outline-variant/60"
-                              }`}
+                              className={`w-full text-xs font-code-metric bg-surface-container-lowest border rounded-lg px-2 py-1 focus:outline-none focus:border-primary cursor-pointer transition-colors ${lead.event_2_name ? "text-on-surface border-outline-variant/40 hover:border-primary/60" : "text-outline border-dashed border-outline-variant/60"
+                                }`}
                             >
                               <option value="" className="bg-surface-container-high text-outline">
                                 -- Pilih Event --
@@ -1231,9 +1226,8 @@ export default function TrackingPage() {
                             <select
                               value={lead.event_3_name || ""}
                               onChange={(e) => handleChangeEventName(lead.id, 3, e.target.value)}
-                              className={`w-full text-xs font-code-metric bg-surface-container-lowest border rounded-lg px-2 py-1 focus:outline-none focus:border-primary cursor-pointer transition-colors ${
-                                lead.event_3_name ? "text-on-surface border-outline-variant/40 hover:border-primary/60" : "text-outline border-dashed border-outline-variant/60"
-                              }`}
+                              className={`w-full text-xs font-code-metric bg-surface-container-lowest border rounded-lg px-2 py-1 focus:outline-none focus:border-primary cursor-pointer transition-colors ${lead.event_3_name ? "text-on-surface border-outline-variant/40 hover:border-primary/60" : "text-outline border-dashed border-outline-variant/60"
+                                }`}
                             >
                               <option value="" className="bg-surface-container-high text-outline">
                                 -- Pilih Event --
@@ -1291,13 +1285,12 @@ export default function TrackingPage() {
                             <select
                               value={lead.event_4_name || ""}
                               onChange={(e) => handleChangeEventName(lead.id, 4, e.target.value)}
-                              className={`w-full text-xs font-code-metric bg-surface-container-lowest border rounded-lg px-2 py-1 focus:outline-none focus:border-tertiary cursor-pointer transition-colors ${
-                                lead.event_4_name === "Purchase"
-                                  ? "text-tertiary font-semibold border-tertiary/40 hover:border-tertiary"
-                                  : lead.event_4_name
+                              className={`w-full text-xs font-code-metric bg-surface-container-lowest border rounded-lg px-2 py-1 focus:outline-none focus:border-tertiary cursor-pointer transition-colors ${lead.event_4_name === "Purchase"
+                                ? "text-tertiary font-semibold border-tertiary/40 hover:border-tertiary"
+                                : lead.event_4_name
                                   ? "text-on-surface border-outline-variant/40 hover:border-primary/60"
                                   : "text-outline border-dashed border-outline-variant/60"
-                              }`}
+                                }`}
                             >
                               <option value="" className="bg-surface-container-high text-outline font-normal">
                                 -- Pilih Event --

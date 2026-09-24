@@ -365,21 +365,7 @@ function ConnectWhatsAppContent() {
             </span>
           </div>
 
-          {isConnected && (
-            <button
-              type="button"
-              onClick={handleTestEvent}
-              disabled={testingEvent}
-              className="w-full sm:w-auto px-4 py-2 rounded-lg bg-primary-container text-on-primary-container font-medium text-xs sm:text-body-sm hover:bg-primary transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-75 shadow-sm"
-            >
-              {testingEvent ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <Send className="w-4 h-4" />
-              )}
-              <span>Tes Event CAPI</span>
-            </button>
-          )}
+
         </div>
       </div>
 
