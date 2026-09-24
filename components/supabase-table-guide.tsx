@@ -25,8 +25,22 @@ create table if not exists public.app_settings (
   ctwa_purchase_value numeric default 150000,
   ctwa_dataset_id text default '1469138511709885',
   ctwa_test_code text,
+  meta_pixel_id text,
+  meta_pixel_name text,
+  meta_access_token text,
+  meta_test_code text,
+  is_meta_connected boolean default false,
+  meta_connected_at timestamp with time zone,
   updated_at timestamp with time zone default timezone('utc'::text, now())
 );
+
+-- Jalankan baris berikut jika tabel app_settings sudah pernah dibuat sebelumnya:
+-- alter table public.app_settings add column if not exists meta_pixel_id text;
+-- alter table public.app_settings add column if not exists meta_pixel_name text;
+-- alter table public.app_settings add column if not exists meta_access_token text;
+-- alter table public.app_settings add column if not exists meta_test_code text;
+-- alter table public.app_settings add column if not exists is_meta_connected boolean default false;
+-- alter table public.app_settings add column if not exists meta_connected_at timestamp with time zone;
 
 -- 3. Aktifkan Row Level Security (RLS) pada app_settings
 alter table public.app_settings enable row level security;

@@ -25,6 +25,7 @@ import {
   Zap,
   CheckCircle2,
   Download,
+  Share2,
 } from "lucide-react";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase/client";
 
@@ -207,6 +208,17 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       active: pathname.startsWith("/dashboard/connect-whatsapp"),
       badge: (
         <span className="ml-auto w-2 h-2 rounded-full bg-tertiary glow-dot animate-ping" />
+      ),
+    },
+    {
+      label: "Connect Meta Ads",
+      href: "/dashboard/connect-meta",
+      icon: Share2,
+      active: pathname.startsWith("/dashboard/connect-meta"),
+      badge: (
+        <span className="ml-auto px-1.5 py-0.5 rounded text-[10px] font-code-metric bg-primary/10 text-primary border border-primary/30">
+          CAPI
+        </span>
       ),
     },
     {

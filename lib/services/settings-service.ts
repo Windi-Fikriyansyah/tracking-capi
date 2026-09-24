@@ -8,6 +8,13 @@ export interface AppSettings {
   wa_waba_name: string | null;
   wa_waba_id: string | null;
   wa_connected_at: string | null;
+  // Meta Ads CAPI fields
+  meta_pixel_id?: string | null;
+  meta_pixel_name?: string | null;
+  meta_access_token?: string | null;
+  meta_test_code?: string | null;
+  is_meta_connected?: boolean;
+  meta_connected_at?: string | null;
   updated_at: string | null;
 }
 
@@ -19,6 +26,12 @@ export const DEFAULT_SETTINGS: AppSettings = {
   wa_waba_name: null,
   wa_waba_id: null,
   wa_connected_at: null,
+  meta_pixel_id: null,
+  meta_pixel_name: null,
+  meta_access_token: null,
+  meta_test_code: null,
+  is_meta_connected: false,
+  meta_connected_at: null,
   updated_at: null,
 };
 
@@ -157,6 +170,12 @@ export async function getAppSettings(explicitUserId?: string): Promise<{
         wa_waba_name: data.wa_waba_name || null,
         wa_waba_id: data.wa_waba_id || null,
         wa_connected_at: data.wa_connected_at || null,
+        meta_pixel_id: data.meta_pixel_id || null,
+        meta_pixel_name: data.meta_pixel_name || null,
+        meta_access_token: data.meta_access_token || null,
+        meta_test_code: data.meta_test_code || null,
+        is_meta_connected: Boolean(data.is_meta_connected),
+        meta_connected_at: data.meta_connected_at || null,
         updated_at: data.updated_at || null,
       },
       tableExists: true,
@@ -365,3 +384,133 @@ export async function disconnectWhatsAppFromDatabase(explicitUserId?: string): P
     userId: explicitUserId,
   });
 }
+
+/**
+ * Menyimpan konfigurasi koneksi Meta Ads Pixel & CAPI khusus untuk user_id yang sedang login
+ */
+export async function saveMetaConnectionToDatabase(params: {
+  pixelId: string;
+  pixelName?: string;
+  accessToken: string;
+  testCode?: string;
+  isConnected: boolean;
+  userId?: string;
+}): Promise<{ success: boolean; error: string | null; isTableMissing?: boolean }> {
+  const activeUser = await getCurrentUser();
+  const userId = params.userId || activeUser?.id;
+
+  if (!userId) {
+    return {
+      success: false,
+      error: "Sesi login tidak aktif. Silakan masuk terlebih dahulu.",
+    };
+  }
+
+  if (!isSupabaseConfigured) {
+    return {
+      success: false,
+      error: "Supabase belum terkonfigurasi pada file .env.local",
+    };
+  }
+
+  try {
+    const { data: existing, error: checkError } = await supabase
+      .from("app_settings")
+      .select("user_id")
+      .eq("user_id", userId)
+      .maybeSingle();
+
+    if (checkError) {
+      if (isMissingTableError(checkError)) {
+        return {
+          success: false,
+          error: "Tabel 'app_settings' belum dibuat di database Supabase Anda.",
+          isTableMissing: true,
+        };
+      }
+      return { success: false, error: checkError.message };
+    }
+
+    const payload = {
+      user_id: userId,
+      meta_pixel_id: params.pixelId.trim(),
+      meta_pixel_name: params.pixelName?.trim() || null,
+      meta_access_token: params.accessToken.trim(),
+      meta_test_code: params.testCode?.trim() || null,
+      is_meta_connected: params.isConnected,
+      meta_connected_at: params.isConnected ? new Date().toISOString() : null,
+      updated_at: new Date().toISOString(),
+    };
+
+    if (existing) {
+      const { error: updateError } = await supabase
+        .from("app_settings")
+        .update(payload)
+        .eq("user_id", userId);
+
+      if (updateError) {
+        return { success: false, error: updateError.message };
+      }
+    } else {
+      const { error: insertError } = await supabase.from("app_settings").insert({
+        ...payload,
+        wa_is_connected: false,
+      });
+
+      if (insertError) {
+        if (isMissingTableError(insertError)) {
+          return {
+            success: false,
+            error: "Tabel 'app_settings' belum dibuat di database Supabase Anda.",
+            isTableMissing: true,
+          };
+        }
+        return { success: false, error: insertError.message };
+      }
+    }
+
+    return { success: true, error: null };
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : "Gagal menyimpan koneksi Meta Ads ke database";
+    return { success: false, error: msg };
+  }
+}
+
+/**
+ * Memutuskan koneksi Meta Ads khusus untuk user_id yang sedang login
+ */
+export async function disconnectMetaFromDatabase(explicitUserId?: string): Promise<{
+  success: boolean;
+  error: string | null;
+}> {
+  const activeUser = await getCurrentUser();
+  const userId = explicitUserId || activeUser?.id;
+
+  if (!userId) {
+    return {
+      success: false,
+      error: "Sesi login tidak aktif. Silakan masuk terlebih dahulu.",
+    };
+  }
+
+  try {
+    const { error } = await supabase
+      .from("app_settings")
+      .update({
+        is_meta_connected: false,
+        meta_connected_at: null,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("user_id", userId);
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+
+    return { success: true, error: null };
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : "Gagal memutuskan koneksi Meta Ads";
+    return { success: false, error: msg };
+  }
+}
+

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useTransition } from "react";
+import Link from "next/link";
 import {
   Target,
   Plus,
@@ -25,6 +26,7 @@ import {
   Copy,
   Check,
   Zap,
+  Share2,
 } from "lucide-react";
 import { getCurrentUser, getAppSettings } from "@/lib/services/settings-service";
 import {
@@ -53,6 +55,19 @@ export default function TrackingPage() {
   const [currentUser, setCurrentUser] = useState<{ id: string; email: string } | null>(null);
   const [apiKey, setApiKey] = useState<string | null>(null);
   const [wabaAccountId, setWabaAccountId] = useState<string | null>(null);
+  const [metaSettings, setMetaSettings] = useState<{
+    pixelId: string | null;
+    pixelName: string | null;
+    accessToken: string | null;
+    testCode: string | null;
+    isConnected: boolean;
+  }>({
+    pixelId: null,
+    pixelName: null,
+    accessToken: null,
+    testCode: null,
+    isConnected: false,
+  });
   const [loading, setLoading] = useState(true);
 
   // Leads & Settings state
@@ -107,6 +122,13 @@ export default function TrackingPage() {
         const { settings: appSettings } = await getAppSettings(user.id);
         setApiKey(appSettings.zernio_api_key);
         setWabaAccountId(appSettings.wa_waba_id);
+        setMetaSettings({
+          pixelId: appSettings.meta_pixel_id || null,
+          pixelName: appSettings.meta_pixel_name || null,
+          accessToken: appSettings.meta_access_token || null,
+          testCode: appSettings.meta_test_code || null,
+          isConnected: Boolean(appSettings.is_meta_connected),
+        });
 
         const ctwaSet = await getCtwaSettings(user.id);
         setSettings(ctwaSet);
@@ -175,25 +197,12 @@ export default function TrackingPage() {
     await updateCtwaLeadEventName(leadId, eventIndex, newEventName);
   };
 
-  // 2. Trigger conversion event (Event 1, 2, 3, or 4) to Meta via Zernio
+  // 2. Trigger conversion event (Event 1, 2, 3, or 4) to Meta (CTWA via Zernio or Organic via Direct Meta CAPI)
   const handleTriggerEvent = async (
     lead: CtwaLead,
     eventIndex: 1 | 2 | 3 | 4,
     customValue?: number
   ) => {
-    if (!apiKey || !wabaAccountId) {
-      setFeedback({
-        type: "error",
-        message:
-          "Akun WhatsApp atau API Key belum terhubung. Silakan buka halaman Connect WhatsApp & Pengaturan.",
-      });
-      return;
-    }
-
-    const eventKey = `${lead.id}_${eventIndex}`;
-    setSendingEventMap((prev) => ({ ...prev, [eventKey]: true }));
-    setFeedback(null);
-
     // Use event name selected for this lead's column
     const eventName =
       (eventIndex === 1
@@ -209,9 +218,126 @@ export default function TrackingPage() {
         type: "error",
         message: `Silakan pilih event untuk Kolom Event ${eventIndex} terlebih dahulu.`,
       });
-      setSendingEventMap((prev) => ({ ...prev, [eventKey]: false }));
       return;
     }
+
+    const eventKey = `${lead.id}_${eventIndex}`;
+
+    // -------------------------------------------------------------------------
+    // JALUR 1: LEADS ORGANIK (Tanpa ctwa_clid iklan) -> Direct Meta CAPI
+    // -------------------------------------------------------------------------
+    if (!lead.ctwa_clid) {
+      if (!metaSettings.isConnected || !metaSettings.pixelId || !metaSettings.accessToken) {
+        setFeedback({
+          type: "error",
+          message: `Nomor ${lead.phone} adalah kontak WhatsApp Organik. Untuk mengirim event ke Meta Pixel, silakan hubungkan Pixel dan Access Token di menu 'Connect Meta Ads' terlebih dahulu.`,
+        });
+        return;
+      }
+
+      setSendingEventMap((prev) => ({ ...prev, [eventKey]: true }));
+      setFeedback(null);
+
+      const eventId = `meta_org_${eventIndex}_${Date.now()}_${lead.phone_e164.slice(-4)}`;
+
+      try {
+        const res = await fetch("/api/meta/conversions", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            pixelId: metaSettings.pixelId,
+            accessToken: metaSettings.accessToken,
+            testCode: metaSettings.testCode || undefined,
+            eventName: eventName === "LeadSubmitted" ? "Lead" : eventName,
+            phone: lead.phone_e164 || lead.phone,
+            name: lead.contact_name,
+            eventId,
+            value:
+              eventName === "Purchase"
+                ? customValue || lead.event_4_value || settings.purchase_value
+                : undefined,
+            currency: settings.currency,
+            userId: currentUser?.id,
+            userEmail: currentUser?.email,
+          }),
+        });
+
+        const data = await res.json().catch(() => ({}));
+
+        if (res.ok && data.success) {
+          const traceId = data.traceId || data.eventId || `meta_${Date.now().toString(36)}`;
+          setLeads((prev) =>
+            prev.map((item) => {
+              if (item.id === lead.id) {
+                return {
+                  ...item,
+                  [`event_${eventIndex}_status`]: "sent",
+                  [`event_${eventIndex}_trace_id`]: traceId,
+                  [`event_${eventIndex}_sent_at`]: new Date().toISOString(),
+                  event_4_value:
+                    eventName === "Purchase"
+                      ? customValue || item.event_4_value || settings.purchase_value
+                      : item.event_4_value,
+                };
+              }
+              return item;
+            })
+          );
+
+          await updateCtwaLeadEvent(
+            lead.id,
+            eventIndex,
+            "sent",
+            traceId,
+            eventName === "Purchase"
+              ? customValue || lead.event_4_value || settings.purchase_value
+              : undefined
+          );
+
+          setFeedback({
+            type: "success",
+            message: `Event ${eventIndex} ('${eventName}') prospek organik berhasil dikirim ke Meta Pixel (${metaSettings.pixelId})! Trace ID: ${traceId}`,
+          });
+        } else {
+          setFeedback({
+            type: "error",
+            message: `Gagal mengirim ke Meta Pixel: ${data.error || "Event ditolak oleh Meta Graph API."}`,
+          });
+          setLeads((prev) =>
+            prev.map((item) =>
+              item.id === lead.id
+                ? { ...item, [`event_${eventIndex}_status`]: "failed" }
+                : item
+            )
+          );
+          await updateCtwaLeadEvent(lead.id, eventIndex, "failed");
+        }
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : "Error saat menghubungi Meta Conversions API.";
+        setFeedback({
+          type: "error",
+          message: `Koneksi Meta CAPI gagal: ${msg}`,
+        });
+      } finally {
+        setSendingEventMap((prev) => ({ ...prev, [eventKey]: false }));
+      }
+      return;
+    }
+
+    // -------------------------------------------------------------------------
+    // JALUR 2: LEADS IKLAN CTWA (Dengan ctwa_clid iklan) -> Zernio CTWA CAPI
+    // -------------------------------------------------------------------------
+    if (!apiKey || !wabaAccountId) {
+      setFeedback({
+        type: "error",
+        message:
+          "Akun WhatsApp atau API Key belum terhubung. Silakan buka halaman Connect WhatsApp & Pengaturan.",
+      });
+      return;
+    }
+
+    setSendingEventMap((prev) => ({ ...prev, [eventKey]: true }));
+    setFeedback(null);
 
     const eventId = `ctwa_${eventIndex}_${Date.now()}_${lead.phone_e164.slice(-4)}`;
 
@@ -383,10 +509,10 @@ export default function TrackingPage() {
       return;
     }
 
-    if (!lead.ctwa_clid) {
+    if (!lead.ctwa_clid && (!metaSettings.isConnected || !metaSettings.pixelId)) {
       setFeedback({
         type: "error",
-        message: `Kontak ${lead.phone} merupakan chat organik (tanpa ctwa_clid iklan). Meta Conversions API hanya menerima event konversi untuk nomor yang berasal dari iklan Click-to-WhatsApp Meta Ads.`,
+        message: `Kontak ${lead.phone} merupakan chat organik (tanpa parameter iklan CTWA). Untuk mengirimkan event ke Meta Pixel, silakan hubungkan Meta Ads di menu "Connect Meta Ads".`,
       });
       return;
     }
@@ -551,8 +677,28 @@ export default function TrackingPage() {
               </h1>
               <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] sm:text-label-sm font-code-metric bg-tertiary/10 text-tertiary border border-tertiary/30">
                 <span className="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse" />
-                CAPI v19.0 Active
+                CTWA CAPI Active
               </span>
+              <Link
+                href="/dashboard/connect-meta"
+                className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] sm:text-label-sm font-code-metric transition-colors ${
+                  metaSettings.isConnected
+                    ? "bg-primary/10 text-primary border border-primary/30 hover:bg-primary/20"
+                    : "bg-surface-container-high text-on-surface-variant border border-outline-variant/40 hover:border-primary/40 hover:text-on-surface"
+                }`}
+                title={
+                  metaSettings.isConnected
+                    ? `Meta Pixel Terhubung: ${metaSettings.pixelId} (${metaSettings.pixelName || "Pixel"})`
+                    : "Klik untuk menghubungkan Meta Ads Pixel bagi prospek organik"
+                }
+              >
+                <Share2 className="w-3 h-3 text-primary" />
+                <span>
+                  {metaSettings.isConnected
+                    ? `Pixel: ${metaSettings.pixelId?.slice(-6) || "Active"}`
+                    : "Connect Meta Ads"}
+                </span>
+              </Link>
             </div>
             <p className="text-xs sm:text-body-sm font-body-sm text-on-surface-variant mt-1 leading-relaxed">
               Tangkap otomatis Click ID (<code className="text-primary font-code-metric">ctwa_clid</code>) dari iklan Meta dan kirimkan event konversi 4 tahap kembali ke Ads Manager.
