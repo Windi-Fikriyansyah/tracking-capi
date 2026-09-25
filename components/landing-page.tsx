@@ -220,6 +220,12 @@ export default function LandingPage() {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
+            <Link
+              href="/login"
+              className="px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium text-[#dbe1ff] hover:text-[#4cd7f6] hover:bg-[#1e2847]/40 transition-colors"
+            >
+              Masuk
+            </Link>
             <a
               href="#harga"
               className="inline-flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-5 py-2 rounded-lg bg-gradient-to-r from-[#4cd7f6] to-[#06b6d4] text-[#050d25] text-xs sm:text-sm font-semibold hover:shadow-[0_0_24px_rgba(76,215,246,0.4)] transition-all hover:scale-[1.02] active:scale-[0.98]"
@@ -282,6 +288,15 @@ export default function LandingPage() {
               >
                 Pertanyaan Umum (FAQ)
               </a>
+
+              <Link
+                href="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="mt-2 px-3 py-2.5 rounded-lg bg-[#4cd7f6]/10 border border-[#4cd7f6]/30 text-[#4cd7f6] font-semibold flex items-center justify-between transition-colors"
+              >
+                <span>Masuk ke Dashboard</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
           </div>
         )}

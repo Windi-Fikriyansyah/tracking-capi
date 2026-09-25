@@ -465,13 +465,7 @@ function LoginPortalContent() {
                   >
                     Kata Sandi
                   </label>
-                  <button
-                    type="button"
-                    onClick={() => setShowResetModal(true)}
-                    className="text-label-md font-label-md text-primary hover:text-primary-fixed-dim transition-colors cursor-pointer"
-                  >
-                    Lupa kata sandi?
-                  </button>
+
                 </div>
                 <div className="relative rounded-lg shadow-sm">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-on-surface-variant">
