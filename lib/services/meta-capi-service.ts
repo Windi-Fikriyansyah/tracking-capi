@@ -282,3 +282,131 @@ export async function sendMetaPixelEvent(
     };
   }
 }
+
+export interface ServerPurchaseEventParams {
+  orderId: string;
+  amount: number;
+  planName: string;
+  customerEmail: string;
+  customerPhone?: string;
+  customerName?: string;
+  paidAt?: string;
+  clientIp?: string;
+  clientUserAgent?: string;
+  eventSourceUrl?: string;
+}
+
+/**
+ * Mengirim event "Purchase" secara Server-Side (Meta Conversions API)
+ * Dijalankan saat pembayaran Pakasir berhasil dikonfirmasi (Completed).
+ * Menggunakan deduplikasi event_id = orderId untuk mencegah double counting.
+ */
+export async function sendServerSidePurchaseEvent(
+  params: ServerPurchaseEventParams
+): Promise<{ success: boolean; error?: string; fbtraceId?: string }> {
+  try {
+    let pixelId =
+      process.env.NEXT_PUBLIC_META_PIXEL_ID ||
+      process.env.META_PIXEL_ID ||
+      "1023827323852108";
+    let accessToken = process.env.META_CAPI_ACCESS_TOKEN;
+    let testCode = process.env.META_TEST_CODE;
+
+    // Jika accessToken belum ada di env, coba query dari database Supabase app_settings
+    if (!accessToken) {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const serviceRoleKey =
+        process.env.SUPABASE_SERVICE_ROLE_KEY ||
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+      if (supabaseUrl && serviceRoleKey) {
+        try {
+          const { createClient } = await import("@supabase/supabase-js");
+          const client = createClient(supabaseUrl, serviceRoleKey, {
+            auth: { autoRefreshToken: false, persistSession: false },
+          });
+
+          const { data: settings } = await client
+            .from("app_settings")
+            .select("meta_pixel_id, meta_access_token, meta_test_code")
+            .not("meta_access_token", "is", null)
+            .limit(1)
+            .maybeSingle();
+
+          if (settings?.meta_access_token) {
+            accessToken = settings.meta_access_token;
+            if (settings.meta_pixel_id) pixelId = settings.meta_pixel_id;
+            if (settings.meta_test_code) testCode = settings.meta_test_code;
+          }
+        } catch (dbErr) {
+          console.warn("[Meta CAPI Purchase] DB credentials lookup warning:", dbErr);
+        }
+      }
+    }
+
+    if (!accessToken || !pixelId) {
+      console.warn(
+        "[Meta CAPI Purchase Skipped]: META_CAPI_ACCESS_TOKEN atau META_PIXEL_ID belum dikonfigurasi."
+      );
+      return {
+        success: false,
+        error: "Meta Pixel credentials not configured in env or database",
+      };
+    }
+
+    const appUrl =
+      process.env.NEXT_PUBLIC_APP_URL || "https://trackcapi.com";
+    const eventSourceUrl =
+      params.eventSourceUrl || `${appUrl}/checkout?order_id=${params.orderId}`;
+
+    const eventTime = params.paidAt
+      ? Math.floor(new Date(params.paidAt).getTime() / 1000)
+      : Math.floor(Date.now() / 1000);
+
+    console.log(
+      `[Meta CAPI Purchase Sending]: Order #${params.orderId}, Rp ${params.amount}, Customer: ${params.customerEmail}`
+    );
+
+    const result = await sendMetaPixelEvent({
+      pixelId,
+      accessToken,
+      eventName: "Purchase",
+      eventId: params.orderId, // Unique event_id for deduplication
+      eventTime,
+      actionSource: "website",
+      eventSourceUrl,
+      testCode,
+      customerData: {
+        email: params.customerEmail,
+        phone: params.customerPhone,
+        name: params.customerName,
+        clientIpAddress: params.clientIp,
+        clientUserAgent: params.clientUserAgent,
+      },
+      customData: {
+        value: Number(params.amount) || 0,
+        currency: "IDR",
+        content_name: params.planName || "Paket Langganan TrackCapi",
+        content_type: "product",
+        order_id: params.orderId,
+      },
+    });
+
+    if (result.success) {
+      console.log(
+        `[Meta CAPI Purchase SUCCESS]: Order #${params.orderId} successfully reported to Meta. Trace ID: ${result.fbtraceId || "-"}`
+      );
+    } else {
+      console.error(
+        `[Meta CAPI Purchase FAILED]: Order #${params.orderId}. Error: ${result.error}`
+      );
+    }
+
+    return result;
+  } catch (err: unknown) {
+    const errorMsg =
+      err instanceof Error ? err.message : "Kesalahan sistem CAPI purchase";
+    console.error("[Meta CAPI Purchase Exception]:", errorMsg);
+    return { success: false, error: errorMsg };
+  }
+}

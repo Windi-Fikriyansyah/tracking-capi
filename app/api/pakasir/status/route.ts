@@ -7,6 +7,7 @@ import {
   findOrderByEmail,
 } from "@/lib/services/order-service";
 import { sendLoginAccessEmail } from "@/lib/services/email-service";
+import { sendServerSidePurchaseEvent } from "@/lib/services/meta-capi-service";
 import { createClient } from "@supabase/supabase-js";
 
 function generateRandomPassword(): string {
@@ -165,6 +166,29 @@ export async function GET(request: Request) {
               emailSent: emailResult.success,
               emailSentAt: new Date().toISOString(),
             });
+
+            // Kirim Event "Purchase" Server-Side ke Meta CAPI
+            try {
+              const clientIp =
+                request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+                request.headers.get("x-real-ip") ||
+                undefined;
+              const clientUserAgent = request.headers.get("user-agent") || undefined;
+
+              await sendServerSidePurchaseEvent({
+                orderId: order.orderId,
+                amount: order.amount || order.totalPayment,
+                planName: order.planName,
+                customerEmail: order.customer.email,
+                customerPhone: order.customer.phone,
+                customerName: order.customer.name,
+                paidAt,
+                clientIp,
+                clientUserAgent,
+              });
+            } catch (capiErr) {
+              console.warn("[Pakasir Status] Meta CAPI Purchase warning:", capiErr);
+            }
 
             return NextResponse.json({
               status: "completed",

@@ -7,6 +7,7 @@ import {
   findOrderByEmail,
 } from "@/lib/services/order-service";
 import { sendLoginAccessEmail } from "@/lib/services/email-service";
+import { sendServerSidePurchaseEvent } from "@/lib/services/meta-capi-service";
 import { createClient } from "@supabase/supabase-js";
 
 export interface PakasirWebhookPayload {
@@ -291,6 +292,29 @@ export async function POST(request: Request) {
       emailSent: emailResult.success,
       emailSentAt: new Date().toISOString(),
     });
+
+    // 8. Kirim Event "Purchase" Server-Side ke Meta Conversions API
+    try {
+      const clientIp =
+        request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+        request.headers.get("x-real-ip") ||
+        undefined;
+      const clientUserAgent = request.headers.get("user-agent") || undefined;
+
+      await sendServerSidePurchaseEvent({
+        orderId: order.orderId,
+        amount: order.amount || order.totalPayment || body.amount,
+        planName: order.planName,
+        customerEmail: order.customer.email,
+        customerPhone: order.customer.phone,
+        customerName: order.customer.name,
+        paidAt,
+        clientIp,
+        clientUserAgent,
+      });
+    } catch (metaErr) {
+      console.warn("[Pakasir Webhook] Meta CAPI Purchase warning:", metaErr);
+    }
 
     return NextResponse.json({
       success: true,

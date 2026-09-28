@@ -3,6 +3,7 @@
 import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { trackMetaEvent } from "@/components/meta-pixel";
 import {
   Activity,
   ArrowLeft,
@@ -204,6 +205,16 @@ function CheckoutContent() {
       });
   }, [selectedPlanId]);
 
+  // Track InitiateCheckout on checkout page visit or plan change
+  useEffect(() => {
+    trackMetaEvent("InitiateCheckout", {
+      content_name: PLANS[selectedPlanId].name,
+      content_category: "Subscription",
+      value: PLANS[selectedPlanId].price,
+      currency: "IDR",
+    });
+  }, [selectedPlanId]);
+
   const currentPlan = PLANS[selectedPlanId];
   const selectedMethod =
     PAKASIR_METHODS.find((m) => m.id === selectedMethodId) || PAKASIR_METHODS[0];
@@ -315,6 +326,13 @@ function CheckoutContent() {
       }
 
       setTransactionData(data);
+
+      // Track AddPaymentInfo on client-side when invoice is created
+      trackMetaEvent("AddPaymentInfo", {
+        content_name: currentPlan.name,
+        value: data.total_payment || data.amount || totalPayment,
+        currency: "IDR",
+      });
     } catch (err: any) {
       setErrorMsg(err.message || "Terjadi kesalahan koneksi ke payment gateway Pakasir.");
     } finally {
