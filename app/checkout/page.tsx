@@ -190,16 +190,6 @@ function CheckoutContent() {
     }
   }, [initialPlanParam]);
 
-  // ── Meta Pixel: InitiateCheckout (hanya di halaman checkout) ──
-  useEffect(() => {
-    trackMetaEvent("InitiateCheckout", {
-      content_name: currentPlan.name,
-      value: currentPlan.price,
-      currency: "IDR",
-    });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   // ── Meta Pixel: AddPaymentInfo (ketika masuk halaman pembayaran) ──
   useEffect(() => {
     if (transactionData && !isPaidSuccess) {
