@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { trackMetaEvent } from "@/components/meta-pixel";
 import {
   Activity,
   ArrowRight,

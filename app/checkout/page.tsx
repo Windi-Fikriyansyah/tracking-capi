@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { trackMetaEvent } from "@/components/meta-pixel";
 import {
   Activity,
   ArrowLeft,
@@ -212,40 +211,6 @@ function CheckoutContent() {
   const currentFee = feeMap[selectedMethodId] ?? 0;
   const totalPayment = currentPlan.price + currentFee;
 
-  const hasTrackedInitiateRef = useRef(false);
-  const hasTrackedPaymentInfoRef = useRef<string | null>(null);
-
-  // Track InitiateCheckout: HANYA terkirim saat pertama kali masuk ke halaman formulir checkout
-  useEffect(() => {
-    if (!transactionData && !hasTrackedInitiateRef.current) {
-      hasTrackedInitiateRef.current = true;
-      trackMetaEvent("InitiateCheckout", {
-        content_name: PLANS[selectedPlanId].name,
-        content_category: "Subscription",
-        value: PLANS[selectedPlanId].price,
-        currency: "IDR",
-      });
-    }
-  }, [selectedPlanId, transactionData]);
-
-  // Track AddPaymentInfo: HANYA terkirim saat beralih masuk ke layar instruksi pembayaran (QRIS / VA)
-  useEffect(() => {
-    if (
-      transactionData?.order_id &&
-      !isPaidSuccess &&
-      hasTrackedPaymentInfoRef.current !== transactionData.order_id
-    ) {
-      hasTrackedPaymentInfoRef.current = transactionData.order_id;
-      trackMetaEvent("AddPaymentInfo", {
-        content_name: currentPlan.name,
-        content_category: "Subscription",
-        value: transactionData.total_payment || transactionData.amount || totalPayment,
-        currency: "IDR",
-        payment_method: transactionData.method || selectedMethodId,
-        order_id: transactionData.order_id,
-      });
-    }
-  }, [transactionData?.order_id, isPaidSuccess, currentPlan.name, totalPayment, selectedMethodId]);
 
   const filteredMethods =
     methodFilter === "all"

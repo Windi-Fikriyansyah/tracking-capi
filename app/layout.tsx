@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { PwaRegister } from "@/components/pwa-register";
-import MetaPixel from "@/components/meta-pixel";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -58,7 +57,6 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <PwaRegister />
-        <MetaPixel />
         {children}
       </body>
     </html>
