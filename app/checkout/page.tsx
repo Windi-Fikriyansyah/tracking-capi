@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect, useRef, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { trackMetaEvent } from "@/components/meta-pixel";
@@ -205,9 +205,20 @@ function CheckoutContent() {
       });
   }, [selectedPlanId]);
 
-  // Track InitiateCheckout saat pertama kali masuk ke halaman formulir checkout
+  const currentPlan = PLANS[selectedPlanId];
+  const selectedMethod =
+    PAKASIR_METHODS.find((m) => m.id === selectedMethodId) || PAKASIR_METHODS[0];
+
+  const currentFee = feeMap[selectedMethodId] ?? 0;
+  const totalPayment = currentPlan.price + currentFee;
+
+  const hasTrackedInitiateRef = useRef(false);
+  const hasTrackedPaymentInfoRef = useRef<string | null>(null);
+
+  // Track InitiateCheckout: HANYA terkirim saat pertama kali masuk ke halaman formulir checkout
   useEffect(() => {
-    if (!transactionData) {
+    if (!transactionData && !hasTrackedInitiateRef.current) {
+      hasTrackedInitiateRef.current = true;
       trackMetaEvent("InitiateCheckout", {
         content_name: PLANS[selectedPlanId].name,
         content_category: "Subscription",
@@ -215,11 +226,16 @@ function CheckoutContent() {
         currency: "IDR",
       });
     }
-  }, [selectedPlanId, Boolean(!transactionData)]);
+  }, [selectedPlanId, transactionData]);
 
-  // Track AddPaymentInfo saat user masuk ke layar/halaman instruksi pembayaran (QRIS / VA)
+  // Track AddPaymentInfo: HANYA terkirim saat beralih masuk ke layar instruksi pembayaran (QRIS / VA)
   useEffect(() => {
-    if (transactionData?.order_id && !isPaidSuccess) {
+    if (
+      transactionData?.order_id &&
+      !isPaidSuccess &&
+      hasTrackedPaymentInfoRef.current !== transactionData.order_id
+    ) {
+      hasTrackedPaymentInfoRef.current = transactionData.order_id;
       trackMetaEvent("AddPaymentInfo", {
         content_name: currentPlan.name,
         content_category: "Subscription",
@@ -229,14 +245,7 @@ function CheckoutContent() {
         order_id: transactionData.order_id,
       });
     }
-  }, [transactionData?.order_id]);
-
-  const currentPlan = PLANS[selectedPlanId];
-  const selectedMethod =
-    PAKASIR_METHODS.find((m) => m.id === selectedMethodId) || PAKASIR_METHODS[0];
-
-  const currentFee = feeMap[selectedMethodId] ?? 0;
-  const totalPayment = currentPlan.price + currentFee;
+  }, [transactionData?.order_id, isPaidSuccess, currentPlan.name, totalPayment, selectedMethodId]);
 
   const filteredMethods =
     methodFilter === "all"

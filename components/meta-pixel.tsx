@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, Suspense } from "react";
 import Script from "next/script";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 // Type definition for window.fbq
 declare global {
@@ -31,7 +31,7 @@ export function trackMetaEvent(
       } else {
         window.fbq("track", eventName);
       }
-      console.log(`[Meta Pixel]: Event '${eventName}' berhasil dikirim`, params || "");
+      console.log(`[Meta Pixel]: Event '${eventName}' terkirim`, params || "");
     }
   } catch (err) {
     console.warn(`[Meta Pixel] Error tracking event ${eventName}:`, err);
@@ -54,7 +54,7 @@ export function trackMetaCustomEvent(
       } else {
         window.fbq("trackCustom", eventName);
       }
-      console.log(`[Meta Pixel]: Custom Event '${eventName}' berhasil dikirim`, params || "");
+      console.log(`[Meta Pixel]: Custom Event '${eventName}' terkirim`, params || "");
     }
   } catch (err) {
     console.warn(`[Meta Pixel] Error tracking custom event ${eventName}:`, err);
@@ -64,29 +64,29 @@ export function trackMetaCustomEvent(
 function MetaPixelInner({ pixelId }: { pixelId?: string }) {
   const activePixelId = pixelId || META_PIXEL_ID;
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const isFirstRender = useRef(true);
+  const hasTrackedLandingPageView = useRef(false);
 
-  // Kirim PageView HANYA saat terjadi perubahan rute (SPA Navigation di Next.js)
-  // Kunjungan pertama (initial load) sudah otomatis ditangani oleh Base Script Meta di bawah
+  // Event PageView HANYA terkirim di Landing Page ('/').
+  // Di halaman /checkout atau halaman lainnya, PageView DILARANG terkirim.
   useEffect(() => {
     if (!activePixelId) return;
 
-    if (isFirstRender.current) {
-      // Lewati render pertama karena script inline sudah menembak PageView awal
-      isFirstRender.current = false;
-      return;
+    if (pathname === "/") {
+      if (!hasTrackedLandingPageView.current) {
+        hasTrackedLandingPageView.current = true;
+        trackMetaEvent("PageView");
+      }
+    } else {
+      // Reset ref jika user bernavigasi kembali ke landing page nanti
+      hasTrackedLandingPageView.current = false;
     }
-
-    // Tembak PageView untuk navigasi halaman berikutnya (misal pindah ke /checkout)
-    trackMetaEvent("PageView");
-  }, [pathname, searchParams, activePixelId]);
+  }, [pathname, activePixelId]);
 
   if (!activePixelId) return null;
 
   return (
     <>
-      {/* Base Code Resmi Meta Pixel */}
+      {/* Base Code Resmi Meta Pixel (Hanya init Pixel ID, TIDAK memanggil PageView secara otomatis) */}
       <Script
         id="meta-pixel-script"
         strategy="afterInteractive"
@@ -101,19 +101,9 @@ function MetaPixelInner({ pixelId }: { pixelId?: string }) {
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
             fbq('init', '${activePixelId}');
-            fbq('track', 'PageView');
           `,
         }}
       />
-      <noscript>
-        <img
-          height="1"
-          width="1"
-          style={{ display: "none" }}
-          src={`https://www.facebook.com/tr?id=${activePixelId}&ev=PageView&noscript=1`}
-          alt=""
-        />
-      </noscript>
     </>
   );
 }
