@@ -308,7 +308,7 @@ export async function sendServerSidePurchaseEvent(
     let pixelId =
       process.env.NEXT_PUBLIC_META_PIXEL_ID ||
       process.env.META_PIXEL_ID ||
-      "1023827323852108";
+      "1603845487907640";
     let accessToken = process.env.META_CAPI_ACCESS_TOKEN;
     let testCode = process.env.META_TEST_CODE;
 
@@ -355,7 +355,7 @@ export async function sendServerSidePurchaseEvent(
     }
 
     const appUrl =
-      process.env.NEXT_PUBLIC_APP_URL || "https://trackcapi.com";
+      process.env.NEXT_PUBLIC_APP_URL || "https://trackingcapi.online";
     const eventSourceUrl =
       params.eventSourceUrl || `${appUrl}/checkout?order_id=${params.orderId}`;
 

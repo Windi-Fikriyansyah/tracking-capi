@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, Suspense } from "react";
+import React, { useEffect, useRef, Suspense } from "react";
 import Script from "next/script";
 import { usePathname, useSearchParams } from "next/navigation";
 
@@ -9,21 +9,14 @@ declare global {
   interface Window {
     fbq?: any;
     _fbq?: any;
-    _fbqQueue?: Array<{
-      type: "track" | "trackCustom";
-      eventName: string;
-      params?: Record<string, unknown>;
-    }>;
   }
 }
 
 export const META_PIXEL_ID =
-  process.env.NEXT_PUBLIC_META_PIXEL_ID || "1023827323852108";
+  process.env.NEXT_PUBLIC_META_PIXEL_ID || "1603845487907640";
 
 /**
- * Helper pengiriman event Meta Pixel (Client-Side).
- * Jika script Meta Pixel masih dalam proses download, event otomatis diantrikan di queue
- * dan akan langsung dieksekusi begitu script siap.
+ * Helper untuk memicu event standar Meta Pixel secara aman di sisi client.
  */
 export function trackMetaEvent(
   eventName: string,
@@ -31,26 +24,22 @@ export function trackMetaEvent(
 ): void {
   if (typeof window === "undefined") return;
 
-  if (typeof window.fbq === "function") {
-    try {
+  try {
+    if (typeof window.fbq === "function") {
       if (params) {
         window.fbq("track", eventName, params);
       } else {
         window.fbq("track", eventName);
       }
-      console.log(`[Meta Pixel Track]: ${eventName}`, params || "");
-    } catch (err) {
-      console.warn(`[Meta Pixel] Error tracking event ${eventName}:`, err);
+      console.log(`[Meta Pixel]: Event '${eventName}' berhasil dikirim`, params || "");
     }
-  } else {
-    // Antrikan di memori agar event tidak hilang saat script belum selesai diunduh
-    window._fbqQueue = window._fbqQueue || [];
-    window._fbqQueue.push({ type: "track", eventName, params });
+  } catch (err) {
+    console.warn(`[Meta Pixel] Error tracking event ${eventName}:`, err);
   }
 }
 
 /**
- * Safely trigger custom Meta Pixel events on the client side.
+ * Helper untuk memicu custom event Meta Pixel secara aman di sisi client.
  */
 export function trackMetaCustomEvent(
   eventName: string,
@@ -58,20 +47,17 @@ export function trackMetaCustomEvent(
 ): void {
   if (typeof window === "undefined") return;
 
-  if (typeof window.fbq === "function") {
-    try {
+  try {
+    if (typeof window.fbq === "function") {
       if (params) {
         window.fbq("trackCustom", eventName, params);
       } else {
         window.fbq("trackCustom", eventName);
       }
-      console.log(`[Meta Pixel TrackCustom]: ${eventName}`, params || "");
-    } catch (err) {
-      console.warn(`[Meta Pixel] Error tracking custom event ${eventName}:`, err);
+      console.log(`[Meta Pixel]: Custom Event '${eventName}' berhasil dikirim`, params || "");
     }
-  } else {
-    window._fbqQueue = window._fbqQueue || [];
-    window._fbqQueue.push({ type: "trackCustom", eventName, params });
+  } catch (err) {
+    console.warn(`[Meta Pixel] Error tracking custom event ${eventName}:`, err);
   }
 }
 
@@ -79,25 +65,20 @@ function MetaPixelInner({ pixelId }: { pixelId?: string }) {
   const activePixelId = pixelId || META_PIXEL_ID;
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const isFirstRender = useRef(true);
 
-  // Kirim PageView otomatis setiap kali rute atau halaman berubah di Next.js (SPA Navigation)
+  // Kirim PageView HANYA saat terjadi perubahan rute (SPA Navigation di Next.js)
+  // Kunjungan pertama (initial load) sudah otomatis ditangani oleh Base Script Meta di bawah
   useEffect(() => {
     if (!activePixelId) return;
 
-    // Eksekusi antrean yang tertunda jika ada
-    if (typeof window !== "undefined" && typeof window.fbq === "function" && window._fbqQueue?.length) {
-      const queue = [...window._fbqQueue];
-      window._fbqQueue = [];
-      queue.forEach((item) => {
-        if (item.params) {
-          window.fbq(item.type, item.eventName, item.params);
-        } else {
-          window.fbq(item.type, item.eventName);
-        }
-      });
+    if (isFirstRender.current) {
+      // Lewati render pertama karena script inline sudah menembak PageView awal
+      isFirstRender.current = false;
+      return;
     }
 
-    // Trigger PageView
+    // Tembak PageView untuk navigasi halaman berikutnya (misal pindah ke /checkout)
     trackMetaEvent("PageView");
   }, [pathname, searchParams, activePixelId]);
 
@@ -105,25 +86,10 @@ function MetaPixelInner({ pixelId }: { pixelId?: string }) {
 
   return (
     <>
+      {/* Base Code Resmi Meta Pixel */}
       <Script
-        id="meta-pixel-init"
+        id="meta-pixel-script"
         strategy="afterInteractive"
-        onLoad={() => {
-          // Begitu script fbevents.js selesai dimuat, langsung proses antrean jika ada
-          if (typeof window !== "undefined" && typeof window.fbq === "function") {
-            if (window._fbqQueue?.length) {
-              const queue = [...window._fbqQueue];
-              window._fbqQueue = [];
-              queue.forEach((item) => {
-                if (item.params) {
-                  window.fbq(item.type, item.eventName, item.params);
-                } else {
-                  window.fbq(item.type, item.eventName);
-                }
-              });
-            }
-          }
-        }}
         dangerouslySetInnerHTML={{
           __html: `
             !function(f,b,e,v,n,t,s)
@@ -134,8 +100,8 @@ function MetaPixelInner({ pixelId }: { pixelId?: string }) {
             t.src=v;s=b.getElementsByTagName(e)[0];
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
-            window.fbq('init', '${activePixelId}');
-            window.fbq('track', 'PageView');
+            fbq('init', '${activePixelId}');
+            fbq('track', 'PageView');
           `,
         }}
       />
