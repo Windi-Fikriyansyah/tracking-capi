@@ -6,6 +6,29 @@ import Script from "next/script";
 export const META_PIXEL_ID =
   process.env.NEXT_PUBLIC_META_PIXEL_ID || "1603845487907640";
 
+/* ───────────────────────────────────────────────
+   Helper: fire a single Meta Pixel event safely.
+   Call from useEffect in the target page/component.
+   ─────────────────────────────────────────────── */
+declare global {
+  interface Window {
+    fbq?: (...args: any[]) => void;
+  }
+}
+
+export function trackMetaEvent(
+  eventName: string,
+  params?: Record<string, any>
+) {
+  if (typeof window !== "undefined" && window.fbq) {
+    if (params) {
+      window.fbq("track", eventName, params);
+    } else {
+      window.fbq("track", eventName);
+    }
+  }
+}
+
 interface MetaPixelProps {
   pixelId?: string;
 }

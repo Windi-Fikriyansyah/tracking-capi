@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { trackMetaEvent } from "@/components/meta-pixel";
 import {
   Activity,
   ArrowLeft,
@@ -188,6 +189,28 @@ function CheckoutContent() {
       setSelectedPlanId("1-tahun");
     }
   }, [initialPlanParam]);
+
+  // ── Meta Pixel: InitiateCheckout (hanya di halaman checkout) ──
+  useEffect(() => {
+    trackMetaEvent("InitiateCheckout", {
+      content_name: currentPlan.name,
+      value: currentPlan.price,
+      currency: "IDR",
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // ── Meta Pixel: AddPaymentInfo (ketika masuk halaman pembayaran) ──
+  useEffect(() => {
+    if (transactionData && !isPaidSuccess) {
+      trackMetaEvent("AddPaymentInfo", {
+        content_name: currentPlan.name,
+        value: transactionData.total_payment || transactionData.amount || totalPayment,
+        currency: "IDR",
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [transactionData]);
 
   // Fetch dynamic fee from Pakasir v2 API whenever plan changes
   useEffect(() => {

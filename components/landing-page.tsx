@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { trackMetaEvent } from "@/components/meta-pixel";
 import {
   Activity,
   ArrowRight,
@@ -180,6 +181,11 @@ export default function LandingPage() {
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // ── Meta Pixel: PageView (hanya di landing page) ──
+  useEffect(() => {
+    trackMetaEvent("PageView");
   }, []);
 
   return (
