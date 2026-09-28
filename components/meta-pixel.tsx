@@ -34,9 +34,8 @@ interface MetaPixelProps {
 }
 
 /**
- * Base Code Meta Pixel murni tanpa event PageView atau event lainnya.
- * Seluruh event akan ditentukan dan ditambahkan secara mandiri oleh pengguna
- * melalui fitur Uji Peristiwa / Alat Penyiapan Peristiwa di Meta Events Manager.
+ * Base Code Meta Pixel — autoConfig DIMATIKAN agar fbevents.js
+ * tidak otomatis mengirim PageView, ViewContent, dll.
  *
  * Event routing terpusat berdasarkan pathname:
  *   "/" → PageView (1x)
@@ -47,12 +46,16 @@ interface MetaPixelProps {
 export default function MetaPixel({ pixelId }: MetaPixelProps) {
   const activePixelId = pixelId || META_PIXEL_ID;
   const pathname = usePathname();
-  const firedRef = useRef<string | null>(null);
 
-  // ── Route-based event: hanya kirim 1x per pathname ──
+  // Set mencegah duplikat dari React Strict Mode (double-mount) dan SPA re-render
+  const firedEvents = useRef<Set<string>>(new Set());
+
+  // ── Route-based event: hanya kirim 1x per route ──
   useEffect(() => {
-    // Jangan kirim ulang jika pathname sama (mencegah duplikat)
-    if (firedRef.current === pathname) return;
+    const key = `${pathname}`;
+
+    // Sudah pernah kirim event untuk route ini? Skip.
+    if (firedEvents.current.has(key)) return;
 
     // Tunggu fbq siap (Script afterInteractive mungkin belum load)
     const timer = setTimeout(() => {
@@ -60,13 +63,15 @@ export default function MetaPixel({ pixelId }: MetaPixelProps) {
 
       if (pathname === "/") {
         window.fbq("track", "PageView");
-        firedRef.current = pathname;
       } else if (pathname === "/checkout") {
         window.fbq("track", "InitiateCheckout");
-        firedRef.current = pathname;
+      } else {
+        // Halaman lain: tidak ada event otomatis
+        return;
       }
-      // halaman lain: tidak ada event otomatis
-    }, 300);
+
+      firedEvents.current.add(key);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [pathname]);
@@ -88,6 +93,7 @@ export default function MetaPixel({ pixelId }: MetaPixelProps) {
             t.src=v;s=b.getElementsByTagName(e)[0];
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('set', 'autoConfig', false, '${activePixelId}');
             fbq('init', '${activePixelId}');
           `,
         }}
@@ -104,4 +110,3 @@ export default function MetaPixel({ pixelId }: MetaPixelProps) {
     </>
   );
 }
-
