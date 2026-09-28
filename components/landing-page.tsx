@@ -176,10 +176,6 @@ export default function LandingPage() {
   const [scrollY, setScrollY] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  useEffect(() => {
-    // Track PageView on landing page mount
-    trackMetaEvent("PageView");
-  }, []);
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
