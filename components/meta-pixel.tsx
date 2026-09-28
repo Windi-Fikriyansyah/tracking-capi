@@ -1,94 +1,29 @@
 "use client";
 
-import React, { useEffect, useRef, Suspense } from "react";
+import React from "react";
 import Script from "next/script";
-import { usePathname } from "next/navigation";
-
-// Type definition for window.fbq
-declare global {
-  interface Window {
-    fbq?: any;
-    _fbq?: any;
-  }
-}
 
 export const META_PIXEL_ID =
   process.env.NEXT_PUBLIC_META_PIXEL_ID || "1603845487907640";
 
-/**
- * Helper untuk memicu event standar Meta Pixel secara aman di sisi client.
- */
-export function trackMetaEvent(
-  eventName: string,
-  params?: Record<string, unknown>
-): void {
-  if (typeof window === "undefined") return;
-
-  try {
-    if (typeof window.fbq === "function") {
-      if (params) {
-        window.fbq("track", eventName, params);
-      } else {
-        window.fbq("track", eventName);
-      }
-      console.log(`[Meta Pixel]: Event '${eventName}' terkirim`, params || "");
-    }
-  } catch (err) {
-    console.warn(`[Meta Pixel] Error tracking event ${eventName}:`, err);
-  }
+interface MetaPixelProps {
+  pixelId?: string;
 }
 
 /**
- * Helper untuk memicu custom event Meta Pixel secara aman di sisi client.
+ * Base Code Meta Pixel murni tanpa event bawaan.
+ * Memungkinkan pelacakan dan penambahan event dilakukan secara manual melalui
+ * fitur 'Uji Peristiwa' (Test Events) / Event Setup Tool di Meta Events Manager.
  */
-export function trackMetaCustomEvent(
-  eventName: string,
-  params?: Record<string, unknown>
-): void {
-  if (typeof window === "undefined") return;
-
-  try {
-    if (typeof window.fbq === "function") {
-      if (params) {
-        window.fbq("trackCustom", eventName, params);
-      } else {
-        window.fbq("trackCustom", eventName);
-      }
-      console.log(`[Meta Pixel]: Custom Event '${eventName}' terkirim`, params || "");
-    }
-  } catch (err) {
-    console.warn(`[Meta Pixel] Error tracking custom event ${eventName}:`, err);
-  }
-}
-
-function MetaPixelInner({ pixelId }: { pixelId?: string }) {
+export default function MetaPixel({ pixelId }: MetaPixelProps) {
   const activePixelId = pixelId || META_PIXEL_ID;
-  const pathname = usePathname();
-  const hasTrackedLandingPageView = useRef(false);
-
-  // Event PageView HANYA terkirim di Landing Page ('/').
-  // Di halaman /checkout atau halaman lainnya, PageView DILARANG terkirim.
-  useEffect(() => {
-    if (!activePixelId) return;
-
-    if (pathname === "/") {
-      if (!hasTrackedLandingPageView.current) {
-        hasTrackedLandingPageView.current = true;
-        trackMetaEvent("PageView");
-      }
-    } else {
-      // Reset ref jika user bernavigasi kembali ke landing page nanti
-      hasTrackedLandingPageView.current = false;
-    }
-  }, [pathname, activePixelId]);
 
   if (!activePixelId) return null;
 
   return (
     <>
-      {/* Base Code Resmi Meta Pixel (Hanya init Pixel ID, TIDAK memanggil PageView secara otomatis) */}
       <Script
-        id="meta-pixel-script"
+        id="meta-pixel-base"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: `
@@ -104,14 +39,15 @@ function MetaPixelInner({ pixelId }: { pixelId?: string }) {
           `,
         }}
       />
+      <noscript>
+        <img
+          height="1"
+          width="1"
+          style={{ display: "none" }}
+          src={`https://www.facebook.com/tr?id=${activePixelId}&noscript=1`}
+          alt=""
+        />
+      </noscript>
     </>
-  );
-}
-
-export default function MetaPixel({ pixelId }: { pixelId?: string }) {
-  return (
-    <Suspense fallback={null}>
-      <MetaPixelInner pixelId={pixelId} />
-    </Suspense>
   );
 }
