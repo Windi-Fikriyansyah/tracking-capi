@@ -11,9 +11,9 @@ interface MetaPixelProps {
 }
 
 /**
- * Base Code Meta Pixel murni tanpa event bawaan.
- * Memungkinkan pelacakan dan penambahan event dilakukan secara manual melalui
- * fitur 'Uji Peristiwa' (Test Events) / Event Setup Tool di Meta Events Manager.
+ * Base Code Standar Resmi Meta Pixel dengan base event PageView.
+ * Memberi sinyal 'fired' yang valid ke Meta agar Pixel aktif (centang hijau)
+ * dan siap dihubungkan dengan fitur 'Uji Peristiwa' (Event Setup Tool) di Events Manager.
  */
 export default function MetaPixel({ pixelId }: MetaPixelProps) {
   const activePixelId = pixelId || META_PIXEL_ID;
@@ -36,6 +36,7 @@ export default function MetaPixel({ pixelId }: MetaPixelProps) {
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
             fbq('init', '${activePixelId}');
+            fbq('track', 'PageView');
           `,
         }}
       />
@@ -44,7 +45,7 @@ export default function MetaPixel({ pixelId }: MetaPixelProps) {
           height="1"
           width="1"
           style={{ display: "none" }}
-          src={`https://www.facebook.com/tr?id=${activePixelId}&noscript=1`}
+          src={`https://www.facebook.com/tr?id=${activePixelId}&ev=PageView&noscript=1`}
           alt=""
         />
       </noscript>
