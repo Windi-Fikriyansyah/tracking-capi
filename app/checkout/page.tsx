@@ -205,15 +205,31 @@ function CheckoutContent() {
       });
   }, [selectedPlanId]);
 
-  // Track InitiateCheckout on checkout page visit or plan change
+  // Track InitiateCheckout saat pertama kali masuk ke halaman formulir checkout
   useEffect(() => {
-    trackMetaEvent("InitiateCheckout", {
-      content_name: PLANS[selectedPlanId].name,
-      content_category: "Subscription",
-      value: PLANS[selectedPlanId].price,
-      currency: "IDR",
-    });
-  }, [selectedPlanId]);
+    if (!transactionData) {
+      trackMetaEvent("InitiateCheckout", {
+        content_name: PLANS[selectedPlanId].name,
+        content_category: "Subscription",
+        value: PLANS[selectedPlanId].price,
+        currency: "IDR",
+      });
+    }
+  }, [selectedPlanId, Boolean(!transactionData)]);
+
+  // Track AddPaymentInfo saat user masuk ke layar/halaman instruksi pembayaran (QRIS / VA)
+  useEffect(() => {
+    if (transactionData?.order_id && !isPaidSuccess) {
+      trackMetaEvent("AddPaymentInfo", {
+        content_name: currentPlan.name,
+        content_category: "Subscription",
+        value: transactionData.total_payment || transactionData.amount || totalPayment,
+        currency: "IDR",
+        payment_method: transactionData.method || selectedMethodId,
+        order_id: transactionData.order_id,
+      });
+    }
+  }, [transactionData?.order_id]);
 
   const currentPlan = PLANS[selectedPlanId];
   const selectedMethod =
@@ -326,13 +342,6 @@ function CheckoutContent() {
       }
 
       setTransactionData(data);
-
-      // Track AddPaymentInfo on client-side when invoice is created
-      trackMetaEvent("AddPaymentInfo", {
-        content_name: currentPlan.name,
-        value: data.total_payment || data.amount || totalPayment,
-        currency: "IDR",
-      });
     } catch (err: any) {
       setErrorMsg(err.message || "Terjadi kesalahan koneksi ke payment gateway Pakasir.");
     } finally {

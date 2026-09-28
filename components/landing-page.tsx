@@ -177,11 +177,8 @@ export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    // Track ViewContent for landing page
-    trackMetaEvent("ViewContent", {
-      content_name: "TrackCapi Landing Page",
-      content_category: "Software / SaaS",
-    });
+    // Track PageView on landing page mount
+    trackMetaEvent("PageView");
   }, []);
 
   useEffect(() => {
@@ -916,14 +913,6 @@ export default function LandingPage() {
               <div>
                 <Link
                   href="/checkout?plan=6-bulan"
-                  onClick={() => {
-                    trackMetaEvent("InitiateCheckout", {
-                      content_name: "Paket 6 Bulan",
-                      content_category: "Subscription",
-                      value: 149000,
-                      currency: "IDR",
-                    });
-                  }}
                   className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 sm:py-4 rounded-xl border border-[#4cd7f6]/50 bg-[#4cd7f6]/10 text-[#4cd7f6] font-semibold text-sm sm:text-base hover:bg-[#4cd7f6] hover:text-[#050d25] transition-all duration-200 group-hover:shadow-[0_0_25px_rgba(76,215,246,0.3)]"
                 >
                   <span>Beli Paket 6 Bulan</span>
@@ -986,14 +975,6 @@ export default function LandingPage() {
               <div>
                 <Link
                   href="/checkout?plan=1-tahun"
-                  onClick={() => {
-                    trackMetaEvent("InitiateCheckout", {
-                      content_name: "Paket 1 Tahun",
-                      content_category: "Subscription",
-                      value: 249000,
-                      currency: "IDR",
-                    });
-                  }}
                   className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 sm:py-4 rounded-xl bg-gradient-to-r from-[#4cd7f6] via-[#06b6d4] to-[#4edea3] text-[#050d25] font-bold text-sm sm:text-base hover:shadow-[0_0_35px_rgba(76,215,246,0.5)] hover:scale-[1.02] active:scale-[0.98] transition-all"
                 >
                   <Zap className="w-4 h-4 shrink-0" />
