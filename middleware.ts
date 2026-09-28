@@ -18,6 +18,7 @@ function getApexDomain(hostname: string): string {
 export function middleware(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
   const host = request.headers.get("host") || "";
+  const origin = request.headers.get("origin") || "";
   // Strip port from hostname (e.g. "app.domain.com:3000" -> "app.domain.com")
   const hostname = host.split(":")[0].toLowerCase();
   const port = host.includes(":") ? `:${host.split(":")[1]}` : "";
@@ -33,37 +34,69 @@ export function middleware(request: NextRequest) {
   const mainHost = `${apexDomain}${port}`;
 
   // ---------------------------------------------------------------------------
+  // CORS Headers Helper (Mengizinkan komunikasi antar subdomain & Next.js RSC)
+  // ---------------------------------------------------------------------------
+  const applyCorsHeaders = (res: NextResponse) => {
+    // Izinkan origin domain utama dan semua subdomainnya
+    if (origin) {
+      res.headers.set("Access-Control-Allow-Origin", origin);
+    } else {
+      res.headers.set("Access-Control-Allow-Origin", "*");
+    }
+    res.headers.set("Access-Control-Allow-Credentials", "true");
+    res.headers.set(
+      "Access-Control-Allow-Methods",
+      "GET, POST, PUT, DELETE, OPTIONS, PATCH"
+    );
+    res.headers.set(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization, X-Requested-With, rsc, next-router-state-tree, next-url, next-router-prefetch, x-nextjs-data, x-secret"
+    );
+    return res;
+  };
+
+  // Preflight OPTIONS request handling
+  if (request.method === "OPTIONS") {
+    const preflight = new NextResponse(null, { status: 204 });
+    return applyCorsHeaders(preflight);
+  }
+
+  // ---------------------------------------------------------------------------
   // CASE 1: Request is on APP SUBDOMAIN (e.g. app.domain.com or app.localhost:3000)
   // ---------------------------------------------------------------------------
   if (isAppSubdomain) {
     // If visitor visits root path on app subdomain (https://app.domain.com/)
     // Automatically redirect them to login page
     if (pathname === "/") {
-      return NextResponse.redirect(new URL("/login", request.url));
+      const res = NextResponse.redirect(new URL("/login", request.url));
+      return applyCorsHeaders(res);
     }
 
     // All other app paths (/login, /dashboard/*, /checkout, /api/*, /auth/*)
     // are served directly on the app subdomain
-    return NextResponse.next();
+    const res = NextResponse.next();
+    return applyCorsHeaders(res);
   }
 
   // ---------------------------------------------------------------------------
   // CASE 2: Request is on MAIN DOMAIN (e.g. domain.com or localhost:3000)
   // ---------------------------------------------------------------------------
-  // If user accesses Web App routes (/login, /dashboard/*, /checkout) on the main domain,
-  // NEVER allow it on the main domain! Automatically redirect them to the app subdomain.
-  const isWebAppPath =
+  // Rute aplikasi privat (/login, /dashboard/*) diarahkan ke subdomain app.
+  // Rute publik (/ dan /checkout) DILAYANI LANGSUNG di domain utama
+  // agar checkout sebagai sales funnel tidak mengalami cross-origin fetch / CORS preflight.
+  const isPrivateAppPath =
     pathname.startsWith("/login") ||
-    pathname.startsWith("/dashboard") ||
-    pathname.startsWith("/checkout");
+    pathname.startsWith("/dashboard");
 
-  if (isWebAppPath) {
+  if (isPrivateAppPath) {
     const targetUrl = `${protocol}://${appHost}${pathname}${search}`;
-    return NextResponse.redirect(targetUrl, 307);
+    const res = NextResponse.redirect(targetUrl, 307);
+    return applyCorsHeaders(res);
   }
 
-  // Otherwise, serve the Landing Page on the main domain
-  return NextResponse.next();
+  // Melayani Landing Page dan Checkout di domain utama
+  const res = NextResponse.next();
+  return applyCorsHeaders(res);
 }
 
 export const config = {
