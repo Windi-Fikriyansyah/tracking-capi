@@ -128,20 +128,9 @@ export default function TrackingPage() {
       status: "success" | "failed";
       errorMsg?: string;
     }) => {
-      setOrganicDeliveries((prev) => {
-        const updated = [log, ...prev].slice(0, 30);
-        if (typeof window !== "undefined" && currentUser?.id) {
-          try {
-            localStorage.setItem(
-              `organic_deliveries_${currentUser.id}`,
-              JSON.stringify(updated)
-            );
-          } catch {}
-        }
-        return updated;
-      });
+      setOrganicDeliveries((prev) => [log, ...prev].slice(0, 30));
     },
-    [currentUser?.id]
+    []
   );
 
   // Action status feedback
@@ -177,7 +166,7 @@ export default function TrackingPage() {
         const { leads: loadedLeads } = await getCtwaLeads(user.id);
         setLeads(loadedLeads);
 
-        // Muat log live delivery untuk chat organik dari histori lead tersimpan & localStorage
+        // Muat log live delivery untuk chat organik murni dari database Supabase (ctwa_leads)
         const histLogs: Array<{
           timestamp: string;
           eventName: string;
@@ -211,27 +200,6 @@ export default function TrackingPage() {
             });
           }
         });
-
-        if (typeof window !== "undefined") {
-          try {
-            const saved = localStorage.getItem(`organic_deliveries_${user.id}`);
-            if (saved) {
-              const parsed = JSON.parse(saved);
-              if (Array.isArray(parsed)) {
-                const keys = new Set(
-                  histLogs.map((h) => `${h.phone}_${h.eventName}_${h.traceId}`)
-                );
-                parsed.forEach((p) => {
-                  const k = `${p.phone}_${p.eventName}_${p.traceId}`;
-                  if (!keys.has(k)) {
-                    histLogs.push(p);
-                    keys.add(k);
-                  }
-                });
-              }
-            }
-          } catch {}
-        }
 
         histLogs.sort(
           (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
@@ -1720,26 +1688,15 @@ export default function TrackingPage() {
             )}
           </div>
 
-          <div className="flex items-center gap-2 self-start sm:self-auto font-code-metric text-xs">
-            {organicDeliveries.length > 0 && (
-              <button
-                type="button"
-                onClick={() => {
-                  setOrganicDeliveries([]);
-                  if (typeof window !== "undefined" && currentUser?.id) {
-                    try {
-                      localStorage.removeItem(`organic_deliveries_${currentUser.id}`);
-                    } catch {}
-                  }
-                }}
-                className="text-xs text-outline hover:text-error flex items-center gap-1 cursor-pointer transition-colors"
-                title="Bersihkan log lokal chat organik"
-              >
-                <Trash2 className="w-3 h-3" />
-                <span>Bersihkan</span>
-              </button>
-            )}
-          </div>
+          <button
+            type="button"
+            onClick={loadData}
+            disabled={loading}
+            className="text-xs text-primary hover:underline flex items-center gap-1 cursor-pointer font-code-metric self-start sm:self-auto"
+          >
+            <RefreshCw className={`w-3 h-3 ${loading ? "animate-spin" : ""}`} />
+            <span>Segarkan Feed</span>
+          </button>
         </div>
 
         {organicDeliveries.length === 0 ? (
