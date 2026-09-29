@@ -130,34 +130,43 @@ export async function POST(request: Request) {
       );
       event1Status = "failed";
     } else if (ctwa_clid) {
-      // Auto-dispatch Event 1 to Meta via Zernio ONLY if ctwa_clid exists and subscription is active
+      // Auto-dispatch Event 1 to Meta via internal CTWA-Send route (full retry/resolve logic)
       if (autoSend && apiKey && accountId) {
         try {
           console.log(`Mengirim otomatis Event 1 (${event1Name}) untuk kontak iklan CTWA: ${phoneE164} (clid: ${ctwa_clid})`);
-          const zernioRes = await fetch("https://zernio.com/api/v1/whatsapp/conversions", {
+
+          // Gunakan internal route yang sudah punya logic:
+          // - Resolve accountId (Meta WABA ID → Zernio MongoDB ObjectId)
+          // - Retry jika conversationId format salah
+          // - Auto-provision dataset jika belum ada
+          // - Retry jika account not found
+          const baseUrl =
+            process.env.NEXT_PUBLIC_BASE_URL ||
+            (process.env.VERCEL_URL
+              ? `https://${process.env.VERCEL_URL}`
+              : "http://localhost:3000");
+
+          const internalRes = await fetch(`${baseUrl}/api/zernio/ctwa-send`, {
             method: "POST",
-            headers: {
-              Authorization: `Bearer ${apiKey.trim()}`,
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
+              apiKey,
               accountId,
+              eventName: event1Name,
               phoneE164,
               conversationId: conversationId || undefined,
-              eventName: event1Name,
               eventId: `ctwa_auto_${Date.now()}_${phoneE164.slice(-4)}`,
             }),
           });
 
-          const zernioData = await zernioRes.json().catch(() => ({}));
-          if (zernioRes.ok && (zernioData.eventsReceived > 0 || zernioData.traceId)) {
+          const sendData = await internalRes.json().catch(() => ({}));
+          if (internalRes.ok && sendData.success) {
             event1Status = "sent";
-            event1TraceId = zernioData.traceId || null;
+            event1TraceId = sendData.traceId || null;
             console.log("Auto-send Event 1 berhasil:", event1TraceId);
           } else {
             event1Status = "failed";
-            console.warn("Auto-send Event 1 gagal:", zernioData);
+            console.warn("Auto-send Event 1 gagal:", sendData.message || sendData);
           }
         } catch (sendErr) {
           console.error("Auto-send Event 1 error:", sendErr);
