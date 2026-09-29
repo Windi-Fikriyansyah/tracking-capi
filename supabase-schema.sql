@@ -74,7 +74,8 @@ create table if not exists public.ctwa_leads (
   event_4_trace_id text,
   event_4_sent_at timestamp with time zone,
   event_4_value numeric default 0,
-  created_at timestamp with time zone default timezone('utc'::text, now())
+  created_at timestamp with time zone default timezone('utc'::text, now()),
+  CONSTRAINT ctwa_leads_user_phone_unique UNIQUE (user_id, phone_e164)
 );
 
 alter table public.ctwa_leads enable row level security;

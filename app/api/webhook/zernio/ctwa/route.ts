@@ -212,7 +212,12 @@ export async function POST(request: Request) {
         created_at: existingLead?.created_at || new Date().toISOString(),
       };
 
-      const { error: upsertError } = await supabase.from("ctwa_leads").upsert(leadRecord);
+      const { error: upsertError } = await supabase
+        .from("ctwa_leads")
+        .upsert(leadRecord, {
+          onConflict: "user_id,phone_e164",
+          ignoreDuplicates: false,
+        });
       if (upsertError) {
         console.error("Gagal menyimpan lead ke Supabase ctwa_leads:", upsertError);
       } else {

@@ -165,7 +165,12 @@ export async function getCtwaLeads(
 export async function insertCtwaLead(lead: CtwaLead): Promise<boolean> {
   if (!isSupabaseConfigured) return false;
   try {
-    const { error } = await supabase.from("ctwa_leads").insert(lead);
+    const { error } = await supabase
+      .from("ctwa_leads")
+      .upsert(lead, {
+        onConflict: "user_id,phone_e164",
+        ignoreDuplicates: false,
+      });
     return !error;
   } catch {
     return false;
