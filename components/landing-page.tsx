@@ -21,6 +21,7 @@ import {
   Server,
   ShieldCheck,
   Sparkles,
+  Target,
   TrendingUp,
   X,
   Zap,
@@ -324,41 +325,41 @@ export default function LandingPage() {
 
         <div className="max-w-5xl mx-auto text-center relative z-10">
           {/* Social proof badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full border border-[#1e2847] bg-[#0d1632]/80 backdrop-blur-sm text-[11px] sm:text-xs text-[#869397] mb-6 sm:mb-8 animate-fade-in-up">
+          {/* <div className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full border border-[#1e2847] bg-[#0d1632]/80 backdrop-blur-sm text-[11px] sm:text-xs text-[#869397] mb-6 sm:mb-8 animate-fade-in-up">
             <LivePulse />
             <span>
               Dipercaya <span className="text-[#4cd7f6] font-semibold">200+</span> advertiser CTWA aktif di Indonesia
             </span>
-          </div>
+          </div> */}
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.2] sm:leading-[1.15] tracking-tight mb-5 sm:mb-6 animate-fade-in-up [animation-delay:100ms] break-words">
-            Iklan CTWA Anda{" "}
-            <span className="relative inline-block">
+            Chat WhatsApp dari Iklan Anda{" "}
+            <span className="text-[#ffb4ab]">Tidak Terbaca di Meta?</span>
+            <br className="hidden sm:block" />{" "}
+            <span className="relative inline-block mt-1 sm:mt-0">
               <span className="relative z-10 bg-gradient-to-r from-[#4cd7f6] via-[#4edea3] to-[#4cd7f6] bg-clip-text text-transparent">
-                Menghasilkan Leads
+                Kirim Otomatis
               </span>
               <span className="absolute bottom-1 left-0 right-0 h-[3px] bg-gradient-to-r from-[#4cd7f6] to-[#4edea3] rounded-full opacity-40" />
-            </span>
-            ,<br className="hidden sm:block" /> Tapi Meta Bilang{" "}
-            <span className="text-[#ffb4ab]">0 Konversi</span>?
+            </span>{" "}
+            sebagai Konversi.
           </h1>
 
           <p className="text-base sm:text-lg md:text-xl text-[#869397] max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed animate-fade-in-up [animation-delay:200ms]">
-            Trackcapi menghubungkan <strong className="text-[#dbe1ff]">setiap chat WhatsApp</strong>{" "}
-            dari iklan CTWA langsung ke{" "}
-            <strong className="text-[#dbe1ff]">Meta Conversions API</strong> — secara real-time,
-            server-side, tanpa kehilangan data satu pun.
+            TrackCapi menangkap <strong className="text-[#dbe1ff]">ctwa_clid</strong> dan mengirim event{" "}
+            <strong className="text-[#dbe1ff]">Lead sampai Purchase</strong> ke{" "}
+            <strong className="text-[#dbe1ff]">Meta Conversions API</strong>, tanpa coding.
           </p>
 
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 mb-10 sm:mb-14 animate-fade-in-up [animation-delay:300ms]">
-            <a
-              href="#harga"
+            <Link
+              href="/checkout?plan=1-tahun"
               className="group inline-flex items-center justify-center gap-2.5 px-6 sm:px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#4cd7f6] to-[#06b6d4] text-[#050d25] font-semibold text-sm sm:text-base shadow-[0_0_30px_rgba(76,215,246,0.25)] hover:shadow-[0_0_40px_rgba(76,215,246,0.4)] transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               <Zap className="w-5 h-5 shrink-0" />
-              <span>Lihat Paket Berlangganan</span>
+              <span>Mulai Rp 20.750/bulan</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform shrink-0" />
-            </a>
+            </Link>
             <a
               href="#demo"
               className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3.5 rounded-xl border border-[#4cd7f6]/40 bg-[#4cd7f6]/5 text-[#4cd7f6] hover:bg-[#4cd7f6]/15 hover:border-[#4cd7f6] transition-all text-sm sm:text-base font-medium shadow-[0_0_20px_rgba(76,215,246,0.1)]"
@@ -485,7 +486,7 @@ export default function LandingPage() {
                   <Layers className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="text-white font-semibold">Pipeline 4 Event</h4>
+                  <h4 className="text-white font-semibold">Pipeline 5 Event</h4>
                   <p className="text-[#869397] text-[11px] mt-0.5 leading-snug">Kirim status Lead, ViewContent hingga Closed Purchase.</p>
                 </div>
               </div>
@@ -624,18 +625,16 @@ export default function LandingPage() {
           <div className="text-center mb-12 sm:mb-16">
             <span className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-widest uppercase text-[#4cd7f6] mb-3 sm:mb-4">
               <Zap className="w-4 h-4" />
-              Solusi
+              Solusi & Manfaat
             </span>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-4 sm:mb-5">
-              Server-Side Tracking yang{" "}
+              Iklan Bukan Cuma Bawa Chat,{" "}
               <span className="bg-gradient-to-r from-[#4cd7f6] to-[#4edea3] bg-clip-text text-transparent">
-                Benar-Benar Bekerja
+                Tapi Bawa Pembeli
               </span>
             </h2>
             <p className="text-[#869397] max-w-2xl mx-auto text-xs sm:text-base leading-relaxed">
-              Trackcapi menangkap <code className="text-[#4cd7f6] bg-[#4cd7f6]/10 px-1.5 py-0.5 rounded text-xs">ctwa_clid</code> dari
-              setiap klik iklan CTWA, lalu mengirim event konversi langsung ke Meta Conversions API
-              — bypass browser sepenuhnya.
+              Meta jadi tahu chat mana yang closing, sehingga iklan dioptimasi ke calon pembeli, bukan sekadar yang chat.
             </p>
           </div>
 
@@ -646,12 +645,10 @@ export default function LandingPage() {
                 <Server className="w-5 h-5" />
               </div>
               <h3 className="text-white font-semibold text-base mb-2">
-                Server-Side CAPI Tracking
+                Server-Side Tracking 100% Akurat
               </h3>
               <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
-                Event dikirim dari server, bukan browser. Tidak terpengaruh ad blocker, cookie
-                restriction, atau iOS privacy update. Data Anda{" "}
-                <strong className="text-[#bcc9cd]">100% sampai ke Meta</strong>.
+                Event dikirim langsung dari server ke Meta tanpa lewat browser. Bebas hambatan ad blocker atau batasan iOS, memastikan semua data konversi tersampaikan tanpa hilang.
               </p>
             </div>
 
@@ -661,14 +658,10 @@ export default function LandingPage() {
                 <MessageSquare className="w-5 h-5" />
               </div>
               <h3 className="text-white font-semibold text-base mb-2">
-                Auto-Capture CTWA Click ID
+                Otomatis Hubungkan Chat ke Iklan
               </h3>
               <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
-                Setiap kali user klik iklan CTWA dan memulai chat,{" "}
-                <code className="text-[#4edea3] bg-[#4edea3]/10 px-1 py-0.5 rounded text-xs">
-                  ctwa_clid
-                </code>{" "}
-                otomatis ditangkap via webhook — tanpa setup manual atau coding.
+                Setiap kali calon pelanggan klik iklan CTWA dan memulai WhatsApp, sistem otomatis menangkap ID klik (ctwa_clid) tanpa perlu Anda pusing setup manual.
               </p>
             </div>
 
@@ -678,44 +671,36 @@ export default function LandingPage() {
                 <Layers className="w-5 h-5" />
               </div>
               <h3 className="text-white font-semibold text-base mb-2">
-                Multi-Stage Event Pipeline
+                Lacak Funnel Lengkap hingga Closing
               </h3>
               <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
-                Kirim hingga 5 event per lead:{" "}
-                <span className="text-[#bcc9cd]">
-                  ViewContent → LeadSubmitted → AddToCart → InitiateCheckout → Purchase
-                </span>
-                . Beri Meta data funnel lengkap agar algoritma belajar lebih cerdas.
+                Kirim status konversi dari Chat Masuk (Lead), Tanya Harga / Keranjang (AddToCart), Checkout, hingga Closing (Purchase) agar Meta paham funnel penjualan Anda.
               </p>
             </div>
 
             {/* Feature 4 */}
             <div className="group p-5 sm:p-6 rounded-2xl border border-[#1e2847] bg-[#0d1632]/40 hover:border-[#4cd7f6]/30 hover:bg-[#0d1632]/60 transition-all">
               <div className="w-10 h-10 rounded-xl bg-[#4cd7f6]/10 border border-[#4cd7f6]/20 flex items-center justify-center text-[#4cd7f6] mb-4 group-hover:shadow-[0_0_16px_rgba(76,215,246,0.2)] transition-shadow">
-                <ShieldCheck className="w-5 h-5" />
+                <Target className="w-5 h-5" />
               </div>
               <h3 className="text-white font-semibold text-base mb-2">
-                Smart Deduplication Engine
+                Optimasi ke Calon Pembeli Riil
               </h3>
               <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
-                Redis-powered cache memastikan{" "}
-                <strong className="text-[#bcc9cd]">tidak ada event duplikat</strong> yang terkirim ke
-                Meta. EMQ Score Anda tetap tinggi, reporting tetap akurat.
+                <strong className="text-[#bcc9cd]">Meta jadi tahu chat mana yang closing, sehingga iklan dioptimasi ke calon pembeli, bukan sekadar yang chat.</strong> Bebas dari audiens yang cuma PHP atau buang budget iklan.
               </p>
             </div>
 
             {/* Feature 5 */}
             <div className="group p-5 sm:p-6 rounded-2xl border border-[#1e2847] bg-[#0d1632]/40 hover:border-[#4edea3]/30 hover:bg-[#0d1632]/60 transition-all">
               <div className="w-10 h-10 rounded-xl bg-[#4edea3]/10 border border-[#4edea3]/20 flex items-center justify-center text-[#4edea3] mb-4 group-hover:shadow-[0_0_16px_rgba(78,222,163,0.2)] transition-shadow">
-                <Eye className="w-5 h-5" />
+                <BarChart3 className="w-5 h-5" />
               </div>
               <h3 className="text-white font-semibold text-base mb-2">
-                Real-Time Payload Inspector
+                Tahu Pasti Iklan Mana yang Closing
               </h3>
               <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
-                Dashboard live monitoring: lihat setiap webhook masuk, payload terkirim, response
-                Meta, dan status deduplikasi —{" "}
-                <strong className="text-[#bcc9cd]">semuanya real-time</strong>.
+                Ketahui dengan akurat campaign, adset, dan materi iklan mana yang menghasilkan penjualan nyata. Matikan iklan yang boncos, perbesar budget pada iklan yang terbukti closing.
               </p>
             </div>
 
@@ -725,12 +710,10 @@ export default function LandingPage() {
                 <TrendingUp className="w-5 h-5" />
               </div>
               <h3 className="text-white font-semibold text-base mb-2">
-                EMQ Score 8.7+ Guaranteed
+                Hemat Budget & ROAS Lebih Tinggi
               </h3>
               <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
-                Event yang dikirim selalu ter-enriched dengan{" "}
-                <span className="text-[#bcc9cd]">email hash, phone hash, fbp, fbc, IP, user agent</span>.
-                EMQ Score tinggi = Meta percaya data Anda.
+                Algoritma Meta otomatis mempelajari data pelanggan yang benar-benar melakukan transaksi closing, lalu mencari audiens berkualitas serupa agar biaya akuisisi semakin murah.
               </p>
             </div>
           </div>
@@ -1032,6 +1015,10 @@ export default function LandingPage() {
                   <Lock className="w-3 h-3 shrink-0" />
                   Pembayaran instan otomatis
                 </p>
+                <p className="text-[11px] text-center text-[#4edea3] mt-1.5 flex items-center justify-center gap-1.5 font-medium">
+                  <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
+                  Garansi Uang Kembali 7 Hari
+                </p>
               </div>
             </div>
 
@@ -1093,9 +1080,29 @@ export default function LandingPage() {
                 </Link>
                 <p className="text-[11px] text-center text-[#4edea3] mt-3 flex items-center justify-center gap-1.5 font-medium">
                   <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
-                  Aktivasi instan otomatis & jaminan terhubung
+                  Aktivasi instan • Garansi Uang Kembali 7 Hari
                 </p>
               </div>
+            </div>
+          </div>
+
+          {/* 7-DAY MONEY BACK GUARANTEE BANNER */}
+          <div className="mt-8 sm:mt-10 max-w-3xl mx-auto p-4 sm:p-6 rounded-2xl border border-[#4edea3]/30 bg-gradient-to-r from-[#0d1632]/90 via-[#0a1a36]/90 to-[#0d1632]/90 backdrop-blur-md shadow-[0_0_35px_rgba(78,222,163,0.12)] flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[#4edea3]/10 border border-[#4edea3]/30 flex items-center justify-center text-[#4edea3] shrink-0 shadow-[0_0_20px_rgba(78,222,163,0.25)]">
+              <ShieldCheck className="w-7 h-7 sm:w-8 sm:h-8" />
+            </div>
+            <div className="space-y-1 flex-1">
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                <h3 className="text-white font-bold text-base sm:text-lg">
+                  Garansi Uang Kembali 7 Hari
+                </h3>
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#4edea3]/15 text-[#4edea3] border border-[#4edea3]/30">
+                  100% Risk-Free
+                </span>
+              </div>
+              <p className="text-xs sm:text-sm text-[#869397] leading-relaxed">
+                Coba Trackcapi selama 7 hari penuh. Jika sistem tracking kami tidak berhasil mengirimkan event konversi WhatsApp ke Meta Ads Manager Anda atau Anda tidak puas dengan performanya, kami akan kembalikan uang Anda 100% tanpa potongan.
+              </p>
             </div>
           </div>
         </div>
@@ -1212,6 +1219,34 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+
+      {/* ───── FLOATING WHATSAPP BUTTON (FIXED BOTTOM-RIGHT) ───── */}
+      <aside aria-label="WhatsApp Support" className="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-50 flex items-center gap-2 group">
+        {/* Help Tooltip */}
+        <div className="hidden sm:flex items-center px-3.5 py-1.5 rounded-full bg-[#0a142f]/95 border border-[#25D366]/40 text-[#4edea3] text-xs font-semibold shadow-2xl backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none translate-x-2 group-hover:translate-x-0">
+          <span>Chat WhatsApp Kami</span>
+        </div>
+
+        <a
+          href="https://wa.me/6289622981080?text=Halo%20Admin%20TrackCapi,%20saya%20tertarik%20dengan%20tools%20Trackingcapi%20Meta%20CTWA.%20Bisa%20bantu%20jelaskan?"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Chat WhatsApp dengan Tim TrackCapi"
+          className="relative flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-tr from-[#128C7E] via-[#25D366] to-[#4edea3] text-white shadow-[0_0_25px_rgba(37,211,102,0.45)] hover:shadow-[0_0_35px_rgba(37,211,102,0.65)] hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer"
+        >
+          {/* Animated ping ring */}
+          <span className="absolute -inset-1 rounded-full bg-[#25D366]/40 animate-ping pointer-events-none" />
+
+          {/* Official WhatsApp SVG Icon */}
+          <svg
+            className="w-6 h-6 sm:w-7 sm:h-7 fill-current relative z-10"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg>
+        </a>
+      </aside>
 
       {/* ───── GLOBAL ANIMATIONS ───── */}
       <style jsx global>{`
