@@ -103,6 +103,47 @@ export default function TrackingPage() {
   >([]);
   const [loadingDeliveries, setLoadingDeliveries] = useState(false);
 
+  // Feed Pengiriman Meta CAPI (Live Delivery Logs - Chat Organik)
+  const [organicDeliveries, setOrganicDeliveries] = useState<
+    Array<{
+      timestamp: string;
+      eventName: string;
+      phone: string;
+      contactName: string;
+      traceId: string;
+      pixelId: string;
+      status: "success" | "failed";
+      errorMsg?: string;
+    }>
+  >([]);
+
+  const addOrganicDeliveryLog = useCallback(
+    (log: {
+      timestamp: string;
+      eventName: string;
+      phone: string;
+      contactName: string;
+      traceId: string;
+      pixelId: string;
+      status: "success" | "failed";
+      errorMsg?: string;
+    }) => {
+      setOrganicDeliveries((prev) => {
+        const updated = [log, ...prev].slice(0, 30);
+        if (typeof window !== "undefined" && currentUser?.id) {
+          try {
+            localStorage.setItem(
+              `organic_deliveries_${currentUser.id}`,
+              JSON.stringify(updated)
+            );
+          } catch {}
+        }
+        return updated;
+      });
+    },
+    [currentUser?.id]
+  );
+
   // Action status feedback
   const [feedback, setFeedback] = useState<{
     type: "success" | "error" | "info";
@@ -135,6 +176,67 @@ export default function TrackingPage() {
 
         const { leads: loadedLeads } = await getCtwaLeads(user.id);
         setLeads(loadedLeads);
+
+        // Muat log live delivery untuk chat organik dari histori lead tersimpan & localStorage
+        const histLogs: Array<{
+          timestamp: string;
+          eventName: string;
+          phone: string;
+          contactName: string;
+          traceId: string;
+          pixelId: string;
+          status: "success" | "failed";
+          errorMsg?: string;
+        }> = [];
+
+        loadedLeads.forEach((ld) => {
+          if (!ld.ctwa_clid) {
+            ([1, 2, 3, 4] as const).forEach((idx) => {
+              const status = ld[`event_${idx}_status`];
+              const sentAt = ld[`event_${idx}_sent_at`];
+              const traceId = ld[`event_${idx}_trace_id`];
+              const evName =
+                ld[`event_${idx}_name`] || (idx === 1 ? ctwaSet.event_1_name : null);
+              if (status === "sent" && sentAt && evName) {
+                histLogs.push({
+                  timestamp: sentAt,
+                  eventName: evName === "LeadSubmitted" ? "Lead" : evName,
+                  phone: ld.phone,
+                  contactName: ld.contact_name,
+                  traceId: traceId || "-",
+                  pixelId: appSettings.meta_pixel_id || "-",
+                  status: "success",
+                });
+              }
+            });
+          }
+        });
+
+        if (typeof window !== "undefined") {
+          try {
+            const saved = localStorage.getItem(`organic_deliveries_${user.id}`);
+            if (saved) {
+              const parsed = JSON.parse(saved);
+              if (Array.isArray(parsed)) {
+                const keys = new Set(
+                  histLogs.map((h) => `${h.phone}_${h.eventName}_${h.traceId}`)
+                );
+                parsed.forEach((p) => {
+                  const k = `${p.phone}_${p.eventName}_${p.traceId}`;
+                  if (!keys.has(k)) {
+                    histLogs.push(p);
+                    keys.add(k);
+                  }
+                });
+              }
+            }
+          } catch {}
+        }
+
+        histLogs.sort(
+          (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+        );
+        setOrganicDeliveries(histLogs.slice(0, 30));
 
         // Fetch recent conversions from Zernio if API key and account exist
         if (appSettings.zernio_api_key && appSettings.wa_waba_id) {
@@ -294,11 +396,34 @@ export default function TrackingPage() {
               : undefined
           );
 
+          // Catat log live delivery chat organik berhasil
+          addOrganicDeliveryLog({
+            timestamp: new Date().toISOString(),
+            eventName: eventName === "LeadSubmitted" ? "Lead" : eventName,
+            phone: lead.phone,
+            contactName: lead.contact_name,
+            traceId,
+            pixelId: metaSettings.pixelId || "",
+            status: "success",
+          });
+
           setFeedback({
             type: "success",
             message: `Event ${eventIndex} ('${eventName}') prospek organik berhasil dikirim ke Meta Pixel (${metaSettings.pixelId})! Trace ID: ${traceId}`,
           });
         } else {
+          // Catat log live delivery chat organik gagal
+          addOrganicDeliveryLog({
+            timestamp: new Date().toISOString(),
+            eventName: eventName === "LeadSubmitted" ? "Lead" : eventName,
+            phone: lead.phone,
+            contactName: lead.contact_name,
+            traceId: "-",
+            pixelId: metaSettings.pixelId || "",
+            status: "failed",
+            errorMsg: data.error || "Event ditolak oleh Meta Graph API.",
+          });
+
           setFeedback({
             type: "error",
             message: `Gagal mengirim ke Meta Pixel: ${data.error || "Event ditolak oleh Meta Graph API."}`,
@@ -1563,6 +1688,119 @@ export default function TrackingPage() {
                   </span>
                   {item.durationMs && (
                     <span className="text-outline">({item.durationMs}ms)</span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* FEED PENGIRIMAN META CAPI (LIVE DELIVERY LOGS - CHAT ORGANIK) */}
+      <div className="p-3.5 sm:p-5 rounded-xl bg-surface-container-low border border-outline-variant/30 space-y-3 sm:space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-outline-variant/20">
+          <div className="flex flex-wrap items-center gap-2 text-on-surface">
+            <Radio className="w-4 h-4 text-primary animate-pulse shrink-0" />
+            <h3 className="font-headline-sm text-sm sm:text-headline-sm font-semibold">
+              Feed Pengiriman Meta CAPI (Live Delivery Logs - Chat Organik)
+            </h3>
+            {metaSettings.isConnected ? (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-code-metric bg-tertiary/10 text-tertiary border border-tertiary/30">
+                <span className="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse" />
+                Pixel {metaSettings.pixelId?.slice(-6) || "Active"} Terhubung
+              </span>
+            ) : (
+              <Link
+                href="/dashboard/connect-meta"
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-code-metric bg-surface-container-high text-on-surface-variant hover:text-primary border border-outline-variant/40 transition-colors"
+              >
+                <span>Hubungkan Meta Ads</span>
+                <ExternalLink className="w-2.5 h-2.5" />
+              </Link>
+            )}
+          </div>
+
+          <div className="flex items-center gap-2 self-start sm:self-auto font-code-metric text-xs">
+            {organicDeliveries.length > 0 && (
+              <button
+                type="button"
+                onClick={() => {
+                  setOrganicDeliveries([]);
+                  if (typeof window !== "undefined" && currentUser?.id) {
+                    try {
+                      localStorage.removeItem(`organic_deliveries_${currentUser.id}`);
+                    } catch {}
+                  }
+                }}
+                className="text-xs text-outline hover:text-error flex items-center gap-1 cursor-pointer transition-colors"
+                title="Bersihkan log lokal chat organik"
+              >
+                <Trash2 className="w-3 h-3" />
+                <span>Bersihkan</span>
+              </button>
+            )}
+          </div>
+        </div>
+
+        {organicDeliveries.length === 0 ? (
+          <p className="text-xs text-on-surface-variant py-2">
+            Belum ada log pengiriman event untuk kontak chat organik ke Meta Pixel. Klik tombol{" "}
+            <span className="font-semibold text-primary">Kirim</span> pada baris kontak berlabel{" "}
+            <span className="px-1.5 py-0.5 rounded bg-sky-500/15 text-sky-400 border border-sky-500/30 text-[10px] font-semibold">
+              Chat Organik
+            </span>{" "}
+            di tabel atas untuk mengirimkan event konversi dan melihat log pengiriman di sini.
+          </p>
+        ) : (
+          <div className="space-y-2 font-code-metric text-xs">
+            {organicDeliveries.map((item, idx) => (
+              <div
+                key={idx}
+                className={`p-3 rounded-lg bg-surface-container-lowest border flex flex-col sm:flex-row sm:items-center justify-between gap-2 ${
+                  item.status === "success"
+                    ? "border-outline-variant/30 hover:border-tertiary/40"
+                    : "border-error/30 bg-error/5"
+                } transition-colors`}
+              >
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                  {item.status === "success" ? (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-tertiary/10 text-tertiary border border-tertiary/30 font-bold text-[11px]">
+                      <CheckCircle2 className="w-3 h-3 text-tertiary" />
+                      {item.eventName}
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-error/10 text-error border border-error/30 font-bold text-[11px]">
+                      <AlertCircle className="w-3 h-3 text-error" />
+                      {item.eventName} (Gagal)
+                    </span>
+                  )}
+
+                  <span className="text-on-surface font-semibold text-[11px]">
+                    {item.phone} {item.contactName ? `(${item.contactName})` : ""}
+                  </span>
+
+                  <span className="text-outline font-mono text-[11px] break-all">
+                    Trace ID: {item.traceId || "-"}
+                  </span>
+
+                  <span className="text-outline text-[11px]">
+                    {new Date(item.timestamp).toLocaleTimeString("id-ID", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      second: "2-digit",
+                    })}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-2 text-[11px]">
+                  {item.status === "success" ? (
+                    <span className="text-tertiary">
+                      Pixel: {item.pixelId || metaSettings.pixelId || "-"} • Diterima Meta
+                    </span>
+                  ) : (
+                    <span className="text-error truncate max-w-xs" title={item.errorMsg}>
+                      {item.errorMsg || "Gagal dikirim"}
+                    </span>
                   )}
                 </div>
               </div>
