@@ -27,6 +27,8 @@ import {
   Check,
   Zap,
   Share2,
+  Search,
+  X,
 } from "lucide-react";
 import { getCurrentUser, getAppSettings } from "@/lib/services/settings-service";
 import {
@@ -74,6 +76,7 @@ export default function TrackingPage() {
   const [leads, setLeads] = useState<CtwaLead[]>([]);
   const [settings, setSettings] = useState<CtwaSettings>(DEFAULT_CTWA_SETTINGS);
   const [savingSettings, setSavingSettings] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Modals & Drawers
   const [showSettingsModal, setShowSettingsModal] = useState(false);
@@ -746,6 +749,27 @@ export default function TrackingPage() {
     .filter((l) => l.event_4_status === "sent")
     .reduce((acc, curr) => acc + (curr.event_4_value || 0), 0);
 
+  // Filter leads based on search query
+  const filteredLeads = leads.filter((lead) => {
+    if (!searchQuery.trim()) return true;
+    const q = searchQuery.toLowerCase().trim();
+    return (
+      lead.phone?.toLowerCase().includes(q) ||
+      lead.phone_e164?.toLowerCase().includes(q) ||
+      lead.contact_name?.toLowerCase().includes(q) ||
+      lead.ctwa_clid?.toLowerCase().includes(q) ||
+      lead.ctwa_headline?.toLowerCase().includes(q) ||
+      lead.event_1_name?.toLowerCase().includes(q) ||
+      lead.event_2_name?.toLowerCase().includes(q) ||
+      lead.event_3_name?.toLowerCase().includes(q) ||
+      lead.event_4_name?.toLowerCase().includes(q) ||
+      lead.event_1_trace_id?.toLowerCase().includes(q) ||
+      lead.event_2_trace_id?.toLowerCase().includes(q) ||
+      lead.event_3_trace_id?.toLowerCase().includes(q) ||
+      lead.event_4_trace_id?.toLowerCase().includes(q)
+    );
+  });
+
   if (loading) {
     return (
       <div className="flex-1 flex items-center justify-center p-12 text-on-surface-variant">
@@ -942,16 +966,43 @@ export default function TrackingPage() {
 
       {/* MAIN TRACKING CONTAINER (4 Event Pipeline) */}
       <div className="rounded-xl bg-surface-container-low border border-outline-variant/30 overflow-hidden">
-        <div className="p-3.5 sm:p-4 border-b border-outline-variant/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div className="p-3.5 sm:p-4 border-b border-outline-variant/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <Activity className="w-5 h-5 text-primary shrink-0" />
             <h2 className="text-sm sm:text-headline-sm font-semibold text-on-surface">
               Log Kontak Iklan &amp; Pipeline 4 Event CTWA
             </h2>
           </div>
-          <span className="text-xs text-on-surface-variant font-code-metric">
-            Menampilkan {leads.length} Kontak
-          </span>
+
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 w-full sm:w-auto">
+            {/* Search Input Bar */}
+            <div className="relative w-full sm:w-64">
+              <Search className="w-3.5 h-3.5 text-outline absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Cari no. WA, nama, click ID..."
+                className="w-full pl-8.5 pr-8 py-1.5 rounded-lg bg-surface-container-high border border-outline-variant/40 text-on-surface text-xs focus:border-primary focus:outline-none placeholder:text-outline transition-colors"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface p-0.5 cursor-pointer"
+                  title="Hapus pencarian"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+
+            <span className="text-xs text-on-surface-variant font-code-metric shrink-0">
+              {searchQuery
+                ? `${filteredLeads.length} dari ${leads.length} Kontak`
+                : `Menampilkan ${leads.length} Kontak`}
+            </span>
+          </div>
         </div>
 
         {leads.length === 0 ? (
@@ -968,11 +1019,32 @@ export default function TrackingPage() {
               </p>
             </div>
           </div>
+        ) : filteredLeads.length === 0 ? (
+          <div className="py-12 px-4 text-center text-on-surface-variant">
+            <div className="max-w-md mx-auto space-y-2">
+              <div className="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center mx-auto text-outline">
+                <Search className="w-5 h-5 text-outline" />
+              </div>
+              <p className="font-semibold text-on-surface text-sm">
+                Tidak Ada Kontak yang Cocok
+              </p>
+              <p className="text-xs text-outline leading-relaxed">
+                Tidak ditemukan kontak dengan kata kunci &quot;{searchQuery}&quot;. Coba cari dengan nomor telepon, nama kontak, atau Click ID lain.
+              </p>
+              <button
+                type="button"
+                onClick={() => setSearchQuery("")}
+                className="mt-2 px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-container border border-outline-variant/40 text-xs text-primary font-medium cursor-pointer transition-colors"
+              >
+                Reset Pencarian
+              </button>
+            </div>
+          </div>
         ) : (
           <>
             {/* MOBILE VIEW (CARDS): Displayed on screens < lg */}
             <div className="block lg:hidden divide-y divide-outline-variant/20 font-code-metric">
-              {leads.map((lead) => (
+              {filteredLeads.map((lead) => (
                 <div key={lead.id} className="p-3.5 sm:p-4 space-y-3 bg-surface-container-low hover:bg-surface-container/30 transition-colors">
                   {/* Lead Header: Phone, Name, Type badge, and Delete button */}
                   <div className="flex items-start justify-between gap-2">
@@ -1298,7 +1370,7 @@ export default function TrackingPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-outline-variant/20 font-code-metric">
-                  {leads.map((lead) => {
+                  {filteredLeads.map((lead) => {
                     return (
                       <tr key={lead.id} className="hover:bg-surface-container transition-colors">
                         {/* 1. Phone & Contact */}
