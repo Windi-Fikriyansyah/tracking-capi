@@ -681,11 +681,10 @@ export default function TrackingPage() {
               </span>
               <Link
                 href="/dashboard/connect-meta"
-                className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] sm:text-label-sm font-code-metric transition-colors ${
-                  metaSettings.isConnected
+                className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] sm:text-label-sm font-code-metric transition-colors ${metaSettings.isConnected
                     ? "bg-primary/10 text-primary border border-primary/30 hover:bg-primary/20"
                     : "bg-surface-container-high text-on-surface-variant border border-outline-variant/40 hover:border-primary/40 hover:text-on-surface"
-                }`}
+                  }`}
                 title={
                   metaSettings.isConnected
                     ? `Meta Pixel Terhubung: ${metaSettings.pixelId} (${metaSettings.pixelName || "Pixel"})`
@@ -1517,9 +1516,7 @@ export default function TrackingPage() {
             <h3 className="font-headline-sm text-sm sm:text-headline-sm font-semibold">
               Feed Pengiriman Meta CAPI (Live Delivery Logs)
             </h3>
-            <span className="text-[11px] sm:text-xs text-on-surface-variant font-code-metric">
-              via Zernio GET /v1/whatsapp/conversions
-            </span>
+
           </div>
 
           <button

@@ -341,7 +341,7 @@ function ConnectWhatsAppContent() {
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <h1 className="text-base sm:text-headline-sm font-semibold text-on-surface">
-                Connect WhatsApp Business via Zernio OAuth
+                Connect WhatsApp Business
               </h1>
               {isConnected ? (
                 <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] sm:text-label-sm bg-tertiary/10 text-tertiary border border-tertiary/30 font-code-metric">
@@ -480,7 +480,7 @@ function ConnectWhatsAppContent() {
               ) : (
                 <>
                   <MessageSquare className="w-5 h-5 fill-current shrink-0" />
-                  <span>Hubungkan WhatsApp dengan Zernio OAuth</span>
+                  <span>Hubungkan WhatsApp dengan OAuth</span>
                   <ExternalLink className="w-4 h-4 shrink-0" />
                 </>
               )}
@@ -585,7 +585,7 @@ function ConnectWhatsAppContent() {
             <div className="p-3.5 sm:p-4 rounded-lg bg-surface-container-lowest border border-outline-variant/30 space-y-3 font-code-metric text-xs">
               <div className="flex items-center justify-between pb-2 border-b border-outline-variant/20 gap-2">
                 <span className="text-on-surface font-semibold flex items-center gap-1.5">
-                  <Activity className="w-4 h-4 text-primary shrink-0" /> Zernio Account ID:
+                  <Activity className="w-4 h-4 text-primary shrink-0" /> Account ID:
                 </span>
                 <span className="font-mono text-on-surface bg-surface-container-high px-2 py-0.5 rounded text-[11px] break-all">
                   {connectedAccount?.zernioAccountId || "6aab661f8d284ffb210c4d75"}
@@ -606,7 +606,7 @@ function ConnectWhatsAppContent() {
                 <span className="text-on-surface-variant flex items-center gap-1.5">
                   <ShieldCheck className="w-4 h-4 text-primary shrink-0" /> Metode Otorisasi:
                 </span>
-                <span className="text-primary font-medium">Zernio OAuth</span>
+                <span className="text-primary font-medium">OAuth</span>
               </div>
 
               <div className="flex items-center justify-between gap-2">
