@@ -214,7 +214,7 @@ export default function SettingsPage() {
     }
   };
 
-  // Change Password directly via Supabase Auth
+  // Change Password directly via server API (updates database orders table & Supabase Auth)
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setPasswordFeedback(null);
@@ -238,40 +238,40 @@ export default function SettingsPage() {
     setPasswordLoading(true);
 
     try {
-      if (isSupabaseConfigured) {
-        const { error } = await supabase.auth.updateUser({
-          password: newPassword,
-        });
+      // 1. Call server API to update database (orders table & Supabase Auth admin)
+      const res = await fetch("/api/auth/change-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: currentUser?.id,
+          email: currentUser?.email,
+          newPassword,
+        }),
+      });
 
-        if (error) {
-          if (error.message.includes("Auth session missing")) {
-            setPasswordFeedback({
-              type: "success",
-              message: "Kata sandi akun demo berhasil diperbarui di sesi aktif!",
-            });
-            setNewPassword("");
-            setConfirmPassword("");
-          } else {
-            setPasswordFeedback({
-              type: "error",
-              message: error.message,
-            });
-          }
-        } else {
-          setPasswordFeedback({
-            type: "success",
-            message: "Kata sandi Anda berhasil diperbarui di database Supabase!",
-          });
-          setNewPassword("");
-          setConfirmPassword("");
+      const data = await res.json().catch(() => ({}));
+
+      // 2. Also try client-side Supabase auth update if active session exists
+      if (isSupabaseConfigured) {
+        try {
+          await supabase.auth.updateUser({ password: newPassword });
+        } catch {
+          // ignore client session errors
         }
-      } else {
+      }
+
+      if (res.ok && data.success) {
         setPasswordFeedback({
           type: "success",
-          message: "Kata sandi berhasil diperbarui!",
+          message: data.message || "Kata sandi Anda berhasil diperbarui di database!",
         });
         setNewPassword("");
         setConfirmPassword("");
+      } else {
+        setPasswordFeedback({
+          type: "error",
+          message: data.message || "Gagal memperbarui kata sandi.",
+        });
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Gagal memperbarui kata sandi.";
