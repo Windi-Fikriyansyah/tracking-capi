@@ -164,8 +164,8 @@ function CheckoutContent() {
     initialPlanParam === "1-bulan"
       ? "1-bulan"
       : initialPlanParam === "6-bulan"
-      ? "6-bulan"
-      : "1-tahun"
+        ? "6-bulan"
+        : "1-tahun"
   );
   const [selectedMethodId, setSelectedMethodId] = useState<string>("qris");
   const [methodFilter, setMethodFilter] = useState<"all" | "qris" | "va">("all");
@@ -214,7 +214,7 @@ function CheckoutContent() {
         currency: "IDR",
       });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transactionData]);
 
   // Fetch dynamic fee from Pakasir v2 API whenever plan changes
@@ -469,11 +469,7 @@ function CheckoutContent() {
                   <span className="text-2xl font-black text-[#4cd7f6] font-mono">
                     Rp {(transactionData.total_payment || transactionData.amount).toLocaleString("id-ID")}
                   </span>
-                  {transactionData.fee > 0 && (
-                    <span className="text-[11px] text-[#869397] block font-mono">
-                      (Termasuk Biaya Admin Rp {transactionData.fee.toLocaleString("id-ID")})
-                    </span>
-                  )}
+
                 </div>
               </div>
 
