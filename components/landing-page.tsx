@@ -300,957 +300,957 @@ export default function LandingPage() {
         {/* ───── HERO SECTION ───── */}
         <section className="relative pt-28 pb-16 sm:pt-32 sm:pb-20 md:pt-40 md:pb-28 px-4 sm:px-6 overflow-hidden">
           <ParticleField />
-        {/* Radial gradient glow */}
-        <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[90vw] max-w-[800px] h-[360px] sm:h-[600px] pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse at center, rgba(76,215,246,0.08) 0%, rgba(6,182,212,0.03) 40%, transparent 70%)",
-          }}
-        />
+          {/* Radial gradient glow */}
+          <div
+            className="absolute top-0 left-1/2 -translate-x-1/2 w-[90vw] max-w-[800px] h-[360px] sm:h-[600px] pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(ellipse at center, rgba(76,215,246,0.08) 0%, rgba(6,182,212,0.03) 40%, transparent 70%)",
+            }}
+          />
 
-        <div className="max-w-5xl mx-auto text-center relative z-10">
-          {/* Social proof badge */}
-          {/* <div className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full border border-[#1e2847] bg-[#0d1632]/80 backdrop-blur-sm text-[11px] sm:text-xs text-[#869397] mb-6 sm:mb-8 animate-fade-in-up">
+          <div className="max-w-5xl mx-auto text-center relative z-10">
+            {/* Social proof badge */}
+            {/* <div className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full border border-[#1e2847] bg-[#0d1632]/80 backdrop-blur-sm text-[11px] sm:text-xs text-[#869397] mb-6 sm:mb-8 animate-fade-in-up">
             <LivePulse />
             <span>
               Dipercaya <span className="text-[#4cd7f6] font-semibold">200+</span> advertiser CTWA aktif di Indonesia
             </span>
           </div> */}
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.2] sm:leading-[1.15] tracking-tight mb-5 sm:mb-6 break-words">
-            Chat WhatsApp dari Iklan Anda{" "}
-            <span className="text-[#ffb4ab]">Tidak Terbaca di Meta?</span>
-            <br className="hidden sm:block" />{" "}
-            <span className="relative inline-block mt-1 sm:mt-0">
-              <span className="relative z-10 bg-gradient-to-r from-[#4cd7f6] via-[#4edea3] to-[#4cd7f6] bg-clip-text text-transparent">
-                Kirim Otomatis
-              </span>
-              <span className="absolute bottom-1 left-0 right-0 h-[3px] bg-gradient-to-r from-[#4cd7f6] to-[#4edea3] rounded-full opacity-40" />
-            </span>{" "}
-            sebagai Konversi.
-          </h1>
-
-          <p className="text-base sm:text-lg md:text-xl text-[#869397] max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed">
-            TrackCapi menangkap <strong className="text-[#dbe1ff]">ctwa_clid</strong> dan mengirim event{" "}
-            <strong className="text-[#dbe1ff]">Lead sampai Purchase</strong> ke{" "}
-            <strong className="text-[#dbe1ff]">Meta Conversions API</strong>, tanpa coding.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 mb-10 sm:mb-14">
-            <Link
-              href="/checkout?plan=1-tahun"
-              className="group inline-flex items-center justify-center gap-2.5 px-6 sm:px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#4cd7f6] to-[#06b6d4] text-[#050d25] font-semibold text-sm sm:text-base shadow-[0_0_30px_rgba(76,215,246,0.25)] hover:shadow-[0_0_40px_rgba(76,215,246,0.4)] transition-all hover:scale-[1.02] active:scale-[0.98]"
-            >
-              <Zap className="w-5 h-5 shrink-0" />
-              <span>Mulai Rp 20.750/bulan</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform shrink-0" />
-            </Link>
-            <a
-              href="#demo"
-              className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3.5 rounded-xl border border-[#4cd7f6]/40 bg-[#4cd7f6]/5 text-[#4cd7f6] hover:bg-[#4cd7f6]/15 hover:border-[#4cd7f6] transition-all text-sm sm:text-base font-medium shadow-[0_0_20px_rgba(76,215,246,0.1)]"
-            >
-              <Play className="w-4 h-4 fill-current shrink-0" />
-              <span>Tonton Demo Video</span>
-            </a>
-            <a
-              href="#cara-kerja"
-              className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3.5 rounded-xl border border-[#1e2847] text-[#869397] hover:text-white hover:border-[#2d3a5c] transition-all text-sm sm:text-base"
-            >
-              <span>Cara Kerja</span>
-              <ChevronDown className="w-4 h-4 shrink-0" />
-            </a>
-          </div>
-
-          {/* Hero metric cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 max-w-3xl mx-auto">
-            <div className="p-4 sm:p-5 rounded-xl border border-[#1e2847] bg-[#0d1632]/60 backdrop-blur-sm hover:border-[#4cd7f6]/30 transition-all group text-center sm:text-left">
-              <div className="text-2xl sm:text-3xl font-bold font-mono text-[#4cd7f6] mb-1">
-                <span ref={stat1.ref}>{stat1.value}</span>
-                <span className="text-lg sm:text-xl">.4%</span>
-              </div>
-              <p className="text-xs text-[#869397] group-hover:text-[#bcc9cd] transition-colors">
-                Akurasi Deduplikasi Event
-              </p>
-            </div>
-            <div className="p-4 sm:p-5 rounded-xl border border-[#1e2847] bg-[#0d1632]/60 backdrop-blur-sm hover:border-[#4edea3]/30 transition-all group text-center sm:text-left">
-              <div className="text-2xl sm:text-3xl font-bold font-mono text-[#4edea3] mb-1">
-                +<span ref={stat2.ref}>{stat2.value}</span>
-                <span className="text-lg sm:text-xl">%</span>
-              </div>
-              <p className="text-xs text-[#869397] group-hover:text-[#bcc9cd] transition-colors">
-                Rata-rata Peningkatan Attributed Conversions
-              </p>
-            </div>
-            <div className="p-4 sm:p-5 rounded-xl border border-[#1e2847] bg-[#0d1632]/60 backdrop-blur-sm hover:border-[#b4c5ff]/30 transition-all group text-center sm:text-left">
-              <div className="text-2xl sm:text-3xl font-bold font-mono text-[#b4c5ff] mb-1">
-                {"<"}<span ref={stat3.ref}>{stat3.value}</span>
-                <span className="text-lg sm:text-xl">ms</span>
-              </div>
-              <p className="text-xs text-[#869397] group-hover:text-[#bcc9cd] transition-colors">
-                Latency Webhook → Meta Graph
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ───── DEMO VIDEO SECTION ───── */}
-      <section id="demo" className="relative py-16 sm:py-20 md:py-28 px-4 sm:px-6 overflow-hidden">
-        {/* Ambient background glow */}
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] max-w-[900px] h-[450px] pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse at center, rgba(76,215,246,0.12) 0%, rgba(78,222,163,0.05) 35%, transparent 70%)",
-          }}
-        />
-
-        <div className="max-w-5xl mx-auto relative z-10">
-          <div className="text-center mb-10 sm:mb-14">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold tracking-widest uppercase text-[#4cd7f6] bg-[#4cd7f6]/10 border border-[#4cd7f6]/30 mb-3 sm:mb-4">
-              <Play className="w-3.5 h-3.5 fill-current" />
-              Demo Langsung
-            </span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] font-bold tracking-tight mb-4 sm:mb-5 leading-tight">
-              Saksikan Bagaimana{" "}
-              <span className="bg-gradient-to-r from-[#4cd7f6] via-[#4edea3] to-[#4cd7f6] bg-clip-text text-transparent">
-                TrackCapi Bekerja
-              </span>
-            </h2>
-            <p className="text-[#869397] max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
-              Tonton demonstrasi lengkap bagaimana setiap pesan masuk dari iklan WhatsApp (CTWA)
-              ditangkap otomatis dan diteruskan ke Meta Conversions API secara instan.
-            </p>
-          </div>
-
-          {/* Video Player Card Frame */}
-          <div className="relative rounded-2xl border border-[#1e2847] bg-[#0d1632]/80 backdrop-blur-xl p-2.5 sm:p-4 shadow-[0_0_50px_rgba(76,215,246,0.15)] hover:border-[#4cd7f6]/40 transition-all">
-            {/* Browser/Window Header Bar */}
-            <div className="flex items-center justify-between px-3 py-2 border-b border-[#1e2847]/70 mb-2.5 sm:mb-3 text-xs text-[#869397]">
-              <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-full bg-[#ff5f56]/80 inline-block" />
-                <span className="w-3 h-3 rounded-full bg-[#ffbd2e]/80 inline-block" />
-                <span className="w-3 h-3 rounded-full bg-[#27c93f]/80 inline-block" />
-                <span className="ml-2 hidden sm:inline-block text-[11px] font-mono text-[#869397]">
-                  TrackCapi • Live Demo System
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.2] sm:leading-[1.15] tracking-tight mb-5 sm:mb-6 break-words">
+              Chat WhatsApp dari Iklan Anda{" "}
+              <span className="text-[#ffb4ab]">Tidak Terbaca di Meta?</span>
+              <br className="hidden sm:block" />{" "}
+              <span className="relative inline-block mt-1 sm:mt-0">
+                <span className="relative z-10 bg-gradient-to-r from-[#4cd7f6] via-[#4edea3] to-[#4cd7f6] bg-clip-text text-transparent">
+                  Kirim Otomatis
                 </span>
-              </div>
-              <div className="px-3 py-0.5 rounded-full bg-[#0a122a] border border-[#1e2847] text-[11px] font-mono text-[#4cd7f6] flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-[#4edea3] animate-pulse" />
-                <span>CTWA Live Tracking Demo</span>
-              </div>
-            </div>
+                <span className="absolute bottom-1 left-0 right-0 h-[3px] bg-gradient-to-r from-[#4cd7f6] to-[#4edea3] rounded-full opacity-40" />
+              </span>{" "}
+              sebagai Konversi.
+            </h1>
 
-            {/* Video Player Container */}
-            <div className="relative rounded-xl overflow-hidden bg-black/90 aspect-video shadow-inner">
-              <video
-                src="/asset/demo.mp4"
-                controls
-                playsInline
-                preload="none"
-                title="Demo Sistem TrackCapi WhatsApp CTWA"
-                aria-label="Demo Sistem TrackCapi WhatsApp CTWA"
-                className="w-full h-full object-contain"
+            <p className="text-base sm:text-lg md:text-xl text-[#869397] max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed">
+              TrackCapi menangkap <strong className="text-[#dbe1ff]">ctwa_clid</strong> dan mengirim event{" "}
+              <strong className="text-[#dbe1ff]">Lead sampai Purchase</strong> ke{" "}
+              <strong className="text-[#dbe1ff]">Meta Conversions API</strong>, tanpa coding.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 mb-10 sm:mb-14">
+              <Link
+                href="/checkout?plan=1-tahun"
+                className="group inline-flex items-center justify-center gap-2.5 px-6 sm:px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#4cd7f6] to-[#06b6d4] text-[#050d25] font-semibold text-sm sm:text-base shadow-[0_0_30px_rgba(76,215,246,0.25)] hover:shadow-[0_0_40px_rgba(76,215,246,0.4)] transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
-                <track
-                  kind="captions"
-                  src="/asset/captions-id.vtt"
-                  srcLang="id"
-                  label="Bahasa Indonesia"
-                  default
-                />
-                Browser Anda tidak mendukung tag video. Silakan tonton langsung melalui file demo.
-              </video>
+                <Zap className="w-5 h-5 shrink-0" />
+                <span>Mulai Rp 29.000/bulan</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform shrink-0" />
+              </Link>
+              <a
+                href="#demo"
+                className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3.5 rounded-xl border border-[#4cd7f6]/40 bg-[#4cd7f6]/5 text-[#4cd7f6] hover:bg-[#4cd7f6]/15 hover:border-[#4cd7f6] transition-all text-sm sm:text-base font-medium shadow-[0_0_20px_rgba(76,215,246,0.1)]"
+              >
+                <Play className="w-4 h-4 fill-current shrink-0" />
+                <span>Tonton Demo Video</span>
+              </a>
+              <a
+                href="#cara-kerja"
+                className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3.5 rounded-xl border border-[#1e2847] text-[#869397] hover:text-white hover:border-[#2d3a5c] transition-all text-sm sm:text-base"
+              >
+                <span>Cara Kerja</span>
+                <ChevronDown className="w-4 h-4 shrink-0" />
+              </a>
             </div>
 
-            {/* Highlights Below Video */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 sm:pt-5 border-t border-[#1e2847]/60 mt-3 text-xs">
-              <div className="flex items-start gap-2.5 p-2.5 rounded-lg bg-[#0a122a]/50 border border-[#1e2847]/40">
-                <div className="w-7 h-7 rounded-lg bg-[#4cd7f6]/10 border border-[#4cd7f6]/30 flex items-center justify-center text-[#4cd7f6] shrink-0 mt-0.5">
-                  <Zap className="w-4 h-4" />
+            {/* Hero metric cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 max-w-3xl mx-auto">
+              <div className="p-4 sm:p-5 rounded-xl border border-[#1e2847] bg-[#0d1632]/60 backdrop-blur-sm hover:border-[#4cd7f6]/30 transition-all group text-center sm:text-left">
+                <div className="text-2xl sm:text-3xl font-bold font-mono text-[#4cd7f6] mb-1">
+                  <span ref={stat1.ref}>{stat1.value}</span>
+                  <span className="text-lg sm:text-xl">.4%</span>
                 </div>
-                <div>
-                  <h3 className="text-white font-semibold">Tangkapan Otomatis</h3>
-                  <p className="text-[#869397] text-[11px] mt-0.5 leading-snug">Click ID (ctwa_clid) diekstrak tanpa jeda dari pesan pertama.</p>
-                </div>
+                <p className="text-xs text-[#869397] group-hover:text-[#bcc9cd] transition-colors">
+                  Akurasi Deduplikasi Event
+                </p>
               </div>
-
-              <div className="flex items-start gap-2.5 p-2.5 rounded-lg bg-[#0a122a]/50 border border-[#1e2847]/40">
-                <div className="w-7 h-7 rounded-lg bg-[#4edea3]/10 border border-[#4edea3]/30 flex items-center justify-center text-[#4edea3] shrink-0 mt-0.5">
-                  <Layers className="w-4 h-4" />
+              <div className="p-4 sm:p-5 rounded-xl border border-[#1e2847] bg-[#0d1632]/60 backdrop-blur-sm hover:border-[#4edea3]/30 transition-all group text-center sm:text-left">
+                <div className="text-2xl sm:text-3xl font-bold font-mono text-[#4edea3] mb-1">
+                  +<span ref={stat2.ref}>{stat2.value}</span>
+                  <span className="text-lg sm:text-xl">%</span>
                 </div>
-                <div>
-                  <h3 className="text-white font-semibold">Pipeline 5 Event</h3>
-                  <p className="text-[#869397] text-[11px] mt-0.5 leading-snug">Kirim status Lead, ViewContent hingga Closed Purchase.</p>
-                </div>
+                <p className="text-xs text-[#869397] group-hover:text-[#bcc9cd] transition-colors">
+                  Rata-rata Peningkatan Attributed Conversions
+                </p>
               </div>
-
-              <div className="flex items-start gap-2.5 p-2.5 rounded-lg bg-[#0a122a]/50 border border-[#1e2847]/40">
-                <div className="w-7 h-7 rounded-lg bg-[#b4c5ff]/10 border border-[#b4c5ff]/30 flex items-center justify-center text-[#b4c5ff] shrink-0 mt-0.5">
-                  <Radio className="w-4 h-4" />
+              <div className="p-4 sm:p-5 rounded-xl border border-[#1e2847] bg-[#0d1632]/60 backdrop-blur-sm hover:border-[#b4c5ff]/30 transition-all group text-center sm:text-left">
+                <div className="text-2xl sm:text-3xl font-bold font-mono text-[#b4c5ff] mb-1">
+                  {"<"}<span ref={stat3.ref}>{stat3.value}</span>
+                  <span className="text-lg sm:text-xl">ms</span>
                 </div>
-                <div>
-                  <h3 className="text-white font-semibold">Live Delivery Feed</h3>
-                  <p className="text-[#869397] text-[11px] mt-0.5 leading-snug">Pantau status event terkirim ke Meta secara real-time.</p>
-                </div>
+                <p className="text-xs text-[#869397] group-hover:text-[#bcc9cd] transition-colors">
+                  Latency Webhook → Meta Graph
+                </p>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ───── PROBLEM SECTION ───── */}
-      <section id="masalah" className="relative py-16 sm:py-20 md:py-28 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12 sm:mb-16">
-            <span className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-widest uppercase text-[#ffb4ab] mb-3 sm:mb-4">
-              <Ghost className="w-4 h-4" />
-              Masalah Utama
-            </span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-4 sm:mb-5">
-              Kenapa Konversi CTWA Anda{" "}
-              <span className="text-[#ffb4ab]">Menghilang</span> di Meta Ads?
-            </h2>
-            <p className="text-[#869397] max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
-              Anda bukan satu-satunya. Ini adalah masalah{" "}
-              <strong className="text-[#dbe1ff]">struktural</strong> yang dialami hampir semua
-              advertiser CTWA — dan Meta tidak memberikan solusi out-of-the-box.
-            </p>
-          </div>
+        {/* ───── DEMO VIDEO SECTION ───── */}
+        <section id="demo" className="relative py-16 sm:py-20 md:py-28 px-4 sm:px-6 overflow-hidden">
+          {/* Ambient background glow */}
+          <div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] max-w-[900px] h-[450px] pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(ellipse at center, rgba(76,215,246,0.12) 0%, rgba(78,222,163,0.05) 35%, transparent 70%)",
+            }}
+          />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
-            {/* Problem Card 1 */}
-            <div className="group relative p-5 sm:p-6 rounded-2xl border border-[#1e2847] bg-[#0d1632]/40 hover:border-[#ffb4ab]/30 transition-all">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#ffb4ab]/[0.03] rounded-full blur-3xl pointer-events-none" />
-              <div className="w-10 h-10 rounded-xl bg-[#ffb4ab]/10 border border-[#ffb4ab]/20 flex items-center justify-center text-[#ffb4ab] mb-4">
-                <EyeOff className="w-5 h-5" />
-              </div>
-              <h3 className="text-white font-semibold text-base sm:text-lg mb-2">
-                Chat WhatsApp Masuk, Tapi Meta Bilang 0 Konversi
-              </h3>
-              <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
-                Iklan CTWA Anda generate ratusan chat per hari. Tapi di Ads Manager? Kolom
-                &quot;Results&quot; kosong. Pixel browser{" "}
-                <strong className="text-[#bcc9cd]">tidak bisa tracking percakapan WhatsApp</strong>{" "}
-                — karena chat terjadi di luar website Anda.
-              </p>
-            </div>
-
-            {/* Problem Card 2 */}
-            <div className="group relative p-5 sm:p-6 rounded-2xl border border-[#1e2847] bg-[#0d1632]/40 hover:border-[#ffb4ab]/30 transition-all">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#ffb4ab]/[0.03] rounded-full blur-3xl pointer-events-none" />
-              <div className="w-10 h-10 rounded-xl bg-[#ffb4ab]/10 border border-[#ffb4ab]/20 flex items-center justify-center text-[#ffb4ab] mb-4">
-                <BarChart3 className="w-5 h-5" />
-              </div>
-              <h3 className="text-white font-semibold text-base sm:text-lg mb-2">
-                Algoritma Meta Buta → CPA Meledak, ROAS Anjlok
-              </h3>
-              <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
-                Tanpa data konversi, algoritma Meta tidak tahu iklan mana yang berhasil.
-                Akibatnya?{" "}
-                <strong className="text-[#bcc9cd]">
-                  Budget iklan dihabiskan ke audience yang salah
-                </strong>
-                , CPA naik 2–3x lipat, dan optimasi ad set Anda menjadi gambling.
-              </p>
-            </div>
-
-            {/* Problem Card 3 */}
-            <div className="group relative p-5 sm:p-6 rounded-2xl border border-[#1e2847] bg-[#0d1632]/40 hover:border-[#ffb4ab]/30 transition-all">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#ffb4ab]/[0.03] rounded-full blur-3xl pointer-events-none" />
-              <div className="w-10 h-10 rounded-xl bg-[#ffb4ab]/10 border border-[#ffb4ab]/20 flex items-center justify-center text-[#ffb4ab] mb-4">
-                <Ghost className="w-5 h-5" />
-              </div>
-              <h3 className="text-white font-semibold text-base sm:text-lg mb-2">
-                iOS 14.5+ & Browser Blocking Bunuh Tracking Anda
-              </h3>
-              <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
-                40–60% user iOS opt-out dari tracking. Ad blocker makin agresif.{" "}
-                <strong className="text-[#bcc9cd]">
-                  Pixel browser Anda kehilangan setengah data
-                </strong>{" "}
-                bahkan sebelum user klik iklan CTWA. Reporting Anda bohong — dan Anda tidak tahu.
-              </p>
-            </div>
-
-            {/* Problem Card 4 */}
-            <div className="group relative p-5 sm:p-6 rounded-2xl border border-[#1e2847] bg-[#0d1632]/40 hover:border-[#ffb4ab]/30 transition-all">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#ffb4ab]/[0.03] rounded-full blur-3xl pointer-events-none" />
-              <div className="w-10 h-10 rounded-xl bg-[#ffb4ab]/10 border border-[#ffb4ab]/20 flex items-center justify-center text-[#ffb4ab] mb-4">
-                <MousePointerClick className="w-5 h-5" />
-              </div>
-              <h3 className="text-white font-semibold text-base sm:text-lg mb-2">
-                Scaling Iklan CTWA Terasa Seperti Menembak Dalam Gelap
-              </h3>
-              <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
-                Mau scale budget? Tapi tidak ada data konversi yang reliable.{" "}
-                <strong className="text-[#bcc9cd]">
-                  Anda tidak tahu iklan mana yang hasilkan closing, mana yang buang duit
-                </strong>
-                . Keputusan scaling Anda berdasarkan feeling, bukan data.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ───── SOLUTION BRIDGE ───── */}
-      <section className="relative py-12 sm:py-16 px-4 sm:px-6">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 p-5 sm:p-6 rounded-2xl border border-[#1e2847] bg-gradient-to-r from-[#0d1632] via-[#111d3d] to-[#0d1632]">
-            <div className="w-12 h-12 shrink-0 rounded-xl bg-gradient-to-br from-[#4cd7f6]/20 to-[#4edea3]/20 border border-[#4cd7f6]/30 flex items-center justify-center">
-              <Sparkles className="w-6 h-6 text-[#4cd7f6]" />
-            </div>
-            <div>
-              <p className="text-white font-semibold text-base sm:text-lg">
-                Bagaimana jika setiap chat WhatsApp dari iklan CTWA…
-              </p>
-              <p className="text-[#4edea3] text-xs sm:text-sm font-medium mt-0.5">
-                otomatis tercatat sebagai konversi di Meta Ads Manager Anda?
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ───── FEATURES / SOLUTION ───── */}
-      <section id="fitur" className="relative py-16 sm:py-20 md:py-28 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12 sm:mb-16">
-            <span className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-widest uppercase text-[#4cd7f6] mb-3 sm:mb-4">
-              <Zap className="w-4 h-4" />
-              Solusi & Manfaat
-            </span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-4 sm:mb-5">
-              Iklan Bukan Cuma Bawa Chat,{" "}
-              <span className="bg-gradient-to-r from-[#4cd7f6] to-[#4edea3] bg-clip-text text-transparent">
-                Tapi Bawa Pembeli
+          <div className="max-w-5xl mx-auto relative z-10">
+            <div className="text-center mb-10 sm:mb-14">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold tracking-widest uppercase text-[#4cd7f6] bg-[#4cd7f6]/10 border border-[#4cd7f6]/30 mb-3 sm:mb-4">
+                <Play className="w-3.5 h-3.5 fill-current" />
+                Demo Langsung
               </span>
-            </h2>
-            <p className="text-[#869397] max-w-2xl mx-auto text-xs sm:text-base leading-relaxed">
-              Meta jadi tahu chat mana yang closing, sehingga iklan dioptimasi ke calon pembeli, bukan sekadar yang chat.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-            {/* Feature 1 */}
-            <div className="group p-5 sm:p-6 rounded-2xl border border-[#1e2847] bg-[#0d1632]/40 hover:border-[#4cd7f6]/30 hover:bg-[#0d1632]/60 transition-all">
-              <div className="w-10 h-10 rounded-xl bg-[#4cd7f6]/10 border border-[#4cd7f6]/20 flex items-center justify-center text-[#4cd7f6] mb-4 group-hover:shadow-[0_0_16px_rgba(76,215,246,0.2)] transition-shadow">
-                <Server className="w-5 h-5" />
-              </div>
-              <h3 className="text-white font-semibold text-base mb-2">
-                Server-Side Tracking 100% Akurat
-              </h3>
-              <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
-                Event dikirim langsung dari server ke Meta tanpa lewat browser. Bebas hambatan ad blocker atau batasan iOS, memastikan semua data konversi tersampaikan tanpa hilang.
-              </p>
-            </div>
-
-            {/* Feature 2 */}
-            <div className="group p-5 sm:p-6 rounded-2xl border border-[#1e2847] bg-[#0d1632]/40 hover:border-[#4edea3]/30 hover:bg-[#0d1632]/60 transition-all">
-              <div className="w-10 h-10 rounded-xl bg-[#4edea3]/10 border border-[#4edea3]/20 flex items-center justify-center text-[#4edea3] mb-4 group-hover:shadow-[0_0_16px_rgba(78,222,163,0.2)] transition-shadow">
-                <MessageSquare className="w-5 h-5" />
-              </div>
-              <h3 className="text-white font-semibold text-base mb-2">
-                Otomatis Hubungkan Chat ke Iklan
-              </h3>
-              <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
-                Setiap kali calon pelanggan klik iklan CTWA dan memulai WhatsApp, sistem otomatis menangkap ID klik (ctwa_clid) tanpa perlu Anda pusing setup manual.
-              </p>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="group p-5 sm:p-6 rounded-2xl border border-[#1e2847] bg-[#0d1632]/40 hover:border-[#b4c5ff]/30 hover:bg-[#0d1632]/60 transition-all">
-              <div className="w-10 h-10 rounded-xl bg-[#b4c5ff]/10 border border-[#b4c5ff]/20 flex items-center justify-center text-[#b4c5ff] mb-4 group-hover:shadow-[0_0_16px_rgba(180,197,255,0.2)] transition-shadow">
-                <Layers className="w-5 h-5" />
-              </div>
-              <h3 className="text-white font-semibold text-base mb-2">
-                Lacak Funnel Lengkap hingga Closing
-              </h3>
-              <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
-                Kirim status konversi dari Chat Masuk (Lead), Tanya Harga / Keranjang (AddToCart), Checkout, hingga Closing (Purchase) agar Meta paham funnel penjualan Anda.
-              </p>
-            </div>
-
-            {/* Feature 4 */}
-            <div className="group p-5 sm:p-6 rounded-2xl border border-[#1e2847] bg-[#0d1632]/40 hover:border-[#4cd7f6]/30 hover:bg-[#0d1632]/60 transition-all">
-              <div className="w-10 h-10 rounded-xl bg-[#4cd7f6]/10 border border-[#4cd7f6]/20 flex items-center justify-center text-[#4cd7f6] mb-4 group-hover:shadow-[0_0_16px_rgba(76,215,246,0.2)] transition-shadow">
-                <Target className="w-5 h-5" />
-              </div>
-              <h3 className="text-white font-semibold text-base mb-2">
-                Optimasi ke Calon Pembeli Riil
-              </h3>
-              <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
-                <strong className="text-[#bcc9cd]">Meta jadi tahu chat mana yang closing, sehingga iklan dioptimasi ke calon pembeli, bukan sekadar yang chat.</strong> Bebas dari audiens yang cuma PHP atau buang budget iklan.
-              </p>
-            </div>
-
-            {/* Feature 5 */}
-            <div className="group p-5 sm:p-6 rounded-2xl border border-[#1e2847] bg-[#0d1632]/40 hover:border-[#4edea3]/30 hover:bg-[#0d1632]/60 transition-all">
-              <div className="w-10 h-10 rounded-xl bg-[#4edea3]/10 border border-[#4edea3]/20 flex items-center justify-center text-[#4edea3] mb-4 group-hover:shadow-[0_0_16px_rgba(78,222,163,0.2)] transition-shadow">
-                <BarChart3 className="w-5 h-5" />
-              </div>
-              <h3 className="text-white font-semibold text-base mb-2">
-                Tahu Pasti Iklan Mana yang Closing
-              </h3>
-              <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
-                Ketahui dengan akurat campaign, adset, dan materi iklan mana yang menghasilkan penjualan nyata. Matikan iklan yang boncos, perbesar budget pada iklan yang terbukti closing.
-              </p>
-            </div>
-
-            {/* Feature 6 */}
-            <div className="group p-5 sm:p-6 rounded-2xl border border-[#1e2847] bg-[#0d1632]/40 hover:border-[#b4c5ff]/30 hover:bg-[#0d1632]/60 transition-all">
-              <div className="w-10 h-10 rounded-xl bg-[#b4c5ff]/10 border border-[#b4c5ff]/20 flex items-center justify-center text-[#b4c5ff] mb-4 group-hover:shadow-[0_0_16px_rgba(180,197,255,0.2)] transition-shadow">
-                <TrendingUp className="w-5 h-5" />
-              </div>
-              <h3 className="text-white font-semibold text-base mb-2">
-                Hemat Budget & ROAS Lebih Tinggi
-              </h3>
-              <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
-                Algoritma Meta otomatis mempelajari data pelanggan yang benar-benar melakukan transaksi closing, lalu mencari audiens berkualitas serupa agar biaya akuisisi semakin murah.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ───── HOW IT WORKS ───── */}
-      <section id="cara-kerja" className="relative py-16 sm:py-20 md:py-28 px-4 sm:px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12 sm:mb-16">
-            <span className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-widest uppercase text-[#4edea3] mb-3 sm:mb-4">
-              <Radio className="w-4 h-4" />
-              Cara Kerja
-            </span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-4 sm:mb-5">
-              Setup 10 Menit.{" "}
-              <span className="bg-gradient-to-r from-[#4edea3] to-[#4cd7f6] bg-clip-text text-transparent">
-                Konversi Langsung Tercatat.
-              </span>
-            </h2>
-          </div>
-
-          <div className="relative">
-            {/* Vertical line (desktop only) */}
-            <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-[#4cd7f6]/40 via-[#4edea3]/40 to-[#b4c5ff]/40 hidden md:block" />
-
-            {/* Step 1 */}
-            <div className="relative flex flex-col md:flex-row items-start md:items-center gap-4 sm:gap-6 mb-8 sm:mb-12">
-              <div className="w-full md:w-1/2 md:text-right md:pr-12 p-5 rounded-xl border border-[#1e2847]/60 bg-[#0d1632]/40 md:border-0 md:bg-transparent md:p-0">
-                <div className="inline-flex items-center gap-2 text-xs text-[#4cd7f6] font-semibold mb-2">
-                  <span className="w-7 h-7 rounded-full bg-[#4cd7f6]/10 border border-[#4cd7f6]/30 flex items-center justify-center font-mono text-sm">
-                    1
-                  </span>
-                  STEP
-                </div>
-                <h3 className="text-white font-semibold text-base sm:text-lg mb-2">
-                  Hubungkan WhatsApp Business
-                </h3>
-                <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
-                  Login ke Trackcapi → klik &quot;Connect WhatsApp&quot; → otorisasi via OAuth. Selesai
-                  dalam 2 menit, zero coding.
-                </p>
-              </div>
-              <div className="hidden md:flex w-4 h-4 rounded-full bg-[#4cd7f6] border-4 border-[#0a122a] absolute left-1/2 -translate-x-1/2 shadow-[0_0_12px_rgba(76,215,246,0.4)]" />
-              <div className="hidden md:block md:w-1/2 md:pl-12" />
-            </div>
-
-            {/* Step 2 */}
-            <div className="relative flex flex-col md:flex-row items-start md:items-center gap-4 sm:gap-6 mb-8 sm:mb-12">
-              <div className="hidden md:block md:w-1/2 md:pr-12" />
-              <div className="hidden md:flex w-4 h-4 rounded-full bg-[#4edea3] border-4 border-[#0a122a] absolute left-1/2 -translate-x-1/2 shadow-[0_0_12px_rgba(78,222,163,0.4)]" />
-              <div className="w-full md:w-1/2 md:pl-12 p-5 rounded-xl border border-[#1e2847]/60 bg-[#0d1632]/40 md:border-0 md:bg-transparent md:p-0">
-                <div className="inline-flex items-center gap-2 text-xs text-[#4edea3] font-semibold mb-2">
-                  <span className="w-7 h-7 rounded-full bg-[#4edea3]/10 border border-[#4edea3]/30 flex items-center justify-center font-mono text-sm">
-                    2
-                  </span>
-                  STEP
-                </div>
-                <h3 className="text-white font-semibold text-base sm:text-lg mb-2">
-                  Webhook Otomatis Aktif
-                </h3>
-                <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
-                  Setiap pesan masuk dari iklan CTWA, webhook menangkap{" "}
-                  <code className="text-[#4edea3] bg-[#4edea3]/10 px-1 py-0.5 rounded text-xs">
-                    ctwa_clid
-                  </code>
-                  , nomor telepon, dan metadata percakapan secara otomatis.
-                </p>
-              </div>
-            </div>
-
-            {/* Step 3 */}
-            <div className="relative flex flex-col md:flex-row items-start md:items-center gap-4 sm:gap-6 mb-8 sm:mb-12">
-              <div className="w-full md:w-1/2 md:text-right md:pr-12 p-5 rounded-xl border border-[#1e2847]/60 bg-[#0d1632]/40 md:border-0 md:bg-transparent md:p-0">
-                <div className="inline-flex items-center gap-2 text-xs text-[#b4c5ff] font-semibold mb-2">
-                  <span className="w-7 h-7 rounded-full bg-[#b4c5ff]/10 border border-[#b4c5ff]/30 flex items-center justify-center font-mono text-sm">
-                    3
-                  </span>
-                  STEP
-                </div>
-                <h3 className="text-white font-semibold text-base sm:text-lg mb-2">
-                  Event Terkirim ke Meta CAPI
-                </h3>
-                <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
-                  Trackcapi langsung mengirim event konversi (Lead, Purchase, dll) ke Meta
-                  Conversions API dengan data ter-enriched. Deduplikasi otomatis mencegah double
-                  counting.
-                </p>
-              </div>
-              <div className="hidden md:flex w-4 h-4 rounded-full bg-[#b4c5ff] border-4 border-[#0a122a] absolute left-1/2 -translate-x-1/2 shadow-[0_0_12px_rgba(180,197,255,0.4)]" />
-              <div className="hidden md:block md:w-1/2 md:pl-12" />
-            </div>
-
-            {/* Step 4 */}
-            <div className="relative flex flex-col md:flex-row items-start md:items-center gap-4 sm:gap-6">
-              <div className="hidden md:block md:w-1/2 md:pr-12" />
-              <div className="hidden md:flex w-4 h-4 rounded-full bg-[#4cd7f6] border-4 border-[#0a122a] absolute left-1/2 -translate-x-1/2 shadow-[0_0_12px_rgba(76,215,246,0.4)]" />
-              <div className="w-full md:w-1/2 md:pl-12 p-5 rounded-xl border border-[#1e2847]/60 bg-[#0d1632]/40 md:border-0 md:bg-transparent md:p-0">
-                <div className="inline-flex items-center gap-2 text-xs text-[#4cd7f6] font-semibold mb-2">
-                  <span className="w-7 h-7 rounded-full bg-[#4cd7f6]/10 border border-[#4cd7f6]/30 flex items-center justify-center font-mono text-sm">
-                    4
-                  </span>
-                  STEP
-                </div>
-                <h3 className="text-white font-semibold text-base sm:text-lg mb-2">
-                  Konversi Muncul di Ads Manager 🎯
-                </h3>
-                <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
-                  Sekarang Meta tahu iklan mana yang hasilkan konversi. Algoritma mengoptimasi ke
-                  audience terbaik. CPA turun, ROAS naik —{" "}
-                  <strong className="text-[#bcc9cd]">scaling jadi berdasarkan data</strong>.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ───── BEFORE / AFTER COMPARISON ───── */}
-      <section className="relative py-16 sm:py-20 md:py-28 px-4 sm:px-6 bg-[#060e22]">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-10 sm:mb-14">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3 sm:mb-5">
-              Sebelum vs Sesudah{" "}
-              <span className="text-[#4cd7f6]">Trackcapi</span>
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-            {/* Before */}
-            <div className="p-5 sm:p-6 rounded-2xl border border-[#ffb4ab]/20 bg-[#0d1632]/40 space-y-4">
-              <div className="flex items-center gap-2 text-[#ffb4ab] font-semibold text-xs sm:text-sm uppercase tracking-wider">
-                <EyeOff className="w-4 h-4" />
-                Tanpa Trackcapi
-              </div>
-              <ul className="space-y-2.5 sm:space-y-3">
-                {[
-                  "0 konversi tercatat di Meta Ads Manager",
-                  "CPA tinggi, ROAS rendah — tidak bisa scale",
-                  "40–60% data hilang karena iOS & ad blocker",
-                  "Algoritma Meta tidak belajar — budget habis sia-sia",
-                  "Tidak tahu iklan mana yang hasilkan closing",
-                  "Reporting manual pakai spreadsheet",
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-[#869397]">
-                    <span className="w-5 h-5 rounded-full bg-[#ffb4ab]/10 flex items-center justify-center shrink-0 mt-0.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#ffb4ab]" />
-                    </span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* After */}
-            <div className="p-5 sm:p-6 rounded-2xl border border-[#4edea3]/20 bg-[#0d1632]/40 space-y-4">
-              <div className="flex items-center gap-2 text-[#4edea3] font-semibold text-xs sm:text-sm uppercase tracking-wider">
-                <CheckCircle2 className="w-4 h-4" />
-                Dengan Trackcapi
-              </div>
-              <ul className="space-y-2.5 sm:space-y-3">
-                {[
-                  "Setiap chat CTWA = 1 konversi ter-record di Meta",
-                  "CPA turun 30–50% berkat optimasi algoritma",
-                  "100% data sampai — server-side, bypass semua blocker",
-                  "Meta belajar dari data real → audience makin akurat",
-                  "Dashboard real-time: tahu persis ROI per iklan per jam",
-                  "Semua otomatis — zero manual work",
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-[#dbe1ff]">
-                    <span className="w-5 h-5 rounded-full bg-[#4edea3]/10 flex items-center justify-center shrink-0 mt-0.5">
-                      <CheckCircle2 className="w-3 h-3 text-[#4edea3]" />
-                    </span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ───── LIVE DEMO / SOCIAL PROOF TICKER ───── */}
-      <section className="relative py-12 sm:py-16 px-4 sm:px-6 border-y border-[#1e2847]/60 overflow-hidden">
-        <div className="max-w-6xl mx-auto relative">
-          <div className="flex items-center justify-center gap-3 text-xs sm:text-sm text-[#869397] mb-6 sm:mb-8 text-center">
-            <LivePulse />
-            <span>
-              Event tracking aktif — data dikirim ke Meta sekarang
-            </span>
-          </div>
-
-          {/* Scrolling ticker with edge fade masks */}
-          <div className="relative overflow-hidden">
-            <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-20 bg-gradient-to-r from-[#0a122a] to-transparent z-10" />
-            <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-20 bg-gradient-to-l from-[#0a122a] to-transparent z-10" />
-            <div className="flex gap-3 sm:gap-4 animate-ticker">
-              {[
-                { event: "Lead", phone: "+62 812-****-4821", status: "200 OK", time: "2s ago", color: "#4edea3" },
-                { event: "Purchase", phone: "+62 857-****-9012", status: "200 OK", time: "5s ago", color: "#4cd7f6" },
-                { event: "LeadSubmitted", phone: "+62 896-****-1080", status: "200 OK", time: "8s ago", color: "#4edea3" },
-                { event: "AddToCart", phone: "+62 813-****-5567", status: "200 OK", time: "12s ago", color: "#b4c5ff" },
-                { event: "Purchase", phone: "+62 878-****-3344", status: "200 OK", time: "15s ago", color: "#4cd7f6" },
-                { event: "Lead", phone: "+62 821-****-7788", status: "200 OK", time: "18s ago", color: "#4edea3" },
-                { event: "LeadSubmitted", phone: "+62 858-****-2200", status: "200 OK", time: "22s ago", color: "#4edea3" },
-                { event: "Purchase", phone: "+62 811-****-6655", status: "200 OK", time: "25s ago", color: "#4cd7f6" },
-              ].map((item, i) => (
-                <div
-                  key={i}
-                  className="shrink-0 flex items-center gap-2.5 sm:gap-3 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg border border-[#1e2847] bg-[#0d1632]/60 font-mono text-[11px] sm:text-xs"
-                >
-                  <span
-                    className="w-2 h-2 rounded-full shrink-0"
-                    style={{ backgroundColor: item.color }}
-                  />
-                  <span className="text-[#dbe1ff] font-medium">{item.event}</span>
-                  <span className="text-[#869397]">{item.phone}</span>
-                  <span className="text-[#4edea3]">{item.status}</span>
-                  <span className="text-[#94a3b8]">{item.time}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ───── PRICING SECTION ───── */}
-      <section id="harga" className="relative py-16 sm:py-20 md:py-28 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12 sm:mb-16">
-            <span className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-widest uppercase text-[#4cd7f6] mb-3 sm:mb-4">
-              <CreditCard className="w-4 h-4" />
-              Struktur Harga & Paket
-            </span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-4 sm:mb-5">
-              Investasi Terjangkau,{" "}
-              <span className="bg-gradient-to-r from-[#4cd7f6] via-[#4edea3] to-[#4cd7f6] bg-clip-text text-transparent">
-                Hasil Maksimal
-              </span>
-            </h2>
-            <p className="text-[#869397] max-w-2xl mx-auto text-xs sm:text-base leading-relaxed">
-              Tanpa biaya tersembunyi, tanpa komisi per konversi. Pilih paket yang sesuai kebutuhan
-              skala iklan CTWA Anda dan mulai lacak setiap konversi secara akurat.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-6 max-w-6xl mx-auto items-stretch">
-            {/* 1 BULAN PLAN */}
-            <div className="relative rounded-2xl border border-[#1e2847] bg-[#0d1632]/70 backdrop-blur-md p-6 sm:p-7 flex flex-col justify-between hover:border-[#4cd7f6]/40 transition-all group">
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#869397] px-2.5 sm:px-3 py-1 rounded-full bg-[#1e2847]/60 border border-[#1e2847]">
-                    Pilihan Uji Coba
-                  </span>
-                  <span className="text-[11px] sm:text-xs font-semibold text-[#4cd7f6] px-2.5 py-0.5 rounded-full bg-[#4cd7f6]/10 border border-[#4cd7f6]/20">
-                    Durasi 1 Bulan
-                  </span>
-                </div>
-
-                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">Paket 1 Bulan</h3>
-                <p className="text-xs sm:text-sm text-[#869397] mb-6 leading-relaxed">
-                  Akses penuh ke seluruh fitur Trackcapi selama 1 bulan untuk mencoba dan optimasi iklan CTWA Anda.
-                </p>
-
-                <div className="mb-6 pb-6 border-b border-[#1e2847]">
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-xs sm:text-sm text-[#869397]">Rp</span>
-                    <span className="text-3xl sm:text-4xl md:text-5xl font-black text-white font-mono tracking-tight">
-                      29.000
-                    </span>
-                    <span className="text-xs text-[#869397]">/ bulan</span>
-                  </div>
-                  <p className="text-xs text-[#4edea3] mt-2 flex items-center gap-1.5 font-medium flex-wrap">
-                    <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
-                    <span>Rp 29.000 / bulan (Tanpa komitmen)</span>
-                  </p>
-                </div>
-
-                <div className="p-3.5 sm:p-4 rounded-xl bg-[#090f23]/60 border border-[#1e2847] mb-6 sm:mb-8 space-y-2 text-xs text-[#bcc9cd]">
-                  <p className="font-semibold text-white flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-[#4cd7f6] shrink-0" />
-                    Termasuk Semua Fitur Tanpa Batas:
-                  </p>
-                  <p className="text-[#869397] leading-relaxed text-xs">
-                    Mendapatkan akses lengkap 100% ke seluruh sistem tracking CAPI, telemetry, dan update selama masa aktif 1 bulan.
-                  </p>
-                </div>
-              </div>
-
-              <div>
-                <Link
-                  href="/checkout?plan=1-bulan"
-                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 sm:py-4 rounded-xl border border-[#4cd7f6]/50 bg-[#4cd7f6]/10 text-[#4cd7f6] font-semibold text-sm sm:text-base hover:bg-[#4cd7f6] hover:text-[#050d25] transition-all duration-200 group-hover:shadow-[0_0_25px_rgba(76,215,246,0.3)]"
-                >
-                  <span>Beli Paket 1 Bulan</span>
-                  <ArrowRight className="w-4 h-4 shrink-0" />
-                </Link>
-                <p className="text-[11px] text-center text-[#94a3b8] mt-3 flex items-center justify-center gap-1.5">
-                  <Lock className="w-3 h-3 shrink-0" />
-                  Pembayaran instan otomatis
-                </p>
-                <p className="text-[11px] text-center text-[#4edea3] mt-1.5 flex items-center justify-center gap-1.5 font-medium">
-                  <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
-                  Garansi Uang Kembali 7 Hari
-                </p>
-              </div>
-            </div>
-
-            {/* 6 BULAN PLAN */}
-            <div className="relative rounded-2xl border border-[#1e2847] bg-[#0d1632]/70 backdrop-blur-md p-6 sm:p-7 flex flex-col justify-between hover:border-[#4cd7f6]/40 transition-all group">
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#869397] px-2.5 sm:px-3 py-1 rounded-full bg-[#1e2847]/60 border border-[#1e2847]">
-                    Pilihan Fleksibel
-                  </span>
-                  <span className="text-[11px] sm:text-xs font-semibold text-[#4cd7f6] px-2.5 py-0.5 rounded-full bg-[#4cd7f6]/10 border border-[#4cd7f6]/20">
-                    Durasi 6 Bulan
-                  </span>
-                </div>
-
-                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">Paket 6 Bulan</h3>
-                <p className="text-xs sm:text-sm text-[#869397] mb-6 leading-relaxed">
-                  Akses penuh ke seluruh fitur Trackcapi selama 6 bulan untuk optimasi iklan CTWA Anda.
-                </p>
-
-                <div className="mb-6 pb-6 border-b border-[#1e2847]">
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-xs sm:text-sm text-[#869397]">Rp</span>
-                    <span className="text-3xl sm:text-4xl md:text-5xl font-black text-white font-mono tracking-tight">
-                      149.000
-                    </span>
-                    <span className="text-xs text-[#869397]">/ 6 bulan</span>
-                  </div>
-                  <p className="text-xs text-[#4edea3] mt-2 flex items-center gap-1.5 font-medium flex-wrap">
-                    <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
-                    <span>Setara Rp 24.833 / bulan</span>
-                  </p>
-                </div>
-
-                <div className="p-3.5 sm:p-4 rounded-xl bg-[#090f23]/60 border border-[#1e2847] mb-6 sm:mb-8 space-y-2 text-xs text-[#bcc9cd]">
-                  <p className="font-semibold text-white flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-[#4cd7f6] shrink-0" />
-                    Termasuk Semua Fitur Tanpa Batas:
-                  </p>
-                  <p className="text-[#869397] leading-relaxed text-xs">
-                    Mendapatkan akses lengkap 100% ke seluruh sistem tracking CAPI, telemetry, dan update selama masa aktif 6 bulan.
-                  </p>
-                </div>
-              </div>
-
-              <div>
-                <Link
-                  href="/checkout?plan=6-bulan"
-                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 sm:py-4 rounded-xl border border-[#4cd7f6]/50 bg-[#4cd7f6]/10 text-[#4cd7f6] font-semibold text-sm sm:text-base hover:bg-[#4cd7f6] hover:text-[#050d25] transition-all duration-200 group-hover:shadow-[0_0_25px_rgba(76,215,246,0.3)]"
-                >
-                  <span>Beli Paket 6 Bulan</span>
-                  <ArrowRight className="w-4 h-4 shrink-0" />
-                </Link>
-                <p className="text-[11px] text-center text-[#94a3b8] mt-3 flex items-center justify-center gap-1.5">
-                  <Lock className="w-3 h-3 shrink-0" />
-                  Pembayaran instan otomatis
-                </p>
-                <p className="text-[11px] text-center text-[#4edea3] mt-1.5 flex items-center justify-center gap-1.5 font-medium">
-                  <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
-                  Garansi Uang Kembali 7 Hari
-                </p>
-              </div>
-            </div>
-
-            {/* 1 TAHUN PLAN (RECOMMENDED) */}
-            <div className="relative rounded-2xl border-2 border-[#4cd7f6] bg-gradient-to-b from-[#0f1c42] to-[#0a142f] p-6 sm:p-7 flex flex-col justify-between shadow-[0_0_40px_rgba(76,215,246,0.18)] hover:shadow-[0_0_60px_rgba(76,215,246,0.3)] transition-all">
-              {/* Highlight Badge */}
-              <div className="absolute -top-3.5 sm:-top-4 left-1/2 -translate-x-1/2 px-3 sm:px-4 py-1 rounded-full bg-gradient-to-r from-[#4cd7f6] via-[#4edea3] to-[#4cd7f6] text-[#050d25] text-[10px] sm:text-xs font-bold uppercase tracking-wider shadow-lg whitespace-nowrap">
-                🔥 Rekomendasi • Paling Hemat
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between mb-4 mt-1">
-                  <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#4cd7f6] px-2.5 sm:px-3 py-1 rounded-full bg-[#4cd7f6]/10 border border-[#4cd7f6]/30">
-                    Durasi 1 Tahun
-                  </span>
-                  <span className="text-[11px] sm:text-xs font-semibold text-[#4edea3] bg-[#4edea3]/10 px-2.5 py-0.5 rounded-full border border-[#4edea3]/20">
-                    Hemat Rp 49.000
-                  </span>
-                </div>
-
-                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">Paket 1 Tahun</h3>
-                <p className="text-xs sm:text-sm text-[#bcc9cd] mb-6 leading-relaxed">
-                  Akses penuh ke seluruh fitur Trackcapi selama 12 bulan penuh dengan harga paling hemat.
-                </p>
-
-                <div className="mb-6 pb-6 border-b border-[#1e2847]">
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-xs sm:text-sm text-[#869397]">Rp</span>
-                    <span className="text-3xl sm:text-4xl md:text-5xl font-black text-white font-mono tracking-tight">
-                      249.000
-                    </span>
-                    <span className="text-xs text-[#869397]">/ 1 tahun</span>
-                  </div>
-                  <p className="text-xs text-[#4edea3] mt-2 flex items-center gap-1.5 font-medium flex-wrap">
-                    <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
-                    <span>Setara hanya Rp 20.750 / bulan</span>
-                  </p>
-                </div>
-
-                <div className="p-3.5 sm:p-4 rounded-xl bg-[#090f23]/60 border border-[#4edea3]/30 mb-6 sm:mb-8 space-y-2 text-xs text-[#bcc9cd]">
-                  <p className="font-semibold text-white flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-[#4edea3] shrink-0" />
-                    Termasuk Semua Fitur Tanpa Batas:
-                  </p>
-                  <p className="text-[#869397] leading-relaxed text-xs">
-                    Mendapatkan akses lengkap 100% ke seluruh sistem tracking CAPI, telemetry, dan update selama masa aktif 12 bulan penuh.
-                  </p>
-                </div>
-              </div>
-
-              <div>
-                <Link
-                  href="/checkout?plan=1-tahun"
-                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 sm:py-4 rounded-xl bg-gradient-to-r from-[#4cd7f6] via-[#06b6d4] to-[#4edea3] text-[#050d25] font-bold text-sm sm:text-base hover:shadow-[0_0_35px_rgba(76,215,246,0.5)] hover:scale-[1.02] active:scale-[0.98] transition-all"
-                >
-                  <Zap className="w-4 h-4 shrink-0" />
-                  <span>Beli Paket 1 Tahun</span>
-                  <ArrowRight className="w-4 h-4 shrink-0" />
-                </Link>
-                <p className="text-[11px] text-center text-[#4edea3] mt-3 flex items-center justify-center gap-1.5 font-medium">
-                  <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
-                  Aktivasi instan • Garansi Uang Kembali 7 Hari
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* 7-DAY MONEY BACK GUARANTEE BANNER */}
-          <div className="mt-8 sm:mt-10 max-w-3xl mx-auto p-4 sm:p-6 rounded-2xl border border-[#4edea3]/30 bg-gradient-to-r from-[#0d1632]/90 via-[#0a1a36]/90 to-[#0d1632]/90 backdrop-blur-md shadow-[0_0_35px_rgba(78,222,163,0.12)] flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
-            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[#4edea3]/10 border border-[#4edea3]/30 flex items-center justify-center text-[#4edea3] shrink-0 shadow-[0_0_20px_rgba(78,222,163,0.25)]">
-              <ShieldCheck className="w-7 h-7 sm:w-8 sm:h-8" />
-            </div>
-            <div className="space-y-1 flex-1">
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-                <h3 className="text-white font-bold text-base sm:text-lg">
-                  Garansi Uang Kembali 7 Hari
-                </h3>
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#4edea3]/15 text-[#4edea3] border border-[#4edea3]/30">
-                  100% Risk-Free
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] font-bold tracking-tight mb-4 sm:mb-5 leading-tight">
+                Saksikan Bagaimana{" "}
+                <span className="bg-gradient-to-r from-[#4cd7f6] via-[#4edea3] to-[#4cd7f6] bg-clip-text text-transparent">
+                  TrackCapi Bekerja
                 </span>
-              </div>
-              <p className="text-xs sm:text-sm text-[#869397] leading-relaxed">
-                Coba Trackcapi selama 7 hari penuh. Jika sistem tracking kami tidak berhasil mengirimkan event konversi WhatsApp ke Meta Ads Manager Anda atau Anda tidak puas dengan performanya, kami akan kembalikan uang Anda 100% tanpa potongan.
+              </h2>
+              <p className="text-[#869397] max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
+                Tonton demonstrasi lengkap bagaimana setiap pesan masuk dari iklan WhatsApp (CTWA)
+                ditangkap otomatis dan diteruskan ke Meta Conversions API secara instan.
               </p>
             </div>
-          </div>
-        </div>
-      </section>
 
-      {/* ───── FAQ SECTION ───── */}
-      <section id="faq" className="relative py-16 sm:py-20 md:py-28 px-4 sm:px-6">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-10 sm:mb-14">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3 sm:mb-4">
-              Pertanyaan yang Sering Ditanyakan
+            {/* Video Player Card Frame */}
+            <div className="relative rounded-2xl border border-[#1e2847] bg-[#0d1632]/80 backdrop-blur-xl p-2.5 sm:p-4 shadow-[0_0_50px_rgba(76,215,246,0.15)] hover:border-[#4cd7f6]/40 transition-all">
+              {/* Browser/Window Header Bar */}
+              <div className="flex items-center justify-between px-3 py-2 border-b border-[#1e2847]/70 mb-2.5 sm:mb-3 text-xs text-[#869397]">
+                <div className="flex items-center gap-2">
+                  <span className="w-3 h-3 rounded-full bg-[#ff5f56]/80 inline-block" />
+                  <span className="w-3 h-3 rounded-full bg-[#ffbd2e]/80 inline-block" />
+                  <span className="w-3 h-3 rounded-full bg-[#27c93f]/80 inline-block" />
+                  <span className="ml-2 hidden sm:inline-block text-[11px] font-mono text-[#869397]">
+                    TrackCapi • Live Demo System
+                  </span>
+                </div>
+                <div className="px-3 py-0.5 rounded-full bg-[#0a122a] border border-[#1e2847] text-[11px] font-mono text-[#4cd7f6] flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-[#4edea3] animate-pulse" />
+                  <span>CTWA Live Tracking Demo</span>
+                </div>
+              </div>
+
+              {/* Video Player Container */}
+              <div className="relative rounded-xl overflow-hidden bg-black/90 aspect-video shadow-inner">
+                <video
+                  src="/asset/demo.mp4"
+                  controls
+                  playsInline
+                  preload="none"
+                  title="Demo Sistem TrackCapi WhatsApp CTWA"
+                  aria-label="Demo Sistem TrackCapi WhatsApp CTWA"
+                  className="w-full h-full object-contain"
+                >
+                  <track
+                    kind="captions"
+                    src="/asset/captions-id.vtt"
+                    srcLang="id"
+                    label="Bahasa Indonesia"
+                    default
+                  />
+                  Browser Anda tidak mendukung tag video. Silakan tonton langsung melalui file demo.
+                </video>
+              </div>
+
+              {/* Highlights Below Video */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 sm:pt-5 border-t border-[#1e2847]/60 mt-3 text-xs">
+                <div className="flex items-start gap-2.5 p-2.5 rounded-lg bg-[#0a122a]/50 border border-[#1e2847]/40">
+                  <div className="w-7 h-7 rounded-lg bg-[#4cd7f6]/10 border border-[#4cd7f6]/30 flex items-center justify-center text-[#4cd7f6] shrink-0 mt-0.5">
+                    <Zap className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="text-white font-semibold">Tangkapan Otomatis</h3>
+                    <p className="text-[#869397] text-[11px] mt-0.5 leading-snug">Click ID (ctwa_clid) diekstrak tanpa jeda dari pesan pertama.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-2.5 p-2.5 rounded-lg bg-[#0a122a]/50 border border-[#1e2847]/40">
+                  <div className="w-7 h-7 rounded-lg bg-[#4edea3]/10 border border-[#4edea3]/30 flex items-center justify-center text-[#4edea3] shrink-0 mt-0.5">
+                    <Layers className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="text-white font-semibold">Pipeline 5 Event</h3>
+                    <p className="text-[#869397] text-[11px] mt-0.5 leading-snug">Kirim status Lead, ViewContent hingga Closed Purchase.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-2.5 p-2.5 rounded-lg bg-[#0a122a]/50 border border-[#1e2847]/40">
+                  <div className="w-7 h-7 rounded-lg bg-[#b4c5ff]/10 border border-[#b4c5ff]/30 flex items-center justify-center text-[#b4c5ff] shrink-0 mt-0.5">
+                    <Radio className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="text-white font-semibold">Live Delivery Feed</h3>
+                    <p className="text-[#869397] text-[11px] mt-0.5 leading-snug">Pantau status event terkirim ke Meta secara real-time.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ───── PROBLEM SECTION ───── */}
+        <section id="masalah" className="relative py-16 sm:py-20 md:py-28 px-4 sm:px-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12 sm:mb-16">
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-widest uppercase text-[#ffb4ab] mb-3 sm:mb-4">
+                <Ghost className="w-4 h-4" />
+                Masalah Utama
+              </span>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-4 sm:mb-5">
+                Kenapa Konversi CTWA Anda{" "}
+                <span className="text-[#ffb4ab]">Menghilang</span> di Meta Ads?
+              </h2>
+              <p className="text-[#869397] max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
+                Anda bukan satu-satunya. Ini adalah masalah{" "}
+                <strong className="text-[#dbe1ff]">struktural</strong> yang dialami hampir semua
+                advertiser CTWA — dan Meta tidak memberikan solusi out-of-the-box.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+              {/* Problem Card 1 */}
+              <div className="group relative p-5 sm:p-6 rounded-2xl border border-[#1e2847] bg-[#0d1632]/40 hover:border-[#ffb4ab]/30 transition-all">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#ffb4ab]/[0.03] rounded-full blur-3xl pointer-events-none" />
+                <div className="w-10 h-10 rounded-xl bg-[#ffb4ab]/10 border border-[#ffb4ab]/20 flex items-center justify-center text-[#ffb4ab] mb-4">
+                  <EyeOff className="w-5 h-5" />
+                </div>
+                <h3 className="text-white font-semibold text-base sm:text-lg mb-2">
+                  Chat WhatsApp Masuk, Tapi Meta Bilang 0 Konversi
+                </h3>
+                <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
+                  Iklan CTWA Anda generate ratusan chat per hari. Tapi di Ads Manager? Kolom
+                  &quot;Results&quot; kosong. Pixel browser{" "}
+                  <strong className="text-[#bcc9cd]">tidak bisa tracking percakapan WhatsApp</strong>{" "}
+                  — karena chat terjadi di luar website Anda.
+                </p>
+              </div>
+
+              {/* Problem Card 2 */}
+              <div className="group relative p-5 sm:p-6 rounded-2xl border border-[#1e2847] bg-[#0d1632]/40 hover:border-[#ffb4ab]/30 transition-all">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#ffb4ab]/[0.03] rounded-full blur-3xl pointer-events-none" />
+                <div className="w-10 h-10 rounded-xl bg-[#ffb4ab]/10 border border-[#ffb4ab]/20 flex items-center justify-center text-[#ffb4ab] mb-4">
+                  <BarChart3 className="w-5 h-5" />
+                </div>
+                <h3 className="text-white font-semibold text-base sm:text-lg mb-2">
+                  Algoritma Meta Buta → CPA Meledak, ROAS Anjlok
+                </h3>
+                <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
+                  Tanpa data konversi, algoritma Meta tidak tahu iklan mana yang berhasil.
+                  Akibatnya?{" "}
+                  <strong className="text-[#bcc9cd]">
+                    Budget iklan dihabiskan ke audience yang salah
+                  </strong>
+                  , CPA naik 2–3x lipat, dan optimasi ad set Anda menjadi gambling.
+                </p>
+              </div>
+
+              {/* Problem Card 3 */}
+              <div className="group relative p-5 sm:p-6 rounded-2xl border border-[#1e2847] bg-[#0d1632]/40 hover:border-[#ffb4ab]/30 transition-all">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#ffb4ab]/[0.03] rounded-full blur-3xl pointer-events-none" />
+                <div className="w-10 h-10 rounded-xl bg-[#ffb4ab]/10 border border-[#ffb4ab]/20 flex items-center justify-center text-[#ffb4ab] mb-4">
+                  <Ghost className="w-5 h-5" />
+                </div>
+                <h3 className="text-white font-semibold text-base sm:text-lg mb-2">
+                  iOS 14.5+ & Browser Blocking Bunuh Tracking Anda
+                </h3>
+                <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
+                  40–60% user iOS opt-out dari tracking. Ad blocker makin agresif.{" "}
+                  <strong className="text-[#bcc9cd]">
+                    Pixel browser Anda kehilangan setengah data
+                  </strong>{" "}
+                  bahkan sebelum user klik iklan CTWA. Reporting Anda bohong — dan Anda tidak tahu.
+                </p>
+              </div>
+
+              {/* Problem Card 4 */}
+              <div className="group relative p-5 sm:p-6 rounded-2xl border border-[#1e2847] bg-[#0d1632]/40 hover:border-[#ffb4ab]/30 transition-all">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#ffb4ab]/[0.03] rounded-full blur-3xl pointer-events-none" />
+                <div className="w-10 h-10 rounded-xl bg-[#ffb4ab]/10 border border-[#ffb4ab]/20 flex items-center justify-center text-[#ffb4ab] mb-4">
+                  <MousePointerClick className="w-5 h-5" />
+                </div>
+                <h3 className="text-white font-semibold text-base sm:text-lg mb-2">
+                  Scaling Iklan CTWA Terasa Seperti Menembak Dalam Gelap
+                </h3>
+                <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
+                  Mau scale budget? Tapi tidak ada data konversi yang reliable.{" "}
+                  <strong className="text-[#bcc9cd]">
+                    Anda tidak tahu iklan mana yang hasilkan closing, mana yang buang duit
+                  </strong>
+                  . Keputusan scaling Anda berdasarkan feeling, bukan data.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ───── SOLUTION BRIDGE ───── */}
+        <section className="relative py-12 sm:py-16 px-4 sm:px-6">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 p-5 sm:p-6 rounded-2xl border border-[#1e2847] bg-gradient-to-r from-[#0d1632] via-[#111d3d] to-[#0d1632]">
+              <div className="w-12 h-12 shrink-0 rounded-xl bg-gradient-to-br from-[#4cd7f6]/20 to-[#4edea3]/20 border border-[#4cd7f6]/30 flex items-center justify-center">
+                <Sparkles className="w-6 h-6 text-[#4cd7f6]" />
+              </div>
+              <div>
+                <p className="text-white font-semibold text-base sm:text-lg">
+                  Bagaimana jika setiap chat WhatsApp dari iklan CTWA…
+                </p>
+                <p className="text-[#4edea3] text-xs sm:text-sm font-medium mt-0.5">
+                  otomatis tercatat sebagai konversi di Meta Ads Manager Anda?
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ───── FEATURES / SOLUTION ───── */}
+        <section id="fitur" className="relative py-16 sm:py-20 md:py-28 px-4 sm:px-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12 sm:mb-16">
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-widest uppercase text-[#4cd7f6] mb-3 sm:mb-4">
+                <Zap className="w-4 h-4" />
+                Solusi & Manfaat
+              </span>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-4 sm:mb-5">
+                Iklan Bukan Cuma Bawa Chat,{" "}
+                <span className="bg-gradient-to-r from-[#4cd7f6] to-[#4edea3] bg-clip-text text-transparent">
+                  Tapi Bawa Pembeli
+                </span>
+              </h2>
+              <p className="text-[#869397] max-w-2xl mx-auto text-xs sm:text-base leading-relaxed">
+                Meta jadi tahu chat mana yang closing, sehingga iklan dioptimasi ke calon pembeli, bukan sekadar yang chat.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+              {/* Feature 1 */}
+              <div className="group p-5 sm:p-6 rounded-2xl border border-[#1e2847] bg-[#0d1632]/40 hover:border-[#4cd7f6]/30 hover:bg-[#0d1632]/60 transition-all">
+                <div className="w-10 h-10 rounded-xl bg-[#4cd7f6]/10 border border-[#4cd7f6]/20 flex items-center justify-center text-[#4cd7f6] mb-4 group-hover:shadow-[0_0_16px_rgba(76,215,246,0.2)] transition-shadow">
+                  <Server className="w-5 h-5" />
+                </div>
+                <h3 className="text-white font-semibold text-base mb-2">
+                  Server-Side Tracking 100% Akurat
+                </h3>
+                <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
+                  Event dikirim langsung dari server ke Meta tanpa lewat browser. Bebas hambatan ad blocker atau batasan iOS, memastikan semua data konversi tersampaikan tanpa hilang.
+                </p>
+              </div>
+
+              {/* Feature 2 */}
+              <div className="group p-5 sm:p-6 rounded-2xl border border-[#1e2847] bg-[#0d1632]/40 hover:border-[#4edea3]/30 hover:bg-[#0d1632]/60 transition-all">
+                <div className="w-10 h-10 rounded-xl bg-[#4edea3]/10 border border-[#4edea3]/20 flex items-center justify-center text-[#4edea3] mb-4 group-hover:shadow-[0_0_16px_rgba(78,222,163,0.2)] transition-shadow">
+                  <MessageSquare className="w-5 h-5" />
+                </div>
+                <h3 className="text-white font-semibold text-base mb-2">
+                  Otomatis Hubungkan Chat ke Iklan
+                </h3>
+                <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
+                  Setiap kali calon pelanggan klik iklan CTWA dan memulai WhatsApp, sistem otomatis menangkap ID klik (ctwa_clid) tanpa perlu Anda pusing setup manual.
+                </p>
+              </div>
+
+              {/* Feature 3 */}
+              <div className="group p-5 sm:p-6 rounded-2xl border border-[#1e2847] bg-[#0d1632]/40 hover:border-[#b4c5ff]/30 hover:bg-[#0d1632]/60 transition-all">
+                <div className="w-10 h-10 rounded-xl bg-[#b4c5ff]/10 border border-[#b4c5ff]/20 flex items-center justify-center text-[#b4c5ff] mb-4 group-hover:shadow-[0_0_16px_rgba(180,197,255,0.2)] transition-shadow">
+                  <Layers className="w-5 h-5" />
+                </div>
+                <h3 className="text-white font-semibold text-base mb-2">
+                  Lacak Funnel Lengkap hingga Closing
+                </h3>
+                <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
+                  Kirim status konversi dari Chat Masuk (Lead), Tanya Harga / Keranjang (AddToCart), Checkout, hingga Closing (Purchase) agar Meta paham funnel penjualan Anda.
+                </p>
+              </div>
+
+              {/* Feature 4 */}
+              <div className="group p-5 sm:p-6 rounded-2xl border border-[#1e2847] bg-[#0d1632]/40 hover:border-[#4cd7f6]/30 hover:bg-[#0d1632]/60 transition-all">
+                <div className="w-10 h-10 rounded-xl bg-[#4cd7f6]/10 border border-[#4cd7f6]/20 flex items-center justify-center text-[#4cd7f6] mb-4 group-hover:shadow-[0_0_16px_rgba(76,215,246,0.2)] transition-shadow">
+                  <Target className="w-5 h-5" />
+                </div>
+                <h3 className="text-white font-semibold text-base mb-2">
+                  Optimasi ke Calon Pembeli Riil
+                </h3>
+                <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
+                  <strong className="text-[#bcc9cd]">Meta jadi tahu chat mana yang closing, sehingga iklan dioptimasi ke calon pembeli, bukan sekadar yang chat.</strong> Bebas dari audiens yang cuma PHP atau buang budget iklan.
+                </p>
+              </div>
+
+              {/* Feature 5 */}
+              <div className="group p-5 sm:p-6 rounded-2xl border border-[#1e2847] bg-[#0d1632]/40 hover:border-[#4edea3]/30 hover:bg-[#0d1632]/60 transition-all">
+                <div className="w-10 h-10 rounded-xl bg-[#4edea3]/10 border border-[#4edea3]/20 flex items-center justify-center text-[#4edea3] mb-4 group-hover:shadow-[0_0_16px_rgba(78,222,163,0.2)] transition-shadow">
+                  <BarChart3 className="w-5 h-5" />
+                </div>
+                <h3 className="text-white font-semibold text-base mb-2">
+                  Tahu Pasti Iklan Mana yang Closing
+                </h3>
+                <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
+                  Ketahui dengan akurat campaign, adset, dan materi iklan mana yang menghasilkan penjualan nyata. Matikan iklan yang boncos, perbesar budget pada iklan yang terbukti closing.
+                </p>
+              </div>
+
+              {/* Feature 6 */}
+              <div className="group p-5 sm:p-6 rounded-2xl border border-[#1e2847] bg-[#0d1632]/40 hover:border-[#b4c5ff]/30 hover:bg-[#0d1632]/60 transition-all">
+                <div className="w-10 h-10 rounded-xl bg-[#b4c5ff]/10 border border-[#b4c5ff]/20 flex items-center justify-center text-[#b4c5ff] mb-4 group-hover:shadow-[0_0_16px_rgba(180,197,255,0.2)] transition-shadow">
+                  <TrendingUp className="w-5 h-5" />
+                </div>
+                <h3 className="text-white font-semibold text-base mb-2">
+                  Hemat Budget & ROAS Lebih Tinggi
+                </h3>
+                <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
+                  Algoritma Meta otomatis mempelajari data pelanggan yang benar-benar melakukan transaksi closing, lalu mencari audiens berkualitas serupa agar biaya akuisisi semakin murah.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ───── HOW IT WORKS ───── */}
+        <section id="cara-kerja" className="relative py-16 sm:py-20 md:py-28 px-4 sm:px-6">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12 sm:mb-16">
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-widest uppercase text-[#4edea3] mb-3 sm:mb-4">
+                <Radio className="w-4 h-4" />
+                Cara Kerja
+              </span>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-4 sm:mb-5">
+                Setup 10 Menit.{" "}
+                <span className="bg-gradient-to-r from-[#4edea3] to-[#4cd7f6] bg-clip-text text-transparent">
+                  Konversi Langsung Tercatat.
+                </span>
+              </h2>
+            </div>
+
+            <div className="relative">
+              {/* Vertical line (desktop only) */}
+              <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-[#4cd7f6]/40 via-[#4edea3]/40 to-[#b4c5ff]/40 hidden md:block" />
+
+              {/* Step 1 */}
+              <div className="relative flex flex-col md:flex-row items-start md:items-center gap-4 sm:gap-6 mb-8 sm:mb-12">
+                <div className="w-full md:w-1/2 md:text-right md:pr-12 p-5 rounded-xl border border-[#1e2847]/60 bg-[#0d1632]/40 md:border-0 md:bg-transparent md:p-0">
+                  <div className="inline-flex items-center gap-2 text-xs text-[#4cd7f6] font-semibold mb-2">
+                    <span className="w-7 h-7 rounded-full bg-[#4cd7f6]/10 border border-[#4cd7f6]/30 flex items-center justify-center font-mono text-sm">
+                      1
+                    </span>
+                    STEP
+                  </div>
+                  <h3 className="text-white font-semibold text-base sm:text-lg mb-2">
+                    Hubungkan WhatsApp Business
+                  </h3>
+                  <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
+                    Login ke Trackcapi → klik &quot;Connect WhatsApp&quot; → otorisasi via OAuth. Selesai
+                    dalam 2 menit, zero coding.
+                  </p>
+                </div>
+                <div className="hidden md:flex w-4 h-4 rounded-full bg-[#4cd7f6] border-4 border-[#0a122a] absolute left-1/2 -translate-x-1/2 shadow-[0_0_12px_rgba(76,215,246,0.4)]" />
+                <div className="hidden md:block md:w-1/2 md:pl-12" />
+              </div>
+
+              {/* Step 2 */}
+              <div className="relative flex flex-col md:flex-row items-start md:items-center gap-4 sm:gap-6 mb-8 sm:mb-12">
+                <div className="hidden md:block md:w-1/2 md:pr-12" />
+                <div className="hidden md:flex w-4 h-4 rounded-full bg-[#4edea3] border-4 border-[#0a122a] absolute left-1/2 -translate-x-1/2 shadow-[0_0_12px_rgba(78,222,163,0.4)]" />
+                <div className="w-full md:w-1/2 md:pl-12 p-5 rounded-xl border border-[#1e2847]/60 bg-[#0d1632]/40 md:border-0 md:bg-transparent md:p-0">
+                  <div className="inline-flex items-center gap-2 text-xs text-[#4edea3] font-semibold mb-2">
+                    <span className="w-7 h-7 rounded-full bg-[#4edea3]/10 border border-[#4edea3]/30 flex items-center justify-center font-mono text-sm">
+                      2
+                    </span>
+                    STEP
+                  </div>
+                  <h3 className="text-white font-semibold text-base sm:text-lg mb-2">
+                    Webhook Otomatis Aktif
+                  </h3>
+                  <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
+                    Setiap pesan masuk dari iklan CTWA, webhook menangkap{" "}
+                    <code className="text-[#4edea3] bg-[#4edea3]/10 px-1 py-0.5 rounded text-xs">
+                      ctwa_clid
+                    </code>
+                    , nomor telepon, dan metadata percakapan secara otomatis.
+                  </p>
+                </div>
+              </div>
+
+              {/* Step 3 */}
+              <div className="relative flex flex-col md:flex-row items-start md:items-center gap-4 sm:gap-6 mb-8 sm:mb-12">
+                <div className="w-full md:w-1/2 md:text-right md:pr-12 p-5 rounded-xl border border-[#1e2847]/60 bg-[#0d1632]/40 md:border-0 md:bg-transparent md:p-0">
+                  <div className="inline-flex items-center gap-2 text-xs text-[#b4c5ff] font-semibold mb-2">
+                    <span className="w-7 h-7 rounded-full bg-[#b4c5ff]/10 border border-[#b4c5ff]/30 flex items-center justify-center font-mono text-sm">
+                      3
+                    </span>
+                    STEP
+                  </div>
+                  <h3 className="text-white font-semibold text-base sm:text-lg mb-2">
+                    Event Terkirim ke Meta CAPI
+                  </h3>
+                  <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
+                    Trackcapi langsung mengirim event konversi (Lead, Purchase, dll) ke Meta
+                    Conversions API dengan data ter-enriched. Deduplikasi otomatis mencegah double
+                    counting.
+                  </p>
+                </div>
+                <div className="hidden md:flex w-4 h-4 rounded-full bg-[#b4c5ff] border-4 border-[#0a122a] absolute left-1/2 -translate-x-1/2 shadow-[0_0_12px_rgba(180,197,255,0.4)]" />
+                <div className="hidden md:block md:w-1/2 md:pl-12" />
+              </div>
+
+              {/* Step 4 */}
+              <div className="relative flex flex-col md:flex-row items-start md:items-center gap-4 sm:gap-6">
+                <div className="hidden md:block md:w-1/2 md:pr-12" />
+                <div className="hidden md:flex w-4 h-4 rounded-full bg-[#4cd7f6] border-4 border-[#0a122a] absolute left-1/2 -translate-x-1/2 shadow-[0_0_12px_rgba(76,215,246,0.4)]" />
+                <div className="w-full md:w-1/2 md:pl-12 p-5 rounded-xl border border-[#1e2847]/60 bg-[#0d1632]/40 md:border-0 md:bg-transparent md:p-0">
+                  <div className="inline-flex items-center gap-2 text-xs text-[#4cd7f6] font-semibold mb-2">
+                    <span className="w-7 h-7 rounded-full bg-[#4cd7f6]/10 border border-[#4cd7f6]/30 flex items-center justify-center font-mono text-sm">
+                      4
+                    </span>
+                    STEP
+                  </div>
+                  <h3 className="text-white font-semibold text-base sm:text-lg mb-2">
+                    Konversi Muncul di Ads Manager 🎯
+                  </h3>
+                  <p className="text-[#869397] text-xs sm:text-sm leading-relaxed">
+                    Sekarang Meta tahu iklan mana yang hasilkan konversi. Algoritma mengoptimasi ke
+                    audience terbaik. CPA turun, ROAS naik —{" "}
+                    <strong className="text-[#bcc9cd]">scaling jadi berdasarkan data</strong>.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ───── BEFORE / AFTER COMPARISON ───── */}
+        <section className="relative py-16 sm:py-20 md:py-28 px-4 sm:px-6 bg-[#060e22]">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-10 sm:mb-14">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3 sm:mb-5">
+                Sebelum vs Sesudah{" "}
+                <span className="text-[#4cd7f6]">Trackcapi</span>
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+              {/* Before */}
+              <div className="p-5 sm:p-6 rounded-2xl border border-[#ffb4ab]/20 bg-[#0d1632]/40 space-y-4">
+                <div className="flex items-center gap-2 text-[#ffb4ab] font-semibold text-xs sm:text-sm uppercase tracking-wider">
+                  <EyeOff className="w-4 h-4" />
+                  Tanpa Trackcapi
+                </div>
+                <ul className="space-y-2.5 sm:space-y-3">
+                  {[
+                    "0 konversi tercatat di Meta Ads Manager",
+                    "CPA tinggi, ROAS rendah — tidak bisa scale",
+                    "40–60% data hilang karena iOS & ad blocker",
+                    "Algoritma Meta tidak belajar — budget habis sia-sia",
+                    "Tidak tahu iklan mana yang hasilkan closing",
+                    "Reporting manual pakai spreadsheet",
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-[#869397]">
+                      <span className="w-5 h-5 rounded-full bg-[#ffb4ab]/10 flex items-center justify-center shrink-0 mt-0.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#ffb4ab]" />
+                      </span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* After */}
+              <div className="p-5 sm:p-6 rounded-2xl border border-[#4edea3]/20 bg-[#0d1632]/40 space-y-4">
+                <div className="flex items-center gap-2 text-[#4edea3] font-semibold text-xs sm:text-sm uppercase tracking-wider">
+                  <CheckCircle2 className="w-4 h-4" />
+                  Dengan Trackcapi
+                </div>
+                <ul className="space-y-2.5 sm:space-y-3">
+                  {[
+                    "Setiap chat CTWA = 1 konversi ter-record di Meta",
+                    "CPA turun 30–50% berkat optimasi algoritma",
+                    "100% data sampai — server-side, bypass semua blocker",
+                    "Meta belajar dari data real → audience makin akurat",
+                    "Dashboard real-time: tahu persis ROI per iklan per jam",
+                    "Semua otomatis — zero manual work",
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-[#dbe1ff]">
+                      <span className="w-5 h-5 rounded-full bg-[#4edea3]/10 flex items-center justify-center shrink-0 mt-0.5">
+                        <CheckCircle2 className="w-3 h-3 text-[#4edea3]" />
+                      </span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ───── LIVE DEMO / SOCIAL PROOF TICKER ───── */}
+        <section className="relative py-12 sm:py-16 px-4 sm:px-6 border-y border-[#1e2847]/60 overflow-hidden">
+          <div className="max-w-6xl mx-auto relative">
+            <div className="flex items-center justify-center gap-3 text-xs sm:text-sm text-[#869397] mb-6 sm:mb-8 text-center">
+              <LivePulse />
+              <span>
+                Event tracking aktif — data dikirim ke Meta sekarang
+              </span>
+            </div>
+
+            {/* Scrolling ticker with edge fade masks */}
+            <div className="relative overflow-hidden">
+              <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-20 bg-gradient-to-r from-[#0a122a] to-transparent z-10" />
+              <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-20 bg-gradient-to-l from-[#0a122a] to-transparent z-10" />
+              <div className="flex gap-3 sm:gap-4 animate-ticker">
+                {[
+                  { event: "Lead", phone: "+62 812-****-4821", status: "200 OK", time: "2s ago", color: "#4edea3" },
+                  { event: "Purchase", phone: "+62 857-****-9012", status: "200 OK", time: "5s ago", color: "#4cd7f6" },
+                  { event: "LeadSubmitted", phone: "+62 896-****-1080", status: "200 OK", time: "8s ago", color: "#4edea3" },
+                  { event: "AddToCart", phone: "+62 813-****-5567", status: "200 OK", time: "12s ago", color: "#b4c5ff" },
+                  { event: "Purchase", phone: "+62 878-****-3344", status: "200 OK", time: "15s ago", color: "#4cd7f6" },
+                  { event: "Lead", phone: "+62 821-****-7788", status: "200 OK", time: "18s ago", color: "#4edea3" },
+                  { event: "LeadSubmitted", phone: "+62 858-****-2200", status: "200 OK", time: "22s ago", color: "#4edea3" },
+                  { event: "Purchase", phone: "+62 811-****-6655", status: "200 OK", time: "25s ago", color: "#4cd7f6" },
+                ].map((item, i) => (
+                  <div
+                    key={i}
+                    className="shrink-0 flex items-center gap-2.5 sm:gap-3 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg border border-[#1e2847] bg-[#0d1632]/60 font-mono text-[11px] sm:text-xs"
+                  >
+                    <span
+                      className="w-2 h-2 rounded-full shrink-0"
+                      style={{ backgroundColor: item.color }}
+                    />
+                    <span className="text-[#dbe1ff] font-medium">{item.event}</span>
+                    <span className="text-[#869397]">{item.phone}</span>
+                    <span className="text-[#4edea3]">{item.status}</span>
+                    <span className="text-[#94a3b8]">{item.time}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ───── PRICING SECTION ───── */}
+        <section id="harga" className="relative py-16 sm:py-20 md:py-28 px-4 sm:px-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12 sm:mb-16">
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-widest uppercase text-[#4cd7f6] mb-3 sm:mb-4">
+                <CreditCard className="w-4 h-4" />
+                Struktur Harga & Paket
+              </span>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-4 sm:mb-5">
+                Investasi Terjangkau,{" "}
+                <span className="bg-gradient-to-r from-[#4cd7f6] via-[#4edea3] to-[#4cd7f6] bg-clip-text text-transparent">
+                  Hasil Maksimal
+                </span>
+              </h2>
+              <p className="text-[#869397] max-w-2xl mx-auto text-xs sm:text-base leading-relaxed">
+                Tanpa biaya tersembunyi, tanpa komisi per konversi. Pilih paket yang sesuai kebutuhan
+                skala iklan CTWA Anda dan mulai lacak setiap konversi secara akurat.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-6 max-w-6xl mx-auto items-stretch">
+              {/* 1 BULAN PLAN */}
+              <div className="relative rounded-2xl border border-[#1e2847] bg-[#0d1632]/70 backdrop-blur-md p-6 sm:p-7 flex flex-col justify-between hover:border-[#4cd7f6]/40 transition-all group">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#869397] px-2.5 sm:px-3 py-1 rounded-full bg-[#1e2847]/60 border border-[#1e2847]">
+                      Pilihan Uji Coba
+                    </span>
+                    <span className="text-[11px] sm:text-xs font-semibold text-[#4cd7f6] px-2.5 py-0.5 rounded-full bg-[#4cd7f6]/10 border border-[#4cd7f6]/20">
+                      Durasi 1 Bulan
+                    </span>
+                  </div>
+
+                  <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">Paket 1 Bulan</h3>
+                  <p className="text-xs sm:text-sm text-[#869397] mb-6 leading-relaxed">
+                    Akses penuh ke seluruh fitur Trackcapi selama 1 bulan untuk mencoba dan optimasi iklan CTWA Anda.
+                  </p>
+
+                  <div className="mb-6 pb-6 border-b border-[#1e2847]">
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-xs sm:text-sm text-[#869397]">Rp</span>
+                      <span className="text-3xl sm:text-4xl md:text-5xl font-black text-white font-mono tracking-tight">
+                        29.000
+                      </span>
+                      <span className="text-xs text-[#869397]">/ bulan</span>
+                    </div>
+                    <p className="text-xs text-[#4edea3] mt-2 flex items-center gap-1.5 font-medium flex-wrap">
+                      <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                      <span>Rp 29.000 / bulan (Tanpa komitmen)</span>
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 sm:p-4 rounded-xl bg-[#090f23]/60 border border-[#1e2847] mb-6 sm:mb-8 space-y-2 text-xs text-[#bcc9cd]">
+                    <p className="font-semibold text-white flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-[#4cd7f6] shrink-0" />
+                      Termasuk Semua Fitur Tanpa Batas:
+                    </p>
+                    <p className="text-[#869397] leading-relaxed text-xs">
+                      Mendapatkan akses lengkap 100% ke seluruh sistem tracking CAPI, telemetry, dan update selama masa aktif 1 bulan.
+                    </p>
+                  </div>
+                </div>
+
+                <div>
+                  <Link
+                    href="/checkout?plan=1-bulan"
+                    className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 sm:py-4 rounded-xl border border-[#4cd7f6]/50 bg-[#4cd7f6]/10 text-[#4cd7f6] font-semibold text-sm sm:text-base hover:bg-[#4cd7f6] hover:text-[#050d25] transition-all duration-200 group-hover:shadow-[0_0_25px_rgba(76,215,246,0.3)]"
+                  >
+                    <span>Beli Paket 1 Bulan</span>
+                    <ArrowRight className="w-4 h-4 shrink-0" />
+                  </Link>
+                  <p className="text-[11px] text-center text-[#94a3b8] mt-3 flex items-center justify-center gap-1.5">
+                    <Lock className="w-3 h-3 shrink-0" />
+                    Pembayaran instan otomatis
+                  </p>
+                  <p className="text-[11px] text-center text-[#4edea3] mt-1.5 flex items-center justify-center gap-1.5 font-medium">
+                    <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
+                    Garansi Uang Kembali 7 Hari
+                  </p>
+                </div>
+              </div>
+
+              {/* 6 BULAN PLAN */}
+              <div className="relative rounded-2xl border border-[#1e2847] bg-[#0d1632]/70 backdrop-blur-md p-6 sm:p-7 flex flex-col justify-between hover:border-[#4cd7f6]/40 transition-all group">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#869397] px-2.5 sm:px-3 py-1 rounded-full bg-[#1e2847]/60 border border-[#1e2847]">
+                      Pilihan Fleksibel
+                    </span>
+                    <span className="text-[11px] sm:text-xs font-semibold text-[#4cd7f6] px-2.5 py-0.5 rounded-full bg-[#4cd7f6]/10 border border-[#4cd7f6]/20">
+                      Durasi 6 Bulan
+                    </span>
+                  </div>
+
+                  <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">Paket 6 Bulan</h3>
+                  <p className="text-xs sm:text-sm text-[#869397] mb-6 leading-relaxed">
+                    Akses penuh ke seluruh fitur Trackcapi selama 6 bulan untuk optimasi iklan CTWA Anda.
+                  </p>
+
+                  <div className="mb-6 pb-6 border-b border-[#1e2847]">
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-xs sm:text-sm text-[#869397]">Rp</span>
+                      <span className="text-3xl sm:text-4xl md:text-5xl font-black text-white font-mono tracking-tight">
+                        149.000
+                      </span>
+                      <span className="text-xs text-[#869397]">/ 6 bulan</span>
+                    </div>
+                    <p className="text-xs text-[#4edea3] mt-2 flex items-center gap-1.5 font-medium flex-wrap">
+                      <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                      <span>Setara Rp 24.833 / bulan</span>
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 sm:p-4 rounded-xl bg-[#090f23]/60 border border-[#1e2847] mb-6 sm:mb-8 space-y-2 text-xs text-[#bcc9cd]">
+                    <p className="font-semibold text-white flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-[#4cd7f6] shrink-0" />
+                      Termasuk Semua Fitur Tanpa Batas:
+                    </p>
+                    <p className="text-[#869397] leading-relaxed text-xs">
+                      Mendapatkan akses lengkap 100% ke seluruh sistem tracking CAPI, telemetry, dan update selama masa aktif 6 bulan.
+                    </p>
+                  </div>
+                </div>
+
+                <div>
+                  <Link
+                    href="/checkout?plan=6-bulan"
+                    className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 sm:py-4 rounded-xl border border-[#4cd7f6]/50 bg-[#4cd7f6]/10 text-[#4cd7f6] font-semibold text-sm sm:text-base hover:bg-[#4cd7f6] hover:text-[#050d25] transition-all duration-200 group-hover:shadow-[0_0_25px_rgba(76,215,246,0.3)]"
+                  >
+                    <span>Beli Paket 6 Bulan</span>
+                    <ArrowRight className="w-4 h-4 shrink-0" />
+                  </Link>
+                  <p className="text-[11px] text-center text-[#94a3b8] mt-3 flex items-center justify-center gap-1.5">
+                    <Lock className="w-3 h-3 shrink-0" />
+                    Pembayaran instan otomatis
+                  </p>
+                  <p className="text-[11px] text-center text-[#4edea3] mt-1.5 flex items-center justify-center gap-1.5 font-medium">
+                    <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
+                    Garansi Uang Kembali 7 Hari
+                  </p>
+                </div>
+              </div>
+
+              {/* 1 TAHUN PLAN (RECOMMENDED) */}
+              <div className="relative rounded-2xl border-2 border-[#4cd7f6] bg-gradient-to-b from-[#0f1c42] to-[#0a142f] p-6 sm:p-7 flex flex-col justify-between shadow-[0_0_40px_rgba(76,215,246,0.18)] hover:shadow-[0_0_60px_rgba(76,215,246,0.3)] transition-all">
+                {/* Highlight Badge */}
+                <div className="absolute -top-3.5 sm:-top-4 left-1/2 -translate-x-1/2 px-3 sm:px-4 py-1 rounded-full bg-gradient-to-r from-[#4cd7f6] via-[#4edea3] to-[#4cd7f6] text-[#050d25] text-[10px] sm:text-xs font-bold uppercase tracking-wider shadow-lg whitespace-nowrap">
+                  🔥 Rekomendasi • Paling Hemat
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-4 mt-1">
+                    <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#4cd7f6] px-2.5 sm:px-3 py-1 rounded-full bg-[#4cd7f6]/10 border border-[#4cd7f6]/30">
+                      Durasi 1 Tahun
+                    </span>
+                    <span className="text-[11px] sm:text-xs font-semibold text-[#4edea3] bg-[#4edea3]/10 px-2.5 py-0.5 rounded-full border border-[#4edea3]/20">
+                      Hemat Rp 49.000
+                    </span>
+                  </div>
+
+                  <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">Paket 1 Tahun</h3>
+                  <p className="text-xs sm:text-sm text-[#bcc9cd] mb-6 leading-relaxed">
+                    Akses penuh ke seluruh fitur Trackcapi selama 12 bulan penuh dengan harga paling hemat.
+                  </p>
+
+                  <div className="mb-6 pb-6 border-b border-[#1e2847]">
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-xs sm:text-sm text-[#869397]">Rp</span>
+                      <span className="text-3xl sm:text-4xl md:text-5xl font-black text-white font-mono tracking-tight">
+                        249.000
+                      </span>
+                      <span className="text-xs text-[#869397]">/ 1 tahun</span>
+                    </div>
+                    <p className="text-xs text-[#4edea3] mt-2 flex items-center gap-1.5 font-medium flex-wrap">
+                      <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                      <span>Setara hanya Rp 20.750 / bulan</span>
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 sm:p-4 rounded-xl bg-[#090f23]/60 border border-[#4edea3]/30 mb-6 sm:mb-8 space-y-2 text-xs text-[#bcc9cd]">
+                    <p className="font-semibold text-white flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-[#4edea3] shrink-0" />
+                      Termasuk Semua Fitur Tanpa Batas:
+                    </p>
+                    <p className="text-[#869397] leading-relaxed text-xs">
+                      Mendapatkan akses lengkap 100% ke seluruh sistem tracking CAPI, telemetry, dan update selama masa aktif 12 bulan penuh.
+                    </p>
+                  </div>
+                </div>
+
+                <div>
+                  <Link
+                    href="/checkout?plan=1-tahun"
+                    className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 sm:py-4 rounded-xl bg-gradient-to-r from-[#4cd7f6] via-[#06b6d4] to-[#4edea3] text-[#050d25] font-bold text-sm sm:text-base hover:shadow-[0_0_35px_rgba(76,215,246,0.5)] hover:scale-[1.02] active:scale-[0.98] transition-all"
+                  >
+                    <Zap className="w-4 h-4 shrink-0" />
+                    <span>Beli Paket 1 Tahun</span>
+                    <ArrowRight className="w-4 h-4 shrink-0" />
+                  </Link>
+                  <p className="text-[11px] text-center text-[#4edea3] mt-3 flex items-center justify-center gap-1.5 font-medium">
+                    <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
+                    Aktivasi instan • Garansi Uang Kembali 7 Hari
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* 7-DAY MONEY BACK GUARANTEE BANNER */}
+            <div className="mt-8 sm:mt-10 max-w-3xl mx-auto p-4 sm:p-6 rounded-2xl border border-[#4edea3]/30 bg-gradient-to-r from-[#0d1632]/90 via-[#0a1a36]/90 to-[#0d1632]/90 backdrop-blur-md shadow-[0_0_35px_rgba(78,222,163,0.12)] flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[#4edea3]/10 border border-[#4edea3]/30 flex items-center justify-center text-[#4edea3] shrink-0 shadow-[0_0_20px_rgba(78,222,163,0.25)]">
+                <ShieldCheck className="w-7 h-7 sm:w-8 sm:h-8" />
+              </div>
+              <div className="space-y-1 flex-1">
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                  <h3 className="text-white font-bold text-base sm:text-lg">
+                    Garansi Uang Kembali 7 Hari
+                  </h3>
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#4edea3]/15 text-[#4edea3] border border-[#4edea3]/30">
+                    100% Risk-Free
+                  </span>
+                </div>
+                <p className="text-xs sm:text-sm text-[#869397] leading-relaxed">
+                  Coba Trackcapi selama 7 hari penuh. Jika sistem tracking kami tidak berhasil mengirimkan event konversi WhatsApp ke Meta Ads Manager Anda atau Anda tidak puas dengan performanya, kami akan kembalikan uang Anda 100% tanpa potongan.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ───── FAQ SECTION ───── */}
+        <section id="faq" className="relative py-16 sm:py-20 md:py-28 px-4 sm:px-6">
+          <div className="max-w-3xl mx-auto">
+            <div className="text-center mb-10 sm:mb-14">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3 sm:mb-4">
+                Pertanyaan yang Sering Ditanyakan
+              </h2>
+              <p className="text-[#869397] text-xs sm:text-sm">
+                Jawaban untuk pertanyaan umum seputar Trackcapi dan CTWA tracking.
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <FaqItem
+                q="Apakah saya perlu coding atau technical skill?"
+                a="Tidak sama sekali. Trackcapi didesain untuk advertiser, bukan developer. Setup dilakukan via dashboard visual — hubungkan WhatsApp, konfigurasi event, dan tracking langsung aktif. Zero coding."
+              />
+              <FaqItem
+                q="Bagaimana Trackcapi menangkap konversi dari chat WhatsApp?"
+                a="Ketika user klik iklan CTWA Anda dan memulai chat, Meta menyertakan 'ctwa_clid' (Click ID). Trackcapi menangkap ID ini via webhook, lalu mengirim event konversi ke Meta Conversions API secara server-side — sehingga Meta tahu persis konversi mana yang berasal dari iklan mana."
+              />
+              <FaqItem
+                q="Apakah ini aman? Data pelanggan saya tidak bocor?"
+                a="100% aman. Data dikirim terenkripsi SHA-256 ke Meta sesuai standar Conversions API. Kami tidak menyimpan data sensitif pelanggan — hanya hash yang diperlukan untuk matching. Semua sesuai kebijakan privasi Meta."
+              />
+              <FaqItem
+                q="Apa bedanya dengan Meta Pixel biasa?"
+                a="Meta Pixel bekerja di browser, rentan terhadap ad blocker, cookie restriction, dan iOS privacy update — kehilangan 40-60% data. Trackcapi mengirim data dari server ke server (server-side), sehingga 100% data sampai ke Meta tanpa loss."
+              />
+              <FaqItem
+                q="Berapa banyak event yang bisa saya kirim per lead?"
+                a="Hingga 5 event per lead: misalnya LeadSubmitted (chat masuk), AddToCart, InitiateCheckout, Purchase (closing). Semakin banyak data funnel, semakin cerdas algoritma Meta mengoptimasi iklan Anda."
+              />
+
+            </div>
+          </div>
+        </section>
+
+        {/* ───── FINAL CTA ───── */}
+        <section className="relative py-16 sm:py-24 md:py-32 px-4 sm:px-6 overflow-hidden">
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(ellipse at center bottom, rgba(76,215,246,0.06) 0%, rgba(78,222,163,0.03) 30%, transparent 65%)",
+            }}
+          />
+
+          <div className="max-w-3xl mx-auto text-center relative z-10">
+            <div className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full border border-[#4edea3]/30 bg-[#4edea3]/5 text-xs text-[#4edea3] font-medium mb-6 sm:mb-8">
+              <Sparkles className="w-3.5 h-3.5 shrink-0" />
+              Setup Cuma 10 Menit
+            </div>
+
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-5 sm:mb-6 leading-tight break-words">
+              Stop Bakar Budget Iklan{" "}
+              <span className="bg-gradient-to-r from-[#ffb4ab] to-[#ff8a80] bg-clip-text text-transparent">
+                Tanpa Data
+              </span>
+              .<br />
+              <span className="bg-gradient-to-r from-[#4cd7f6] to-[#4edea3] bg-clip-text text-transparent">
+                Mulai Track Setiap Konversi
+              </span>{" "}
+              Sekarang.
             </h2>
-            <p className="text-[#869397] text-xs sm:text-sm">
-              Jawaban untuk pertanyaan umum seputar Trackcapi dan CTWA tracking.
+
+            <p className="text-[#869397] text-sm sm:text-base md:text-lg mb-8 sm:mb-10 max-w-xl mx-auto leading-relaxed">
+              Join 200+ advertiser CTWA yang sudah melihat data konversi mereka muncul kembali di
+              Meta Ads Manager.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a
+                href="#harga"
+                className="w-full sm:w-auto group inline-flex items-center justify-center gap-2.5 px-8 sm:px-10 py-3.5 sm:py-4 rounded-xl bg-gradient-to-r from-[#4cd7f6] to-[#06b6d4] text-[#050d25] font-semibold text-sm sm:text-base shadow-[0_0_36px_rgba(76,215,246,0.3)] hover:shadow-[0_0_50px_rgba(76,215,246,0.45)] transition-all hover:scale-[1.02] active:scale-[0.98]"
+              >
+                <Zap className="w-5 h-5 shrink-0" />
+                <span>Pilih Paket Sekarang</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform shrink-0" />
+              </a>
+            </div>
+
+            <p className="text-[11px] sm:text-xs text-[#94a3b8] mt-6">
+              Aktivasi Instan Otomatis • Pembayaran Resmi • Setup 10 Menit
             </p>
           </div>
-
-          <div className="space-y-3">
-            <FaqItem
-              q="Apakah saya perlu coding atau technical skill?"
-              a="Tidak sama sekali. Trackcapi didesain untuk advertiser, bukan developer. Setup dilakukan via dashboard visual — hubungkan WhatsApp, konfigurasi event, dan tracking langsung aktif. Zero coding."
-            />
-            <FaqItem
-              q="Bagaimana Trackcapi menangkap konversi dari chat WhatsApp?"
-              a="Ketika user klik iklan CTWA Anda dan memulai chat, Meta menyertakan 'ctwa_clid' (Click ID). Trackcapi menangkap ID ini via webhook, lalu mengirim event konversi ke Meta Conversions API secara server-side — sehingga Meta tahu persis konversi mana yang berasal dari iklan mana."
-            />
-            <FaqItem
-              q="Apakah ini aman? Data pelanggan saya tidak bocor?"
-              a="100% aman. Data dikirim terenkripsi SHA-256 ke Meta sesuai standar Conversions API. Kami tidak menyimpan data sensitif pelanggan — hanya hash yang diperlukan untuk matching. Semua sesuai kebijakan privasi Meta."
-            />
-            <FaqItem
-              q="Apa bedanya dengan Meta Pixel biasa?"
-              a="Meta Pixel bekerja di browser, rentan terhadap ad blocker, cookie restriction, dan iOS privacy update — kehilangan 40-60% data. Trackcapi mengirim data dari server ke server (server-side), sehingga 100% data sampai ke Meta tanpa loss."
-            />
-            <FaqItem
-              q="Berapa banyak event yang bisa saya kirim per lead?"
-              a="Hingga 5 event per lead: misalnya LeadSubmitted (chat masuk), AddToCart, InitiateCheckout, Purchase (closing). Semakin banyak data funnel, semakin cerdas algoritma Meta mengoptimasi iklan Anda."
-            />
-
-          </div>
-        </div>
-      </section>
-
-      {/* ───── FINAL CTA ───── */}
-      <section className="relative py-16 sm:py-24 md:py-32 px-4 sm:px-6 overflow-hidden">
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse at center bottom, rgba(76,215,246,0.06) 0%, rgba(78,222,163,0.03) 30%, transparent 65%)",
-          }}
-        />
-
-        <div className="max-w-3xl mx-auto text-center relative z-10">
-          <div className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full border border-[#4edea3]/30 bg-[#4edea3]/5 text-xs text-[#4edea3] font-medium mb-6 sm:mb-8">
-            <Sparkles className="w-3.5 h-3.5 shrink-0" />
-            Setup Cuma 10 Menit
-          </div>
-
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-5 sm:mb-6 leading-tight break-words">
-            Stop Bakar Budget Iklan{" "}
-            <span className="bg-gradient-to-r from-[#ffb4ab] to-[#ff8a80] bg-clip-text text-transparent">
-              Tanpa Data
-            </span>
-            .<br />
-            <span className="bg-gradient-to-r from-[#4cd7f6] to-[#4edea3] bg-clip-text text-transparent">
-              Mulai Track Setiap Konversi
-            </span>{" "}
-            Sekarang.
-          </h2>
-
-          <p className="text-[#869397] text-sm sm:text-base md:text-lg mb-8 sm:mb-10 max-w-xl mx-auto leading-relaxed">
-            Join 200+ advertiser CTWA yang sudah melihat data konversi mereka muncul kembali di
-            Meta Ads Manager.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              href="#harga"
-              className="w-full sm:w-auto group inline-flex items-center justify-center gap-2.5 px-8 sm:px-10 py-3.5 sm:py-4 rounded-xl bg-gradient-to-r from-[#4cd7f6] to-[#06b6d4] text-[#050d25] font-semibold text-sm sm:text-base shadow-[0_0_36px_rgba(76,215,246,0.3)] hover:shadow-[0_0_50px_rgba(76,215,246,0.45)] transition-all hover:scale-[1.02] active:scale-[0.98]"
-            >
-              <Zap className="w-5 h-5 shrink-0" />
-              <span>Pilih Paket Sekarang</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform shrink-0" />
-            </a>
-          </div>
-
-          <p className="text-[11px] sm:text-xs text-[#94a3b8] mt-6">
-            Aktivasi Instan Otomatis • Pembayaran Resmi • Setup 10 Menit
-          </p>
-        </div>
-      </section>
+        </section>
       </main>
 
       {/* ───── FOOTER ───── */}
