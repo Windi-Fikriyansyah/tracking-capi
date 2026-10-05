@@ -1,0 +1,7 @@
+WEBVTT - TrackCapi Demo Video
+
+00:00:00.000 --> 00:00:05.000
+Demonstrasi sistem tracking otomatis WhatsApp CTWA dengan Meta Conversions API.
+
+00:00:05.001 --> 00:00:10.000
+Ekstraksi ctwa_clid dan pengiriman event Lead secara real-time ke Meta Ads Manager.

@@ -31,34 +31,9 @@ import {
 /* ───────────────────────────────────────────────
    Animated counter hook
    ─────────────────────────────────────────────── */
-function useCountUp(end: number, duration = 2000, startOnView = true) {
-  const [value, setValue] = useState(0);
+function useCountUp(end: number) {
+  const [value] = useState(end);
   const ref = useRef<HTMLSpanElement>(null);
-  const started = useRef(false);
-
-  useEffect(() => {
-    if (!startOnView) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !started.current) {
-          started.current = true;
-          const startTime = performance.now();
-          const animate = (now: number) => {
-            const elapsed = now - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            const eased = 1 - Math.pow(1 - progress, 3);
-            setValue(Math.floor(eased * end));
-            if (progress < 1) requestAnimationFrame(animate);
-          };
-          requestAnimationFrame(animate);
-        }
-      },
-      { threshold: 0.3 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [end, duration, startOnView]);
-
   return { value, ref };
 }
 
@@ -115,6 +90,7 @@ function ParticleField() {
             left: `${p.l}%`,
             top: `${p.t}%`,
             background: PARTICLE_COLORS[p.c],
+            willChange: "transform",
             animation: `float-particle ${p.dur}s ease-in-out infinite`,
             animationDelay: `${p.del}s`,
           }}
@@ -170,9 +146,9 @@ function FaqItem({ q, a }: { q: string; a: string }) {
    MAIN LANDING PAGE COMPONENT
    ─────────────────────────────────────────────── */
 export default function LandingPage() {
-  const stat1 = useCountUp(99, 1800);
-  const stat2 = useCountUp(73, 2200);
-  const stat3 = useCountUp(40, 2000);
+  const stat1 = useCountUp(99);
+  const stat2 = useCountUp(73);
+  const stat3 = useCountUp(40);
 
   const [scrollY, setScrollY] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -186,6 +162,14 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-[#0a122a] text-[#dbe1ff] overflow-x-hidden">
+      {/* Skip to main content for accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-[#4cd7f6] focus:text-[#050d25] focus:font-semibold focus:rounded-lg"
+      >
+        Lewati ke konten utama
+      </a>
+
       {/* ───── STICKY NAV ───── */}
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrollY > 40 || mobileMenuOpen
@@ -311,9 +295,11 @@ export default function LandingPage() {
         )}
       </nav>
 
-      {/* ───── HERO SECTION ───── */}
-      <section className="relative pt-28 pb-16 sm:pt-32 sm:pb-20 md:pt-40 md:pb-28 px-4 sm:px-6 overflow-hidden">
-        <ParticleField />
+      {/* Main Landmark for Accessibility */}
+      <main id="main-content">
+        {/* ───── HERO SECTION ───── */}
+        <section className="relative pt-28 pb-16 sm:pt-32 sm:pb-20 md:pt-40 md:pb-28 px-4 sm:px-6 overflow-hidden">
+          <ParticleField />
         {/* Radial gradient glow */}
         <div
           className="absolute top-0 left-1/2 -translate-x-1/2 w-[90vw] max-w-[800px] h-[360px] sm:h-[600px] pointer-events-none"
@@ -332,7 +318,7 @@ export default function LandingPage() {
             </span>
           </div> */}
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.2] sm:leading-[1.15] tracking-tight mb-5 sm:mb-6 animate-fade-in-up [animation-delay:100ms] break-words">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.2] sm:leading-[1.15] tracking-tight mb-5 sm:mb-6 break-words">
             Chat WhatsApp dari Iklan Anda{" "}
             <span className="text-[#ffb4ab]">Tidak Terbaca di Meta?</span>
             <br className="hidden sm:block" />{" "}
@@ -345,13 +331,13 @@ export default function LandingPage() {
             sebagai Konversi.
           </h1>
 
-          <p className="text-base sm:text-lg md:text-xl text-[#869397] max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed animate-fade-in-up [animation-delay:200ms]">
+          <p className="text-base sm:text-lg md:text-xl text-[#869397] max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed">
             TrackCapi menangkap <strong className="text-[#dbe1ff]">ctwa_clid</strong> dan mengirim event{" "}
             <strong className="text-[#dbe1ff]">Lead sampai Purchase</strong> ke{" "}
             <strong className="text-[#dbe1ff]">Meta Conversions API</strong>, tanpa coding.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 mb-10 sm:mb-14 animate-fade-in-up [animation-delay:300ms]">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 mb-10 sm:mb-14">
             <Link
               href="/checkout?plan=1-tahun"
               className="group inline-flex items-center justify-center gap-2.5 px-6 sm:px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#4cd7f6] to-[#06b6d4] text-[#050d25] font-semibold text-sm sm:text-base shadow-[0_0_30px_rgba(76,215,246,0.25)] hover:shadow-[0_0_40px_rgba(76,215,246,0.4)] transition-all hover:scale-[1.02] active:scale-[0.98]"
@@ -377,7 +363,7 @@ export default function LandingPage() {
           </div>
 
           {/* Hero metric cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 max-w-3xl mx-auto animate-fade-in-up [animation-delay:450ms]">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 max-w-3xl mx-auto">
             <div className="p-4 sm:p-5 rounded-xl border border-[#1e2847] bg-[#0d1632]/60 backdrop-blur-sm hover:border-[#4cd7f6]/30 transition-all group text-center sm:text-left">
               <div className="text-2xl sm:text-3xl font-bold font-mono text-[#4cd7f6] mb-1">
                 <span ref={stat1.ref}>{stat1.value}</span>
@@ -462,9 +448,18 @@ export default function LandingPage() {
                 src="/asset/demo.mp4"
                 controls
                 playsInline
-                preload="metadata"
+                preload="none"
+                title="Demo Sistem TrackCapi WhatsApp CTWA"
+                aria-label="Demo Sistem TrackCapi WhatsApp CTWA"
                 className="w-full h-full object-contain"
               >
+                <track
+                  kind="captions"
+                  src="/asset/captions-id.vtt"
+                  srcLang="id"
+                  label="Bahasa Indonesia"
+                  default
+                />
                 Browser Anda tidak mendukung tag video. Silakan tonton langsung melalui file demo.
               </video>
             </div>
@@ -476,7 +471,7 @@ export default function LandingPage() {
                   <Zap className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="text-white font-semibold">Tangkapan Otomatis</h4>
+                  <h3 className="text-white font-semibold">Tangkapan Otomatis</h3>
                   <p className="text-[#869397] text-[11px] mt-0.5 leading-snug">Click ID (ctwa_clid) diekstrak tanpa jeda dari pesan pertama.</p>
                 </div>
               </div>
@@ -486,7 +481,7 @@ export default function LandingPage() {
                   <Layers className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="text-white font-semibold">Pipeline 5 Event</h4>
+                  <h3 className="text-white font-semibold">Pipeline 5 Event</h3>
                   <p className="text-[#869397] text-[11px] mt-0.5 leading-snug">Kirim status Lead, ViewContent hingga Closed Purchase.</p>
                 </div>
               </div>
@@ -496,7 +491,7 @@ export default function LandingPage() {
                   <Radio className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="text-white font-semibold">Live Delivery Feed</h4>
+                  <h3 className="text-white font-semibold">Live Delivery Feed</h3>
                   <p className="text-[#869397] text-[11px] mt-0.5 leading-snug">Pantau status event terkirim ke Meta secara real-time.</p>
                 </div>
               </div>
@@ -932,7 +927,7 @@ export default function LandingPage() {
                   <span className="text-[#dbe1ff] font-medium">{item.event}</span>
                   <span className="text-[#869397]">{item.phone}</span>
                   <span className="text-[#4edea3]">{item.status}</span>
-                  <span className="text-[#5a6480]">{item.time}</span>
+                  <span className="text-[#94a3b8]">{item.time}</span>
                 </div>
               ))}
             </div>
@@ -1011,7 +1006,7 @@ export default function LandingPage() {
                   <span>Beli Paket 6 Bulan</span>
                   <ArrowRight className="w-4 h-4 shrink-0" />
                 </Link>
-                <p className="text-[11px] text-center text-[#5a6480] mt-3 flex items-center justify-center gap-1.5">
+                <p className="text-[11px] text-center text-[#94a3b8] mt-3 flex items-center justify-center gap-1.5">
                   <Lock className="w-3 h-3 shrink-0" />
                   Pembayaran instan otomatis
                 </p>
@@ -1190,11 +1185,12 @@ export default function LandingPage() {
             </a>
           </div>
 
-          <p className="text-[11px] sm:text-xs text-[#5a6480] mt-6">
+          <p className="text-[11px] sm:text-xs text-[#94a3b8] mt-6">
             Aktivasi Instan Otomatis • Pembayaran Resmi • Setup 10 Menit
           </p>
         </div>
       </section>
+      </main>
 
       {/* ───── FOOTER ───── */}
       <footer className="border-t border-[#1e2847]/60 py-8 sm:py-12 px-4 sm:px-6">
@@ -1208,12 +1204,12 @@ export default function LandingPage() {
             </span>
           </div>
 
-          <div className="flex items-center gap-6 text-xs text-[#5a6480]">
+          <div className="flex items-center gap-6 text-xs text-[#94a3b8]">
             <span>© 2026 Trackcapi. All rights reserved.</span>
-            <a href="#" className="hover:text-[#869397] transition-colors">
+            <a href="#" className="hover:text-white transition-colors">
               Privacy
             </a>
-            <a href="#" className="hover:text-[#869397] transition-colors">
+            <a href="#" className="hover:text-white transition-colors">
               Terms
             </a>
           </div>
@@ -1269,7 +1265,7 @@ export default function LandingPage() {
         @keyframes fade-in-up {
           from {
             opacity: 0;
-            transform: translateY(24px);
+            transform: translateY(16px);
           }
           to {
             opacity: 1;
@@ -1278,8 +1274,7 @@ export default function LandingPage() {
         }
 
         .animate-fade-in-up {
-          animation: fade-in-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-          opacity: 0;
+          animation: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
 
         @keyframes ticker {

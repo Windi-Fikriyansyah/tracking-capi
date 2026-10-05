@@ -82,7 +82,18 @@ export default function MetaPixel({ pixelId }: MetaPixelProps) {
     <>
       <Script
         id="meta-pixel-base"
-        strategy="afterInteractive"
+        strategy="lazyOnload"
+        onLoad={() => {
+          if (window.fbq && !firedEvents.current.has(pathname)) {
+            if (pathname === "/") {
+              window.fbq("track", "PageView");
+              firedEvents.current.add(pathname);
+            } else if (pathname === "/checkout") {
+              window.fbq("track", "InitiateCheckout");
+              firedEvents.current.add(pathname);
+            }
+          }
+        }}
         dangerouslySetInnerHTML={{
           __html: `
             !function(f,b,e,v,n,t,s)
