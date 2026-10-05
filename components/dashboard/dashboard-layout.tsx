@@ -385,7 +385,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
             {/* Renewal Link Button */}
             <Link
-              href={isExpired ? "/checkout?plan=6-bulan" : `/checkout?plan=${subscription?.planId || "6-bulan"}`}
+              href={isExpired ? "/checkout?plan=1-bulan" : `/checkout?plan=${subscription?.planId || "1-bulan"}`}
               className={`mt-2.5 w-full py-1.5 px-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all text-center ${isExpired
                 ? "bg-error text-white hover:bg-error/90 shadow-[0_0_12px_rgba(239,68,68,0.4)]"
                 : "bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30"
@@ -504,51 +504,83 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 </div>
 
                 {/* Plan Renewal Selection Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left pt-2">
-                  {/* Option 1: 6 Bulan */}
-                  <div className="p-5 rounded-xl bg-surface-container-low border border-outline-variant/40 hover:border-primary/50 transition-all flex flex-col justify-between space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 text-left pt-2">
+                  {/* Option 1: 1 Bulan */}
+                  <div className="p-4 rounded-xl bg-surface-container-low border border-outline-variant/40 hover:border-primary/50 transition-all flex flex-col justify-between space-y-3">
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold uppercase tracking-wider text-primary font-code-metric">
+                          Paket 1 Bulan
+                        </span>
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/30 font-code-metric">
+                          Uji Coba
+                        </span>
+                      </div>
+                      <div className="text-xl font-bold text-on-surface">
+                        Rp 29.000
+                        <span className="text-xs font-normal text-on-surface-variant ml-1">/ Bulan</span>
+                      </div>
+                      <ul className="text-xs text-on-surface-variant space-y-1 pt-1 font-body-sm">
+                        <li className="flex items-center gap-1.5">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-tertiary shrink-0" />
+                          <span>Akses 1 bulan</span>
+                        </li>
+                        <li className="flex items-center gap-1.5">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-tertiary shrink-0" />
+                          <span>Unlimited CAPI</span>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <Link
+                      href="/checkout?plan=1-bulan"
+                      className="w-full py-2 px-3 rounded-lg bg-surface-container-high hover:bg-primary/20 hover:text-primary text-on-surface border border-outline-variant/40 text-xs font-bold flex items-center justify-center gap-1.5 transition-all active:scale-[0.99]"
+                    >
+                      <span>Perpanjang 1 Bulan</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
+
+                  {/* Option 2: 6 Bulan */}
+                  <div className="p-4 rounded-xl bg-surface-container-low border border-outline-variant/40 hover:border-primary/50 transition-all flex flex-col justify-between space-y-3">
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-bold uppercase tracking-wider text-primary font-code-metric">
                           Paket 6 Bulan
                         </span>
-                        <span className="text-[11px] px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/30 font-code-metric">
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/30 font-code-metric">
                           Reguler
                         </span>
                       </div>
-                      <div className="text-2xl font-bold text-on-surface">
+                      <div className="text-xl font-bold text-on-surface">
                         Rp 149.000
                         <span className="text-xs font-normal text-on-surface-variant ml-1">/ 6 Bulan</span>
                       </div>
-                      <ul className="text-xs text-on-surface-variant space-y-1.5 pt-2 font-body-sm">
-                        <li className="flex items-center gap-2">
+                      <ul className="text-xs text-on-surface-variant space-y-1 pt-1 font-body-sm">
+                        <li className="flex items-center gap-1.5">
                           <CheckCircle2 className="w-3.5 h-3.5 text-tertiary shrink-0" />
-                          <span>Akses penuh 6 bulan ke depan</span>
+                          <span>Akses penuh 6 bulan</span>
                         </li>
-                        <li className="flex items-center gap-2">
+                        <li className="flex items-center gap-1.5">
                           <CheckCircle2 className="w-3.5 h-3.5 text-tertiary shrink-0" />
-                          <span>Unlimited Event CAPI & CTWA</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-tertiary shrink-0" />
-                          <span>Dukungan Zernio Partner & WABA</span>
+                          <span>Unlimited CAPI</span>
                         </li>
                       </ul>
                     </div>
 
                     <Link
                       href="/checkout?plan=6-bulan"
-                      className="w-full py-2.5 px-4 rounded-lg bg-surface-container-high hover:bg-primary/20 hover:text-primary text-on-surface border border-outline-variant/40 text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-[0.99]"
+                      className="w-full py-2 px-3 rounded-lg bg-surface-container-high hover:bg-primary/20 hover:text-primary text-on-surface border border-outline-variant/40 text-xs font-bold flex items-center justify-center gap-1.5 transition-all active:scale-[0.99]"
                     >
                       <span>Perpanjang 6 Bulan</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   </div>
 
-                  {/* Option 2: 1 Tahun (Recommended) */}
-                  <div className="p-5 rounded-xl bg-surface-container-low border-2 border-tertiary/50 hover:border-tertiary transition-all flex flex-col justify-between space-y-4 relative overflow-hidden shadow-[0_0_20px_rgba(78,222,163,0.15)]">
-                    <div className="absolute top-0 right-0 bg-tertiary text-[#050d25] px-2.5 py-0.5 text-[10px] font-bold rounded-bl font-code-metric uppercase">
-                      Paling Hemat
+                  {/* Option 3: 1 Tahun (Recommended) */}
+                  <div className="p-4 rounded-xl bg-surface-container-low border-2 border-tertiary/50 hover:border-tertiary transition-all flex flex-col justify-between space-y-3 relative overflow-hidden shadow-[0_0_20px_rgba(78,222,163,0.15)]">
+                    <div className="absolute top-0 right-0 bg-tertiary text-[#050d25] px-2 py-0.5 text-[9px] font-bold rounded-bl font-code-metric uppercase">
+                      Hemat
                     </div>
 
                     <div className="space-y-2">
@@ -557,29 +589,25 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                           Paket 1 Tahun
                         </span>
                       </div>
-                      <div className="text-2xl font-bold text-on-surface">
+                      <div className="text-xl font-bold text-on-surface">
                         Rp 249.000
                         <span className="text-xs font-normal text-on-surface-variant ml-1">/ 12 Bulan</span>
                       </div>
-                      <ul className="text-xs text-on-surface-variant space-y-1.5 pt-2 font-body-sm">
-                        <li className="flex items-center gap-2">
+                      <ul className="text-xs text-on-surface-variant space-y-1 pt-1 font-body-sm">
+                        <li className="flex items-center gap-1.5">
                           <CheckCircle2 className="w-3.5 h-3.5 text-tertiary shrink-0" />
-                          <span>Akses penuh 1 tahun (12 bulan)</span>
+                          <span>Akses 12 bulan penuh</span>
                         </li>
-                        <li className="flex items-center gap-2">
+                        <li className="flex items-center gap-1.5">
                           <CheckCircle2 className="w-3.5 h-3.5 text-tertiary shrink-0" />
-                          <span>Hemat Rp 49.000 dibanding 6 bulan</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-tertiary shrink-0" />
-                          <span>Prioritas pembaruan Meta API v20+</span>
+                          <span>Hemat Rp 49.000</span>
                         </li>
                       </ul>
                     </div>
 
                     <Link
                       href="/checkout?plan=1-tahun"
-                      className="w-full py-2.5 px-4 rounded-lg bg-tertiary hover:bg-tertiary/90 text-[#050d25] text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-[0.99] shadow-[0_0_15px_rgba(78,222,163,0.3)]"
+                      className="w-full py-2 px-3 rounded-lg bg-tertiary hover:bg-tertiary/90 text-[#050d25] text-xs font-bold flex items-center justify-center gap-1.5 transition-all active:scale-[0.99] shadow-[0_0_15px_rgba(78,222,163,0.3)]"
                     >
                       <Zap className="w-3.5 h-3.5 fill-current" />
                       <span>Perpanjang 1 Tahun</span>

@@ -10,7 +10,7 @@ export interface CustomerData {
 export interface OrderRecord {
   orderId: string;
   txnId?: string;
-  planId: "6-bulan" | "1-tahun";
+  planId: "1-bulan" | "6-bulan" | "1-tahun";
   planName: string;
   amount: number;
   fee: number;
@@ -29,7 +29,7 @@ export interface OrderRecord {
 export interface SubscriptionStatus {
   hasSubscription: boolean;
   isExpired: boolean;
-  planId: "6-bulan" | "1-tahun" | string;
+  planId: "1-bulan" | "6-bulan" | "1-tahun" | string;
   planName: string;
   paidAt?: string;
   expiresAt?: string;
@@ -39,11 +39,12 @@ export interface SubscriptionStatus {
 
 /**
  * Hitung tanggal kedaluwarsa paket berdasarkan paket yang dibeli:
+ * - 1-bulan: +1 bulan dari tanggal pembayaran (atau tanggal pembuatan)
  * - 6-bulan: +6 bulan dari tanggal pembayaran (atau tanggal pembuatan)
  * - 1-tahun: +12 bulan (1 tahun) dari tanggal pembayaran
  */
 export function calculateExpirationDate(
-  planId: "6-bulan" | "1-tahun" | string,
+  planId: "1-bulan" | "6-bulan" | "1-tahun" | string,
   startDateIso?: string
 ): string {
   const baseDate = startDateIso ? new Date(startDateIso) : new Date();
@@ -51,6 +52,8 @@ export function calculateExpirationDate(
 
   if (planId === "1-tahun") {
     date.setFullYear(date.getFullYear() + 1);
+  } else if (planId === "1-bulan") {
+    date.setMonth(date.getMonth() + 1);
   } else {
     // default 6-bulan
     date.setMonth(date.getMonth() + 6);
@@ -363,6 +366,8 @@ export async function getUserSubscription(emailOrUserId: string): Promise<Subscr
     const nextExpiry = new Date(baseDateToExtend.getTime());
     if (ord.planId === "1-tahun") {
       nextExpiry.setFullYear(nextExpiry.getFullYear() + 1);
+    } else if (ord.planId === "1-bulan") {
+      nextExpiry.setMonth(nextExpiry.getMonth() + 1);
     } else {
       nextExpiry.setMonth(nextExpiry.getMonth() + 6);
     }

@@ -198,8 +198,8 @@ export async function POST(request: Request) {
       order = {
         orderId: order_id,
         txnId: txn_id,
-        planId: body.amount >= 200000 ? "1-tahun" : "6-bulan",
-        planName: body.amount >= 200000 ? "Paket 1 Tahun" : "Paket 6 Bulan",
+        planId: body.amount >= 200000 ? "1-tahun" : body.amount >= 100000 ? "6-bulan" : "1-bulan",
+        planName: body.amount >= 200000 ? "Paket 1 Tahun" : body.amount >= 100000 ? "Paket 6 Bulan" : "Paket 1 Bulan",
         amount: body.amount,
         fee: 0,
         totalPayment: body.amount,

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { saveOrder } from "@/lib/services/order-service";
 
 export interface CreateTransactionRequest {
-  planId: "6-bulan" | "1-tahun";
+  planId: "1-bulan" | "6-bulan" | "1-tahun";
   method: string;
   customer: {
     name: string;
@@ -36,8 +36,15 @@ export async function POST(request: Request) {
     }
 
     // Determine amount
-    const amount = planId === "6-bulan" ? 149000 : 249000;
-    const planName = planId === "6-bulan" ? "Paket 6 Bulan" : "Paket 1 Tahun";
+    let amount = 249000;
+    let planName = "Paket 1 Tahun";
+    if (planId === "1-bulan") {
+      amount = 29000;
+      planName = "Paket 1 Bulan";
+    } else if (planId === "6-bulan") {
+      amount = 149000;
+      planName = "Paket 6 Bulan";
+    }
 
     // Generate unique order ID
     const timestamp = Date.now().toString().slice(-6);

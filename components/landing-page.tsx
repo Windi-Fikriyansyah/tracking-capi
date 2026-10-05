@@ -271,7 +271,7 @@ export default function LandingPage() {
               >
                 <span>Harga & Paket</span>
                 <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-[#4cd7f6]/10 text-[#4cd7f6] border border-[#4cd7f6]/20">
-                  Mulai Rp 149k
+                  Mulai Rp 29k
                 </span>
               </a>
               <a
@@ -955,9 +955,70 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto items-stretch">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-6 max-w-6xl mx-auto items-stretch">
+            {/* 1 BULAN PLAN */}
+            <div className="relative rounded-2xl border border-[#1e2847] bg-[#0d1632]/70 backdrop-blur-md p-6 sm:p-7 flex flex-col justify-between hover:border-[#4cd7f6]/40 transition-all group">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#869397] px-2.5 sm:px-3 py-1 rounded-full bg-[#1e2847]/60 border border-[#1e2847]">
+                    Pilihan Uji Coba
+                  </span>
+                  <span className="text-[11px] sm:text-xs font-semibold text-[#4cd7f6] px-2.5 py-0.5 rounded-full bg-[#4cd7f6]/10 border border-[#4cd7f6]/20">
+                    Durasi 1 Bulan
+                  </span>
+                </div>
+
+                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">Paket 1 Bulan</h3>
+                <p className="text-xs sm:text-sm text-[#869397] mb-6 leading-relaxed">
+                  Akses penuh ke seluruh fitur Trackcapi selama 1 bulan untuk mencoba dan optimasi iklan CTWA Anda.
+                </p>
+
+                <div className="mb-6 pb-6 border-b border-[#1e2847]">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-xs sm:text-sm text-[#869397]">Rp</span>
+                    <span className="text-3xl sm:text-4xl md:text-5xl font-black text-white font-mono tracking-tight">
+                      29.000
+                    </span>
+                    <span className="text-xs text-[#869397]">/ bulan</span>
+                  </div>
+                  <p className="text-xs text-[#4edea3] mt-2 flex items-center gap-1.5 font-medium flex-wrap">
+                    <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                    <span>Rp 29.000 / bulan (Tanpa komitmen)</span>
+                  </p>
+                </div>
+
+                <div className="p-3.5 sm:p-4 rounded-xl bg-[#090f23]/60 border border-[#1e2847] mb-6 sm:mb-8 space-y-2 text-xs text-[#bcc9cd]">
+                  <p className="font-semibold text-white flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-[#4cd7f6] shrink-0" />
+                    Termasuk Semua Fitur Tanpa Batas:
+                  </p>
+                  <p className="text-[#869397] leading-relaxed text-xs">
+                    Mendapatkan akses lengkap 100% ke seluruh sistem tracking CAPI, telemetry, dan update selama masa aktif 1 bulan.
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <Link
+                  href="/checkout?plan=1-bulan"
+                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 sm:py-4 rounded-xl border border-[#4cd7f6]/50 bg-[#4cd7f6]/10 text-[#4cd7f6] font-semibold text-sm sm:text-base hover:bg-[#4cd7f6] hover:text-[#050d25] transition-all duration-200 group-hover:shadow-[0_0_25px_rgba(76,215,246,0.3)]"
+                >
+                  <span>Beli Paket 1 Bulan</span>
+                  <ArrowRight className="w-4 h-4 shrink-0" />
+                </Link>
+                <p className="text-[11px] text-center text-[#94a3b8] mt-3 flex items-center justify-center gap-1.5">
+                  <Lock className="w-3 h-3 shrink-0" />
+                  Pembayaran instan otomatis
+                </p>
+                <p className="text-[11px] text-center text-[#4edea3] mt-1.5 flex items-center justify-center gap-1.5 font-medium">
+                  <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
+                  Garansi Uang Kembali 7 Hari
+                </p>
+              </div>
+            </div>
+
             {/* 6 BULAN PLAN */}
-            <div className="relative rounded-2xl border border-[#1e2847] bg-[#0d1632]/70 backdrop-blur-md p-6 sm:p-8 md:p-9 flex flex-col justify-between hover:border-[#4cd7f6]/40 transition-all group">
+            <div className="relative rounded-2xl border border-[#1e2847] bg-[#0d1632]/70 backdrop-blur-md p-6 sm:p-7 flex flex-col justify-between hover:border-[#4cd7f6]/40 transition-all group">
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#869397] px-2.5 sm:px-3 py-1 rounded-full bg-[#1e2847]/60 border border-[#1e2847]">
@@ -1018,7 +1079,7 @@ export default function LandingPage() {
             </div>
 
             {/* 1 TAHUN PLAN (RECOMMENDED) */}
-            <div className="relative rounded-2xl border-2 border-[#4cd7f6] bg-gradient-to-b from-[#0f1c42] to-[#0a142f] p-6 sm:p-8 md:p-9 flex flex-col justify-between shadow-[0_0_40px_rgba(76,215,246,0.18)] hover:shadow-[0_0_60px_rgba(76,215,246,0.3)] transition-all mt-4 md:mt-0">
+            <div className="relative rounded-2xl border-2 border-[#4cd7f6] bg-gradient-to-b from-[#0f1c42] to-[#0a142f] p-6 sm:p-7 flex flex-col justify-between shadow-[0_0_40px_rgba(76,215,246,0.18)] hover:shadow-[0_0_60px_rgba(76,215,246,0.3)] transition-all">
               {/* Highlight Badge */}
               <div className="absolute -top-3.5 sm:-top-4 left-1/2 -translate-x-1/2 px-3 sm:px-4 py-1 rounded-full bg-gradient-to-r from-[#4cd7f6] via-[#4edea3] to-[#4cd7f6] text-[#050d25] text-[10px] sm:text-xs font-bold uppercase tracking-wider shadow-lg whitespace-nowrap">
                 🔥 Rekomendasi • Paling Hemat
@@ -1049,7 +1110,7 @@ export default function LandingPage() {
                   </div>
                   <p className="text-xs text-[#4edea3] mt-2 flex items-center gap-1.5 font-medium flex-wrap">
                     <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
-                    <span>Setara hanya Rp 20.750 / bulan (Diskon Terbesar!)</span>
+                    <span>Setara hanya Rp 20.750 / bulan</span>
                   </p>
                 </div>
 

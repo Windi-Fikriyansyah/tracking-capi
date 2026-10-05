@@ -29,7 +29,7 @@ import {
    PLAN DEFINITIONS
    ─────────────────────────────────────────────── */
 interface Plan {
-  id: "6-bulan" | "1-tahun";
+  id: "1-bulan" | "6-bulan" | "1-tahun";
   name: string;
   duration: string;
   price: number;
@@ -49,7 +49,16 @@ const SHARED_FEATURES = [
   "Panduan Setup Lengkap & Bantuan Teknis",
 ];
 
-const PLANS: Record<"6-bulan" | "1-tahun", Plan> = {
+const PLANS: Record<"1-bulan" | "6-bulan" | "1-tahun", Plan> = {
+  "1-bulan": {
+    id: "1-bulan",
+    name: "Paket 1 Bulan",
+    duration: "1 Bulan Akses Penuh",
+    price: 29000,
+    monthlyEquivalent: 29000,
+    badge: "Durasi 1 Bulan",
+    features: SHARED_FEATURES,
+  },
   "6-bulan": {
     id: "6-bulan",
     name: "Paket 6 Bulan",
@@ -151,8 +160,12 @@ function CheckoutContent() {
   const searchParams = useSearchParams();
   const initialPlanParam = searchParams.get("plan");
 
-  const [selectedPlanId, setSelectedPlanId] = useState<"6-bulan" | "1-tahun">(
-    initialPlanParam === "6-bulan" ? "6-bulan" : "1-tahun"
+  const [selectedPlanId, setSelectedPlanId] = useState<"1-bulan" | "6-bulan" | "1-tahun">(
+    initialPlanParam === "1-bulan"
+      ? "1-bulan"
+      : initialPlanParam === "6-bulan"
+      ? "6-bulan"
+      : "1-tahun"
   );
   const [selectedMethodId, setSelectedMethodId] = useState<string>("qris");
   const [methodFilter, setMethodFilter] = useState<"all" | "qris" | "va">("all");
@@ -183,7 +196,9 @@ function CheckoutContent() {
 
   // Synchronize if query param changes
   useEffect(() => {
-    if (initialPlanParam === "6-bulan") {
+    if (initialPlanParam === "1-bulan") {
+      setSelectedPlanId("1-bulan");
+    } else if (initialPlanParam === "6-bulan") {
       setSelectedPlanId("6-bulan");
     } else if (initialPlanParam === "1-tahun") {
       setSelectedPlanId("1-tahun");
@@ -620,12 +635,40 @@ function CheckoutContent() {
                       </h2>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                      {/* 1 BULAN CARD */}
+                      <button
+                        type="button"
+                        onClick={() => setSelectedPlanId("1-bulan")}
+                        className={`text-left p-4 sm:p-5 rounded-xl border transition-all relative ${selectedPlanId === "1-bulan"
+                          ? "border-[#4cd7f6] bg-[#4cd7f6]/10 shadow-[0_0_20px_rgba(76,215,246,0.15)]"
+                          : "border-[#1e2847] bg-[#090f23]/60 hover:border-[#2d3a5c]"
+                          }`}
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-xs font-semibold text-[#869397]">
+                            1 Bulan
+                          </span>
+                          <span
+                            className={`w-4 h-4 rounded-full border flex items-center justify-center ${selectedPlanId === "1-bulan"
+                              ? "border-[#4cd7f6] bg-[#4cd7f6]"
+                              : "border-[#5a6480]"
+                              }`}
+                          >
+                            {selectedPlanId === "1-bulan" && (
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#050d25]" />
+                            )}
+                          </span>
+                        </div>
+                        <p className="text-xl font-bold text-white mb-1">Rp 29.000</p>
+                        <p className="text-xs text-[#869397]">Rp 29.000 / bulan</p>
+                      </button>
+
                       {/* 6 BULAN CARD */}
                       <button
                         type="button"
                         onClick={() => setSelectedPlanId("6-bulan")}
-                        className={`text-left p-5 rounded-xl border transition-all relative ${selectedPlanId === "6-bulan"
+                        className={`text-left p-4 sm:p-5 rounded-xl border transition-all relative ${selectedPlanId === "6-bulan"
                           ? "border-[#4cd7f6] bg-[#4cd7f6]/10 shadow-[0_0_20px_rgba(76,215,246,0.15)]"
                           : "border-[#1e2847] bg-[#090f23]/60 hover:border-[#2d3a5c]"
                           }`}
@@ -653,12 +696,12 @@ function CheckoutContent() {
                       <button
                         type="button"
                         onClick={() => setSelectedPlanId("1-tahun")}
-                        className={`text-left p-5 rounded-xl border transition-all relative ${selectedPlanId === "1-tahun"
+                        className={`text-left p-4 sm:p-5 rounded-xl border transition-all relative ${selectedPlanId === "1-tahun"
                           ? "border-[#4edea3] bg-[#4edea3]/10 shadow-[0_0_25px_rgba(78,222,163,0.15)]"
                           : "border-[#1e2847] bg-[#090f23]/60 hover:border-[#2d3a5c]"
                           }`}
                       >
-                        <span className="absolute -top-2.5 right-4 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-gradient-to-r from-[#4cd7f6] to-[#4edea3] text-[#050d25]">
+                        <span className="absolute -top-2.5 right-3 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-gradient-to-r from-[#4cd7f6] to-[#4edea3] text-[#050d25]">
                           Hemat Rp 49.000
                         </span>
                         <div className="flex items-center justify-between mb-2">
